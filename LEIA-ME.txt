@@ -1,15 +1,9 @@
-ARQUIVOS PARA ATUALIZAR NO GITHUB
+CORREÇÃO ORION — SIGMA COLOR + RANKING DE PADRÕES
 
-1. Substitua o index.html existente pelo index.html deste pacote.
-2. Crie a pasta data no repositório, se ainda não existir.
-3. Envie data/sigma-base-1.1.js mantendo esse mesmo caminho.
-4. Faça o commit. A Vercel fará o deploy automaticamente.
+Envie SOMENTE o arquivo index.html ao GitHub, substituindo o atual.
 
-Incluído nesta atualização:
-- Card e módulo Sigma Color IA
-- Seleção de sessão de 00h a 23h
-- Top 12 sinais históricos por sessão
-- Copiar sinais
-- Card e módulo Ranking de Padrões IA
-- Top 10 padrões de quatro casas até G1
-- Base Histórica 1.1 pré-calculada
+A Base Histórica 1.1 agora está incorporada diretamente no index.html.
+Não é necessário enviar a pasta data para esta correção.
+
+Após o commit, aguarde o deploy da Vercel e atualize o navegador com Ctrl+F5.
+Confirme no rodapé: ORION FIX 1.

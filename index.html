@@ -227,6 +227,64 @@ tr:hover td{background:rgba(83,215,255,.025)}
   color:#041019;background:linear-gradient(135deg,var(--cyan),var(--green));
   border-color:transparent;box-shadow:0 0 22px rgba(83,215,255,.18)
 }
+
+/* SIGMA COLOR IA */
+.color-toolbar{display:flex;gap:12px;align-items:end;justify-content:space-between;flex-wrap:wrap}
+.color-hour-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;margin-top:14px}
+.action-btn{
+  border:1px solid rgba(83,215,255,.28);background:linear-gradient(135deg,rgba(83,215,255,.16),rgba(156,124,255,.11));
+  color:var(--text);padding:12px 16px;border-radius:12px;cursor:pointer;font-weight:900;transition:.2s
+}
+.action-btn:hover{transform:translateY(-2px);border-color:rgba(83,215,255,.55);box-shadow:0 10px 28px rgba(83,215,255,.12)}
+.color-signal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.signal-card{
+  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:17px;padding:16px;
+  background:linear-gradient(145deg,rgba(16,24,36,.98),rgba(8,12,18,.98));min-height:145px
+}
+.signal-card:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-35px;bottom:-42px;filter:blur(2px);opacity:.28}
+.signal-card.red:after{background:var(--red)} .signal-card.black:after{background:#607086}
+.signal-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.signal-time{font-size:22px;font-weight:950;letter-spacing:-1px}
+.color-ball{width:28px;height:28px;border-radius:50%;box-shadow:0 0 18px currentColor;border:2px solid rgba(255,255,255,.42)}
+.color-ball.red{background:#ef334f;color:#ef334f}.color-ball.black{background:#1b2430;color:#65768c}
+.signal-name{margin-top:12px;font-weight:900}
+.signal-meta{display:flex;justify-content:space-between;margin-top:13px;color:var(--muted);font-size:11px}
+.signal-score{color:var(--cyan);font-size:20px;font-weight:950}
+.color-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+
+/* RANKING DE PADRÕES */
+.pattern-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.pattern-row{
+  display:grid;grid-template-columns:54px minmax(180px,1.1fr) minmax(160px,1fr) 92px 92px 80px;
+  gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:16px;
+  background:rgba(255,255,255,.022);transition:.2s;cursor:pointer
+}
+.pattern-row:hover{border-color:rgba(156,124,255,.38);transform:translateX(3px);background:rgba(156,124,255,.035)}
+.pattern-pos{font-size:22px;font-weight:950;color:var(--violet)}
+.pattern-seq{display:flex;gap:6px;align-items:center}
+.pattern-dot{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:950;border:1px solid rgba(255,255,255,.18)}
+.pattern-dot.V{background:#d93650}.pattern-dot.P{background:#18202b}
+.pattern-signal{font-weight:900}.pattern-signal.V{color:#ff647b}.pattern-signal.P{color:#aebbc9}
+.pattern-detail{
+  display:none;margin-top:16px;padding:17px;border-radius:16px;border:1px solid rgba(156,124,255,.22);
+  background:linear-gradient(135deg,rgba(156,124,255,.08),rgba(83,215,255,.035))
+}
+.pattern-detail.show{display:block;animation:fade .25s ease}
+.pattern-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+
+@media(max-width:980px){
+  .color-signal-grid{grid-template-columns:repeat(3,1fr)}
+  .pattern-row{grid-template-columns:48px 1fr 1fr 70px}
+  .pattern-row .pattern-hide{display:none}
+}
+@media(max-width:700px){
+  .color-hour-grid{grid-template-columns:repeat(6,1fr)}
+  .color-signal-grid{grid-template-columns:repeat(2,1fr)}
+  .color-summary,.pattern-kpis{grid-template-columns:repeat(2,1fr)}
+  .pattern-row{grid-template-columns:42px 1fr 74px}
+  .pattern-row .pattern-mobile-hide{display:none}
+}
+
 @media(max-width:760px){
   #hourSelector{grid-template-columns:repeat(6,1fr)!important}
   #periodSelector{grid-template-columns:repeat(2,1fr)!important}
@@ -265,7 +323,7 @@ tr:hover td{background:rgba(83,215,255,.025)}
   <div class="lab-box">
     <div class="lab-ring"><div class="lab-dot">SIGMA</div></div>
     <h2 id="labTitle">Inicializando análise</h2>
-    <p id="labText">Calibrando sensores temporais e consultando a Base Histórica 1.0.</p>
+    <p id="labText">Calibrando sensores temporais e consultando a Base Histórica 1.1.</p>
     <div class="progress"><span></span></div>
   </div>
 </div>
@@ -278,8 +336,8 @@ tr:hover td{background:rgba(83,215,255,.025)}
         <p>Centro de inteligência temporal</p>
       </div>
       <div>
-        <span class="status-pill">BASE HISTÓRICA 1.0 • ONLINE</span>
-        <span class="status-pill beta">BETA LAB 1.0</span>
+        <span class="status-pill">BASE HISTÓRICA 1.1 • ONLINE</span>
+        <span class="status-pill beta">BETA LAB 1.1 • ORION</span>
       </div>
     </div>
 
@@ -296,6 +354,10 @@ tr:hover td{background:rgba(83,215,255,.025)}
         <span class="tag">ATIVO</span><div class="icon">◎</div>
         <h3>Radar Operacional</h3><p>Veja a próxima janela, o estado atual e a sequência de oportunidades do dia.</p>
       </button>
+      <button class="module" onclick="openFeature('sigmaColor','Sigma Color IA')" style="--glow:rgba(255,79,109,.14)">
+        <span class="tag">NOVO</span><div class="icon">◉</div>
+        <h3>Sigma Color IA</h3><p>Selecione sua sessão e consulte os 12 sinais de cor que mais se sobressaem na Base Histórica 1.1.</p>
+      </button>
       <button class="module" onclick="openFeature('temporal','Radar Temporal')" style="--glow:rgba(83,215,255,.13)">
         <span class="tag">ATIVO</span><div class="icon">▦</div>
         <h3>Radar Temporal</h3><p>Explore o mapa futurista de calor em janelas de 3 minutos.</p>
@@ -308,6 +370,10 @@ tr:hover td{background:rgba(83,215,255,.025)}
         <span class="tag">ATIVO</span><div class="icon">⌁</div>
         <h3>Ranking IA</h3><p>Consulte as janelas mais fortes identificadas pelo motor histórico.</p>
       </button>
+      <button class="module" onclick="openFeature('padroes','Ranking de Padrões IA')" style="--glow:rgba(156,124,255,.15)">
+        <span class="tag">NOVO</span><div class="icon">◇</div>
+        <h3>Ranking de Padrões IA</h3><p>Top 10 sequências de quatro casas para sinais de cor com proteção no branco até G1.</p>
+      </button>
       <button class="module" onclick="openFeature('tendencias','Tendências')" style="--glow:rgba(156,124,255,.13)">
         <span class="tag">ATIVO</span><div class="icon">↗</div>
         <h3>Tendências</h3><p>Compare aquecimento, estabilidade e perda de força ao longo do dia.</p>
@@ -318,7 +384,7 @@ tr:hover td{background:rgba(83,215,255,.025)}
       </button>
     </div>
   </div>
-    <div style="text-align:center;color:#6f7e92;font-size:11px;margin-top:24px">SIGMA RADAR • INTELIGÊNCIA TEMPORAL • BETA LAB 1.0 • © 2026</div>
+    <div style="text-align:center;color:#6f7e92;font-size:11px;margin-top:24px">SIGMA RADAR • INTELIGÊNCIA TEMPORAL • BETA LAB 1.1 • ORION • © 2026</div>
   </div>
 </div>
 
@@ -357,6 +423,54 @@ tr:hover td{background:rgba(83,215,255,.025)}
     <div class="card" style="margin-top:18px">
       <div class="small">MELHORES JANELAS DESTA HORA</div>
       <div class="list" id="opList" style="margin-top:14px"></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="sigmaColor" class="screen">
+  <div class="shell">
+    <div class="inner-header">
+      <button class="back" onclick="goHome()">← Voltar para Home</button>
+      <div class="title-group"><h2>Sigma Color IA</h2><p>12 sinais de cor selecionados para a sessão escolhida.</p></div>
+      <span class="status-pill">BASE 1.1 • ATIVA</span>
+    </div>
+
+    <div class="card">
+      <div class="color-toolbar">
+        <div>
+          <div class="small">SELECIONE A HORA DA SESSÃO</div>
+          <div style="color:var(--muted);font-size:13px;margin-top:6px">O Sigma consulta cada minuto dessa hora e mantém somente os 12 sinais mais consistentes.</div>
+        </div>
+        <button class="action-btn" onclick="copyColorSignals()">⧉ Copiar sinais</button>
+      </div>
+      <div id="colorHourSelector" class="color-hour-grid"></div>
+    </div>
+
+    <div class="grid two" style="margin-top:18px">
+      <div class="card">
+        <div class="small">SESSÃO SELECIONADA</div>
+        <div id="colorSessionTitle" class="big-time" style="font-size:58px">14h</div>
+        <span id="colorSessionLevel" class="level">SIGMA PRO</span>
+        <p id="colorSessionText" style="color:var(--muted);line-height:1.55">Sinais ordenados cronologicamente para facilitar a operação.</p>
+      </div>
+      <div class="card">
+        <div class="small">RESUMO DA SESSÃO</div>
+        <div class="color-summary">
+          <div class="metric"><span>Vermelhos</span><b id="colorRedCount">—</b></div>
+          <div class="metric"><span>Pretos</span><b id="colorBlackCount">—</b></div>
+          <div class="metric"><span>Score médio</span><b id="colorAvgScore">—</b></div>
+          <div class="metric"><span>Até G1 médio</span><b id="colorAvgG1">—</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="small">TOP 12 SINAIS DA SESSÃO</div>
+      <div id="colorSignalGrid" class="color-signal-grid"></div>
+      <div style="margin-top:16px;color:var(--muted);font-size:11px;line-height:1.5">
+        O branco é considerado cobertura estatística. Os percentuais representam comportamento histórico da base e não garantem resultados futuros.
+      </div>
     </div>
   </div>
 </div>
@@ -415,6 +529,37 @@ tr:hover td{background:rgba(83,215,255,.025)}
   </div>
 </div>
 
+
+<div id="padroes" class="screen">
+  <div class="shell">
+    <div class="inner-header">
+      <button class="back" onclick="goHome()">← Voltar para Home</button>
+      <div class="title-group"><h2>Ranking de Padrões IA</h2><p>Top 10 padrões de quatro casas para entrada em cor até G1.</p></div>
+      <span class="status-pill">TOP 10 • 4 CASAS</span>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <div class="small">METODOLOGIA DO MÓDULO</div>
+        <h3 style="margin:10px 0 8px">Padrão → sinal + cobertura no branco</h3>
+        <p style="color:var(--muted);line-height:1.6;margin:0">Após quatro casas consecutivas de vermelho/preto, o Sigma mede a entrada seguinte e o G1, considerando o branco como cobertura. O ranking combina assertividade, volume e estabilidade entre os dias.</p>
+      </div>
+      <div class="card center">
+        <div class="small">BASE PROCESSADA</div>
+        <div class="pulse" style="width:118px;height:118px;font-size:24px">4×</div>
+        <h3 style="margin:0">SEQUÊNCIAS DE 4 CASAS</h3>
+        <p id="patternBaseInfo" style="color:var(--muted)">Base Histórica 1.1</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="small">RANKING SIGMA</div>
+      <div id="patternList" class="pattern-list"></div>
+      <div id="patternDetail" class="pattern-detail"></div>
+    </div>
+  </div>
+</div>
+
 <div id="tendencias" class="screen">
   <div class="shell">
     <div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Tendências</h2><p>Leitura de movimento das principais faixas horárias.</p></div><span class="status-pill">ANÁLISE DINÂMICA</span></div>
@@ -434,12 +579,23 @@ tr:hover td{background:rgba(83,215,255,.025)}
 
 <div id="tooltip" class="tooltip"></div>
 
+<script src="data/sigma-base-1.1.js"></script>
 <script>
 const screens=[...document.querySelectorAll('.screen')];
 function goHome(){screens.forEach(s=>s.classList.remove('active'));document.getElementById('home').classList.add('active');window.scrollTo(0,0)}
+const loaderMessages={
+  sigmaColor:'Calculando predominância e selecionando os 12 sinais da sessão.',
+  padroes:'Minerando sequências de quatro casas e validando resultados até G1.',
+  temporal:'Mapeando temperaturas históricas em janelas de três minutos.',
+  operacional:'Consultando os ciclos e oportunidades da sessão escolhida.',
+  sessoes:'Comparando as melhores janelas de cada hora.',
+  ranking:'Classificando os horários históricos mais fortes.',
+  tendencias:'Comparando aquecimento e perda de força.'
+};
 function openFeature(id,title){
   const lab=document.getElementById('lab');
   document.getElementById('labTitle').textContent='Analisando '+title;
+  document.getElementById('labText').textContent=loaderMessages[id]||'Consultando a Base Histórica 1.1 e calibrando o Sigma Core.';
   lab.classList.add('show');
   setTimeout(()=>{
     lab.classList.remove('show');
@@ -541,6 +697,103 @@ renderHourSelector();
 renderPeriodSelector();
 selectOperationalHour(15,document.querySelectorAll('.hour-btn')[15]);
 selectPeriod(0,document.querySelectorAll('.period-btn')[0]);
+
+
+/* ===== SIGMA COLOR IA ===== */
+const sigmaBase=window.SIGMA_BASE_11||{meta:{},colorByHour:{},patterns:[]};
+
+function sigmaLevel(score){
+  if(score>=88)return 'SIGMA ELITE';
+  if(score>=80)return 'SIGMA PRO';
+  if(score>=72)return 'SIGMA CORE';
+  return 'SIGMA BASE';
+}
+function renderColorHourSelector(){
+  const box=document.getElementById('colorHourSelector');
+  box.innerHTML=Array.from({length:24},(_,h)=>`<button class="hour-btn ${h===14?'active':''}" onclick="selectColorHour(${h},this)">${String(h).padStart(2,'0')}h</button>`).join('');
+}
+function selectColorHour(hour,btn){
+  document.querySelectorAll('#colorHourSelector .hour-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const signals=(sigmaBase.colorByHour&&sigmaBase.colorByHour[String(hour)])||[];
+  const avg=signals.length?signals.reduce((s,x)=>s+x.score,0)/signals.length:0;
+  const avgG1=signals.length?signals.reduce((s,x)=>s+x.g1,0)/signals.length:0;
+  const red=signals.filter(x=>x.color==='V').length;
+  const black=signals.filter(x=>x.color==='P').length;
+  document.getElementById('colorSessionTitle').textContent=String(hour).padStart(2,'0')+'h';
+  document.getElementById('colorSessionLevel').textContent=sigmaLevel(avg);
+  document.getElementById('colorSessionText').textContent=`${signals.length} sinais selecionados entre ${String(hour).padStart(2,'0')}:00 e ${String(hour).padStart(2,'0')}:59, ordenados pelo horário.`;
+  document.getElementById('colorRedCount').textContent=red;
+  document.getElementById('colorBlackCount').textContent=black;
+  document.getElementById('colorAvgScore').textContent=Math.round(avg);
+  document.getElementById('colorAvgG1').textContent=avgG1.toFixed(1).replace('.',',')+'%';
+  document.getElementById('colorSignalGrid').innerHTML=signals.map((s,i)=>`
+    <div class="signal-card ${s.color==='V'?'red':'black'}">
+      <div class="signal-top">
+        <div class="signal-time">${s.time}</div>
+        <div class="color-ball ${s.color==='V'?'red':'black'}"></div>
+      </div>
+      <div class="signal-name">${s.colorName} + Branco</div>
+      <div class="bar"><i style="width:${s.score}%"></i></div>
+      <div class="signal-meta"><span>Até G1 ${String(s.g1).replace('.',',')}%</span><span class="signal-score">${s.score}</span></div>
+    </div>`).join('')||'<div class="small">Não há dados suficientes para esta sessão.</div>';
+  window.currentColorSignals={hour,signals};
+}
+function copyColorSignals(){
+  const current=window.currentColorSignals;
+  if(!current||!current.signals.length)return;
+  const text=`SIGMA COLOR IA — SESSÃO ${String(current.hour).padStart(2,'0')}h\\n\\n`+
+    current.signals.map(s=>`${s.time} ${s.color==='V'?'🔴 VERMELHO':'⚫ PRETO'} + ⚪ BRANCO`).join('\\n')+
+    '\\n\\nBase Histórica 1.1';
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=[...document.querySelectorAll('.action-btn')].find(x=>x.textContent.includes('Copiar'));
+    if(btn){const old=btn.textContent;btn.textContent='✓ Sinais copiados';setTimeout(()=>btn.textContent=old,1600)}
+  });
+}
+
+/* ===== RANKING DE PADRÕES IA ===== */
+function patternDots(raw){
+  return raw.split('').map(x=>`<span class="pattern-dot ${x}">${x}</span>`).join('');
+}
+function renderPatterns(){
+  const list=document.getElementById('patternList');
+  const items=sigmaBase.patterns||[];
+  list.innerHTML=items.map((p,i)=>`
+    <div class="pattern-row" onclick="showPatternDetail(${i})">
+      <div class="pattern-pos">${String(i+1).padStart(2,'0')}</div>
+      <div class="pattern-seq">${patternDots(p.raw)}</div>
+      <div class="pattern-signal ${p.signal}">${p.signalName}<div class="small">Entrada + cobertura até G1</div></div>
+      <div class="pattern-mobile-hide"><div class="small">Ocorrências</div><strong>${p.occurrences.toLocaleString('pt-BR')}</strong></div>
+      <div class="pattern-hide"><div class="small">Até G1</div><strong>${String(p.g1).replace('.',',')}%</strong></div>
+      <div class="score">${p.score}</div>
+    </div>`).join('');
+  document.getElementById('patternBaseInfo').textContent=`${(sigmaBase.meta.records||0).toLocaleString('pt-BR')} rodadas processadas`;
+  if(items.length)showPatternDetail(0);
+}
+function showPatternDetail(index){
+  const p=(sigmaBase.patterns||[])[index];if(!p)return;
+  const detail=document.getElementById('patternDetail');
+  detail.classList.add('show');
+  detail.innerHTML=`
+    <div class="small">DETALHES DO PADRÃO #${String(index+1).padStart(2,'0')}</div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:10px">
+      <div class="pattern-seq">${patternDots(p.raw)}</div>
+      <div style="font-size:22px;color:var(--muted)">→</div>
+      <div class="pattern-signal ${p.signal}" style="font-size:21px">${p.signalName} até G1</div>
+    </div>
+    <div class="pattern-kpis">
+      <div class="metric"><span>Score Sigma</span><b>${p.score}</b></div>
+      <div class="metric"><span>Ocorrências</span><b>${p.occurrences.toLocaleString('pt-BR')}</b></div>
+      <div class="metric"><span>Acerto direto</span><b>${String(p.direct).replace('.',',')}%</b></div>
+      <div class="metric"><span>Acumulado G1</span><b>${String(p.g1).replace('.',',')}%</b></div>
+      <div class="metric"><span>Loss após G1</span><b>${String(p.loss).replace('.',',')}%</b></div>
+    </div>`;
+}
+
+renderColorHourSelector();
+selectColorHour(14,document.querySelectorAll('#colorHourSelector .hour-btn')[14]);
+renderPatterns();
+
 
 const heat=document.getElementById('heatGrid');
 heat.innerHTML='<div></div>'+Array.from({length:20},(_,i)=>`<div class="m-label">${String(i*3).padStart(2,'0')}</div>`).join('');

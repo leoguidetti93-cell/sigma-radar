@@ -1,0 +1,15 @@
+ARQUIVOS PARA ATUALIZAR NO GITHUB
+
+1. Substitua o index.html existente pelo index.html deste pacote.
+2. Crie a pasta data no repositório, se ainda não existir.
+3. Envie data/sigma-base-1.1.js mantendo esse mesmo caminho.
+4. Faça o commit. A Vercel fará o deploy automaticamente.
+
+Incluído nesta atualização:
+- Card e módulo Sigma Color IA
+- Seleção de sessão de 00h a 23h
+- Top 12 sinais históricos por sessão
+- Copiar sinais
+- Card e módulo Ranking de Padrões IA
+- Top 10 padrões de quatro casas até G1
+- Base Histórica 1.1 pré-calculada

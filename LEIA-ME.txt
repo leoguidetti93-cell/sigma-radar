@@ -1,9 +1,18 @@
-CORREÇÃO ORION — SIGMA COLOR + RANKING DE PADRÕES
+SIGMA RADAR — ORION FIX 2
 
-Envie SOMENTE o arquivo index.html ao GitHub, substituindo o atual.
+ALTERAÇÕES:
+1. Cópia do Sigma Color em formato compacto:
+   16:30 ⚫ + ⚪
+2. Simulador ao Vivo liberado.
+3. Entrada dos quatro últimos brancos.
+4. Projeções por média, mediana e fórmula Sigma.
+5. Tratamento de horários atravessando a meia-noite.
+6. Botão para copiar os três horários projetados.
 
-A Base Histórica 1.1 agora está incorporada diretamente no index.html.
-Não é necessário enviar a pasta data para esta correção.
+GITHUB:
+Substitua somente o arquivo index.html atual por este novo arquivo.
+Faça o commit e aguarde o deploy automático da Vercel.
+Depois pressione Ctrl+F5 no site.
 
-Após o commit, aguarde o deploy da Vercel e atualize o navegador com Ctrl+F5.
-Confirme no rodapé: ORION FIX 1.
+CONFIRMAÇÃO:
+No rodapé deve aparecer ORION FIX 2.

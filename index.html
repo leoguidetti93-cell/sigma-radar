@@ -217,6 +217,129 @@ tr:hover td{background:rgba(83,215,255,.025)}
 .dev .orb{width:130px;height:130px;border-radius:50%;margin:auto;display:grid;place-items:center;
   border:1px dashed rgba(156,124,255,.45);box-shadow:0 0 45px rgba(156,124,255,.14);font-size:38px}
 
+.live-time-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.live-time-field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+.live-time-field input{
+  width:100%;
+  border:1px solid rgba(83,215,255,.17);
+  background:#080d14;
+  color:var(--text);
+  border-radius:12px;
+  padding:13px;
+  font-size:22px;
+  font-weight:900;
+  outline:none;
+  color-scheme:dark;
+}
+.live-time-field input:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(83,215,255,.08);
+}
+.sim-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.secondary-action{background:rgba(255,255,255,.025)}
+.sim-error{
+  display:none;
+  margin-top:14px;
+  padding:12px;
+  border-radius:12px;
+  color:#ff9bab;
+  background:rgba(255,79,109,.08);
+  border:1px solid rgba(255,79,109,.22);
+  font-size:13px;
+}
+.sim-error.show{display:block}
+.interval-display{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:18px 0;
+}
+.interval-display span{
+  min-height:72px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  font-size:22px;
+  font-weight:950;
+  color:var(--cyan);
+  border:1px solid rgba(83,215,255,.18);
+  background:radial-gradient(circle,rgba(83,215,255,.12),rgba(83,215,255,.025));
+}
+.sim-formula{display:flex;flex-direction:column;gap:10px}
+.sim-formula div{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  padding:13px 14px;border-radius:13px;
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.045)
+}
+.sim-formula span{color:var(--muted);font-size:12px}
+.sim-formula strong{font-size:17px}
+.simulation-results{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:16px;
+}
+.projection-card{
+  min-height:190px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 50% 10%,rgba(83,215,255,.11),transparent 45%),
+    rgba(255,255,255,.02);
+  position:relative;
+  overflow:hidden;
+}
+.projection-card:before{
+  content:"";position:absolute;inset:auto 18% 0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent)
+}
+.sigma-projection{
+  border-color:rgba(71,243,162,.28);
+  background:
+    radial-gradient(circle at 50% 10%,rgba(71,243,162,.16),transparent 48%),
+    rgba(255,255,255,.02);
+  box-shadow:0 0 35px rgba(71,243,162,.07)
+}
+.sigma-projection:before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.projection-label{font-size:10px;color:var(--muted);font-weight:900;letter-spacing:1px}
+.projection-time{font-size:50px;letter-spacing:-2px;margin:14px 0 8px}
+.projection-offset{font-size:12px;color:var(--green)}
+.sim-note{
+  margin-top:15px;
+  color:var(--muted);
+  line-height:1.5;
+  font-size:12px;
+  text-align:center
+}
+@media(max-width:700px){
+  .live-time-grid{grid-template-columns:1fr 1fr}
+  .simulation-results{grid-template-columns:1fr}
+  .projection-card{min-height:150px}
+  .interval-display{grid-template-columns:1fr}
+}
+
+
 .hour-btn,.period-btn{
   border:1px solid var(--line);background:#0d141e;color:var(--muted);
   padding:12px 8px;border-radius:12px;cursor:pointer;font-weight:850;
@@ -378,13 +501,13 @@ tr:hover td{background:rgba(83,215,255,.025)}
         <span class="tag">ATIVO</span><div class="icon">↗</div>
         <h3>Tendências</h3><p>Compare aquecimento, estabilidade e perda de força ao longo do dia.</p>
       </button>
-      <button class="module disabled" onclick="openFeature('simulador','Simulador')">
-        <span class="tag">EM DESENVOLVIMENTO</span><div class="icon">◫</div>
-        <h3>Simulador de Sessão</h3><p>Planejamento inteligente de sessões com duração e exigência personalizadas.</p>
+      <button class="module" onclick="openFeature('simulador','Simulador ao Vivo')" style="--glow:rgba(71,243,162,.13)">
+        <span class="tag">NOVO</span><div class="icon">⌖</div>
+        <h3>Simulador ao Vivo</h3><p>Informe os quatro últimos brancos e receba três projeções calculadas por média, mediana e combinação Sigma.</p>
       </button>
     </div>
   </div>
-    <div style="text-align:center;color:#6f7e92;font-size:11px;margin-top:24px">SIGMA RADAR • INTELIGÊNCIA TEMPORAL • BETA LAB 1.1 • ORION FIX 1 • © 2026</div>
+    <div style="text-align:center;color:#6f7e92;font-size:11px;margin-top:24px">SIGMA RADAR • INTELIGÊNCIA TEMPORAL • BETA LAB 1.1 • ORION FIX 2 • © 2026</div>
   </div>
 </div>
 
@@ -442,7 +565,7 @@ tr:hover td{background:rgba(83,215,255,.025)}
           <div class="small">SELECIONE A HORA DA SESSÃO</div>
           <div style="color:var(--muted);font-size:13px;margin-top:6px">O Sigma consulta cada minuto dessa hora e mantém somente os 12 sinais mais consistentes.</div>
         </div>
-        <button class="action-btn" onclick="copyColorSignals()">⧉ Copiar sinais</button>
+        <button id="copyColorBtn" class="action-btn" onclick="copyColorSignals()">⧉ Copiar lista</button>
       </div>
       <div id="colorHourSelector" class="color-hour-grid"></div>
     </div>
@@ -572,8 +695,84 @@ tr:hover td{background:rgba(83,215,255,.025)}
 
 <div id="simulador" class="screen">
   <div class="shell">
-    <div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Simulador de Sessão</h2><p>Módulo reservado para uma próxima atualização.</p></div><span class="status-pill beta">EM DESENVOLVIMENTO</span></div>
-    <div class="card dev"><div><div class="orb">⌁</div><h2>Laboratório Sigma</h2><p style="color:var(--muted)">O simulador está sendo calibrado para planejar sessões por horário, duração e nível de exigência.</p></div></div>
+    <div class="inner-header">
+      <button class="back" onclick="goHome()">← Voltar para Home</button>
+      <div class="title-group">
+        <h2>Simulador ao Vivo</h2>
+        <p>Projeções calculadas a partir dos quatro últimos horários de branco.</p>
+      </div>
+      <span class="status-pill">CÁLCULO EM TEMPO REAL</span>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <div class="small">INFORME OS QUATRO ÚLTIMOS BRANCOS</div>
+        <p style="color:var(--muted);line-height:1.55;margin:8px 0 18px">
+          Digite os horários na ordem em que aconteceram. O sistema também reconhece sequências que atravessam a meia-noite.
+        </p>
+
+        <div class="live-time-grid">
+          <label class="live-time-field">
+            <span>Branco 1</span>
+            <input id="whiteTime1" type="time" value="14:08" step="60">
+          </label>
+          <label class="live-time-field">
+            <span>Branco 2</span>
+            <input id="whiteTime2" type="time" value="14:21" step="60">
+          </label>
+          <label class="live-time-field">
+            <span>Branco 3</span>
+            <input id="whiteTime3" type="time" value="14:37" step="60">
+          </label>
+          <label class="live-time-field">
+            <span>Branco 4</span>
+            <input id="whiteTime4" type="time" value="14:50" step="60">
+          </label>
+        </div>
+
+        <div class="sim-actions">
+          <button class="action-btn" onclick="calculateLiveSimulator()">⌁ Calcular projeções</button>
+          <button id="copySimulatorBtn" class="action-btn secondary-action" onclick="copySimulatorSignals()">⧉ Copiar horários</button>
+        </div>
+        <div id="simulatorError" class="sim-error"></div>
+      </div>
+
+      <div class="card">
+        <div class="small">INTERVALOS IDENTIFICADOS</div>
+        <div id="intervalDisplay" class="interval-display">
+          <span>13 min</span><span>16 min</span><span>13 min</span>
+        </div>
+        <div class="sim-formula">
+          <div><span>Média</span><strong id="meanValue">14 min</strong></div>
+          <div><span>Mediana</span><strong id="medianValue">13 min</strong></div>
+          <div><span>Combinação Sigma</span><strong id="sigmaValue">21 min</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="small">TRÊS PROJEÇÕES DA SESSÃO</div>
+      <div id="simulatorResults" class="simulation-results">
+        <div class="projection-card">
+          <span class="projection-label">MÉDIA DOS INTERVALOS</span>
+          <strong class="projection-time" id="meanSignal">15:04</strong>
+          <span class="projection-offset" id="meanOffset">+14 minutos</span>
+        </div>
+        <div class="projection-card">
+          <span class="projection-label">MEDIANA DOS INTERVALOS</span>
+          <strong class="projection-time" id="medianSignal">15:03</strong>
+          <span class="projection-offset" id="medianOffset">+13 minutos</span>
+        </div>
+        <div class="projection-card sigma-projection">
+          <span class="projection-label">COMBINAÇÃO SIGMA</span>
+          <strong class="projection-time" id="sigmaSignal">15:11</strong>
+          <span class="projection-offset" id="sigmaOffset">+21 minutos</span>
+        </div>
+      </div>
+      <div class="sim-note">
+        Fórmula Sigma: <strong>(média + mediana + 14) ÷ 2</strong>. O resultado é arredondado para o minuto mais próximo e somado ao último branco informado.
+      </div>
+    </div>
   </div>
 </div>
 
@@ -594,7 +793,8 @@ const loaderMessages={
   operacional:'Consultando os ciclos e oportunidades da sessão escolhida.',
   sessoes:'Comparando as melhores janelas de cada hora.',
   ranking:'Classificando os horários históricos mais fortes.',
-  tendencias:'Comparando aquecimento e perda de força.'
+  tendencias:'Comparando aquecimento e perda de força.',
+  simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.'
 };
 function openFeature(id,title){
   const lab=document.getElementById('lab');
@@ -746,14 +946,142 @@ function selectColorHour(hour,btn){
 function copyColorSignals(){
   const current=window.currentColorSignals;
   if(!current||!current.signals.length)return;
-  const text=`SIGMA COLOR IA — SESSÃO ${String(current.hour).padStart(2,'0')}h\\n\\n`+
-    current.signals.map(s=>`${s.time} ${s.color==='V'?'🔴 VERMELHO':'⚫ PRETO'} + ⚪ BRANCO`).join('\\n')+
-    '\\n\\nBase Histórica 1.1';
+  const text=current.signals
+    .map(s=>`${s.time} ${s.color==='V'?'🔴':'⚫'} + ⚪`)
+    .join('\n');
   navigator.clipboard.writeText(text).then(()=>{
-    const btn=[...document.querySelectorAll('.action-btn')].find(x=>x.textContent.includes('Copiar'));
-    if(btn){const old=btn.textContent;btn.textContent='✓ Sinais copiados';setTimeout(()=>btn.textContent=old,1600)}
+    const btn=document.getElementById('copyColorBtn');
+    if(btn){
+      const old=btn.textContent;
+      btn.textContent='✓ Lista copiada';
+      setTimeout(()=>btn.textContent=old,1600);
+    }
   });
 }
+
+
+/* ===== SIMULADOR AO VIVO ===== */
+window.currentSimulatorSignals=null;
+
+function parseClockValue(value){
+  if(!/^\d{2}:\d{2}$/.test(value||''))return null;
+  const [h,m]=value.split(':').map(Number);
+  if(h<0||h>23||m<0||m>59)return null;
+  return h*60+m;
+}
+function formatClock(totalMinutes){
+  const normalized=((Math.round(totalMinutes)%1440)+1440)%1440;
+  const h=Math.floor(normalized/60);
+  const m=normalized%60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+function medianOf(values){
+  const sorted=[...values].sort((a,b)=>a-b);
+  const mid=Math.floor(sorted.length/2);
+  return sorted.length%2?sorted[mid]:(sorted[mid-1]+sorted[mid])/2;
+}
+function showSimulatorError(message){
+  const el=document.getElementById('simulatorError');
+  if(!el)return;
+  el.textContent=message||'';
+  el.classList.toggle('show',Boolean(message));
+}
+function calculateLiveSimulator(){
+  const raw=[1,2,3,4].map(i=>document.getElementById(`whiteTime${i}`).value);
+  const parsed=raw.map(parseClockValue);
+
+  if(parsed.some(v=>v===null)){
+    showSimulatorError('Preencha os quatro horários corretamente no formato HH:MM.');
+    return;
+  }
+
+  const chronological=[parsed[0]];
+  for(let i=1;i<parsed.length;i++){
+    let current=parsed[i];
+    while(current<=chronological[i-1])current+=1440;
+    chronological.push(current);
+  }
+
+  const intervals=[
+    chronological[1]-chronological[0],
+    chronological[2]-chronological[1],
+    chronological[3]-chronological[2]
+  ];
+
+  if(intervals.some(v=>v<=0||v>720)){
+    showSimulatorError('Confira a ordem dos horários. Foi identificado um intervalo incompatível.');
+    return;
+  }
+
+  showSimulatorError('');
+
+  const mean=intervals.reduce((a,b)=>a+b,0)/intervals.length;
+  const median=medianOf(intervals);
+  const sigma=(mean+median+14)/2;
+
+  const meanRounded=Math.round(mean);
+  const medianRounded=Math.round(median);
+  const sigmaRounded=Math.round(sigma);
+  const last=chronological[3];
+
+  const projections={
+    mean:formatClock(last+meanRounded),
+    median:formatClock(last+medianRounded),
+    sigma:formatClock(last+sigmaRounded)
+  };
+
+  document.getElementById('intervalDisplay').innerHTML=
+    intervals.map(v=>`<span>${v} min</span>`).join('');
+  document.getElementById('meanValue').textContent=
+    `${String(mean.toFixed(2)).replace('.',',')} min`;
+  document.getElementById('medianValue').textContent=
+    `${String(median.toFixed(2)).replace('.',',')} min`;
+  document.getElementById('sigmaValue').textContent=
+    `${String(sigma.toFixed(2)).replace('.',',')} min`;
+
+  document.getElementById('meanSignal').textContent=projections.mean;
+  document.getElementById('medianSignal').textContent=projections.median;
+  document.getElementById('sigmaSignal').textContent=projections.sigma;
+  document.getElementById('meanOffset').textContent=`+${meanRounded} minutos`;
+  document.getElementById('medianOffset').textContent=`+${medianRounded} minutos`;
+  document.getElementById('sigmaOffset').textContent=`+${sigmaRounded} minutos`;
+
+  window.currentSimulatorSignals={
+    projections,
+    intervals,
+    mean:meanRounded,
+    median:medianRounded,
+    sigma:sigmaRounded
+  };
+}
+function copySimulatorSignals(){
+  const current=window.currentSimulatorSignals;
+  if(!current){
+    calculateLiveSimulator();
+  }
+  const data=window.currentSimulatorSignals;
+  if(!data)return;
+
+  const text=[
+    `Média: ${data.projections.mean}`,
+    `Mediana: ${data.projections.median}`,
+    `Sigma: ${data.projections.sigma}`
+  ].join('\n');
+
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('copySimulatorBtn');
+    if(btn){
+      const old=btn.textContent;
+      btn.textContent='✓ Horários copiados';
+      setTimeout(()=>btn.textContent=old,1600);
+    }
+  });
+}
+[1,2,3,4].forEach(i=>{
+  const field=document.getElementById(`whiteTime${i}`);
+  if(field)field.addEventListener('change',calculateLiveSimulator);
+});
+calculateLiveSimulator();
 
 /* ===== RANKING DE PADRÕES IA ===== */
 function patternDots(raw){

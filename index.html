@@ -625,6 +625,144 @@ body:before{opacity:.09;background-size:46px 46px}
   .module{min-height:135px}
 }
 
+
+/* ORION UI PREVIEW 2 — HOME DE MARCA E RADAR TÉRMICO */
+.sigma-brand-stage{
+  min-height:430px;
+  margin-top:18px;
+  border:1px solid #273541;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(241,44,76,.11),transparent 32%),
+    linear-gradient(145deg,#121d27,#0c151e);
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  text-align:center;
+}
+.sigma-brand-stage:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,transparent,black 25%,black 75%,transparent);
+}
+.sigma-brand-copy{position:relative;z-index:3}
+.sigma-overline{
+  display:block;
+  color:#8292a2;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:2.6px;
+  margin-bottom:18px
+}
+.sigma-brand-copy h2{
+  margin:0;
+  font-size:clamp(78px,13vw,170px);
+  line-height:.73;
+  letter-spacing:-9px;
+  color:#f7f8fa;
+  text-shadow:0 18px 55px rgba(0,0,0,.42)
+}
+.sigma-brand-copy strong{
+  display:block;
+  margin-top:18px;
+  font-size:clamp(25px,4vw,52px);
+  letter-spacing:14px;
+  color:var(--red);
+  text-shadow:0 0 28px rgba(241,44,76,.25)
+}
+.sigma-brand-copy p{
+  margin:19px 0 0;
+  color:#8997a5;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:3.4px
+}
+.sigma-brand-status{
+  position:absolute;
+  z-index:3;
+  bottom:20px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center
+}
+.sigma-brand-status span{
+  padding:8px 11px;
+  border-radius:999px;
+  background:rgba(13,23,32,.78);
+  border:1px solid #2a3946;
+  color:#8f9dac;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.65px
+}
+.sigma-brand-status i{
+  display:inline-block;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 9px rgba(52,211,153,.75);
+  margin-right:6px
+}
+.sigma-flame{
+  position:absolute;
+  left:50%;top:50%;
+  width:330px;height:330px;
+  transform:translate(-50%,-54%);
+  opacity:.19;
+  filter:drop-shadow(0 0 40px rgba(241,44,76,.25));
+  z-index:1
+}
+.flame-outer,.flame-inner,.flame-core{
+  position:absolute;
+  left:50%;bottom:7%;
+  transform:translateX(-50%) rotate(45deg);
+  border-radius:58% 42% 62% 38% / 65% 42% 58% 35%;
+}
+.flame-outer{
+  width:205px;height:245px;
+  background:linear-gradient(145deg,#ff526d,#a70d2a);
+  clip-path:polygon(51% 0,72% 25%,88% 48%,84% 72%,69% 91%,50% 100%,27% 91%,12% 70%,17% 42%,34% 22%);
+}
+.flame-inner{
+  width:125px;height:165px;bottom:16%;
+  background:linear-gradient(145deg,#ff9aab,#e51f42);
+  clip-path:polygon(50% 0,77% 33%,90% 59%,75% 88%,49% 100%,22% 83%,12% 57%,26% 29%);
+}
+.flame-core{
+  width:63px;height:88px;bottom:22%;
+  background:linear-gradient(145deg,#fff3f5,#ff7189);
+  clip-path:polygon(50% 0,82% 42%,84% 72%,50% 100%,17% 73%,20% 39%);
+}
+.heat-cell.t1{background:#fff0f3;color:#fff0f3}
+.heat-cell.t2{background:#ffd7df;color:#ffd7df}
+.heat-cell.t3{background:#ffb8c6;color:#ffb8c6}
+.heat-cell.t4{background:#ff93a7;color:#ff93a7}
+.heat-cell.t5{background:#fa6c87;color:#fa6c87}
+.heat-cell.t6{background:#ef4565;color:#ef4565}
+.heat-cell.t7{background:#d62749;color:#d62749}
+.heat-cell.t8{background:#ac1635;color:#ac1635}
+.heat-cell.t9{
+  background:#740b26;color:#740b26;
+  box-shadow:0 0 12px rgba(172,22,53,.38)
+}
+.legend .t1{background:#fff0f3}
+.legend .t3{background:#ffb8c6}
+.legend .t5{background:#fa6c87}
+.legend .t7{background:#d62749}
+.legend .t9{background:#740b26}
+@media(max-width:720px){
+  .sigma-brand-stage{min-height:390px}
+  .sigma-brand-copy h2{letter-spacing:-5px}
+  .sigma-brand-copy strong{letter-spacing:8px}
+  .sigma-flame{width:270px;height:270px}
+}
+
 </style>
 </head>
 <body>
@@ -632,7 +770,7 @@ body:before{opacity:.09;background-size:46px 46px}
 <aside class="player-sidebar">
   <div class="side-logo">
     <strong>SIGMA <em>RADAR</em></strong>
-    <span>DOUBLE INTELLIGENCE</span>
+    <span>INTELIGÊNCIA PARA O DOUBLE</span>
   </div>
   <div class="side-status"><i></i><span>BASE 1.1 ONLINE</span></div>
   <nav class="side-nav">
@@ -651,12 +789,12 @@ body:before{opacity:.09;background-size:46px 46px}
 
 
 <div style="max-width:1100px;margin:24px auto;padding:20px;border:1px solid #1f2a38;border-radius:18px;background:#0b1017">
-<h2 style="color:#53d7ff;margin-top:0">Plataforma de Inteligência Temporal</h2>
+<h2 style="color:#53d7ff;margin-top:0"></h2>
 <p>O <b>SIGMA RADAR</b> é uma plataforma de análise histórica para o <b>Double da Blaze</b>. Através da Base Histórica 1.1, identifica janelas operacionais, padrões, predominância de cores e mapas temporais para apoiar o planejamento das operações.</p>
 <ul>
-<li>🎯 Radar Operacional — melhores janelas por sessão</li>
-<li>🎨 Sigma Color IA — 12 sinais mais fortes da sessão</li>
-<li>🧩 Ranking de Padrões IA — Top 10 padrões de 4 casas até G1</li>
+<li>🎯 </li>
+<li>🎨 </li>
+<li>🧩 </li>
 </ul>
 <div style="color:#47f3a2;font-weight:bold">BASE HISTÓRICA 1.1 • BETA LAB 1.1 ORION</div>
 </div>
@@ -673,7 +811,6 @@ body:before{opacity:.09;background-size:46px 46px}
 
 <div id="home" class="screen active">
   <div class="shell">
-    
 <div class="player-topbar">
   <div class="player-greeting">
     <h2>Central Sigma</h2>
@@ -707,55 +844,24 @@ body:before{opacity:.09;background-size:46px 46px}
     <span class="quick-sub">Player Experience — Preview 1</span>
   </div>
 </div>
-
-<div class="hero">
-  <div>
-    <h2>Escolha sua ferramenta.</h2>
-    <p>Radar de horários, sinais de cores, padrões, mapa temporal e simulação ao vivo em uma única central para o Double.</p>
+<div class="sigma-brand-stage">
+  <div class="sigma-flame" aria-hidden="true">
+    <div class="flame-outer"></div>
+    <div class="flame-inner"></div>
+    <div class="flame-core"></div>
+  </div>
+  <div class="sigma-brand-copy">
+    <span class="sigma-overline">CENTRAL DE OPERAÇÕES</span>
+    <h2>SIGMA</h2>
+    <strong>RADAR</strong>
+    <p>INTELIGÊNCIA PARA QUEM OPERA</p>
+  </div>
+  <div class="sigma-brand-status">
+    <span><i></i> SISTEMA ONLINE</span>
+    <span>BASE HISTÓRICA 1.1</span>
   </div>
 </div>
 
-<div class="player-section-title">
-  <h3>Ferramentas da sessão</h3>
-  <span>Selecione um módulo para começar</span>
-</div>
-
-<div class="modules">
-      <button class="module" onclick="openFeature('operacional','Radar Operacional')" style="--glow:rgba(71,243,162,.13)">
-        <span class="tag">ATIVO</span><div class="icon">◎</div>
-        <h3>Radar Operacional</h3><p>Veja a próxima janela, o estado atual e a sequência de oportunidades do dia.</p>
-      </button>
-      <button class="module" onclick="openFeature('sigmaColor','Sigma Color IA')" style="--glow:rgba(255,79,109,.14)">
-        <span class="tag">NOVO</span><div class="icon">◉</div>
-        <h3>Sigma Color IA</h3><p>Selecione sua sessão e consulte os 12 sinais de cor que mais se sobressaem na Base Histórica 1.1.</p>
-      </button>
-      <button class="module" onclick="openFeature('temporal','Radar Temporal')" style="--glow:rgba(83,215,255,.13)">
-        <span class="tag">ATIVO</span><div class="icon">▦</div>
-        <h3>Radar Temporal</h3><p>Explore o mapa futurista de calor em janelas de 3 minutos.</p>
-      </button>
-      <button class="module" onclick="openFeature('sessoes','Sessões do Dia')" style="--glow:rgba(255,216,98,.13)">
-        <span class="tag">ATIVO</span><div class="icon">◷</div>
-        <h3>Sessões do Dia</h3><p>Visualize ciclos organizados por horário, nível e intensidade.</p>
-      </button>
-      <button class="module" onclick="openFeature('ranking','Ranking IA')" style="--glow:rgba(255,148,74,.13)">
-        <span class="tag">ATIVO</span><div class="icon">⌁</div>
-        <h3>Ranking IA</h3><p>Consulte as janelas mais fortes identificadas pelo motor histórico.</p>
-      </button>
-      <button class="module" onclick="openFeature('padroes','Ranking de Padrões IA')" style="--glow:rgba(156,124,255,.15)">
-        <span class="tag">NOVO</span><div class="icon">◇</div>
-        <h3>Ranking de Padrões IA</h3><p>Top 10 sequências de quatro casas para sinais de cor com proteção no branco até G1.</p>
-      </button>
-      <button class="module" onclick="openFeature('tendencias','Tendências')" style="--glow:rgba(156,124,255,.13)">
-        <span class="tag">ATIVO</span><div class="icon">↗</div>
-        <h3>Tendências</h3><p>Compare aquecimento, estabilidade e perda de força ao longo do dia.</p>
-      </button>
-      <button class="module" onclick="openFeature('simulador','Simulador ao Vivo')" style="--glow:rgba(71,243,162,.13)">
-        <span class="tag">NOVO</span><div class="icon">⌖</div>
-        <h3>Simulador ao Vivo</h3><p>Informe os quatro últimos brancos e receba três projeções calculadas por média, mediana e combinação Sigma.</p>
-      </button>
-    </div>
-  </div>
-    <div style="text-align:center;color:#6f7e92;font-size:11px;margin-top:24px">SIGMA RADAR • INTELIGÊNCIA TEMPORAL • BETA LAB 1.1 • ORION UI PREVIEW 1 • © 2026</div>
   </div>
 </div>
 

@@ -626,7 +626,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI PREVIEW 3.2 — HOME DE MARCA E RADAR TÉRMICO */
+/* ORION UI PREVIEW 3.3 — HOME DE MARCA E RADAR TÉRMICO */
 .sigma-brand-stage{
   min-height:430px;
   margin-top:18px;
@@ -764,7 +764,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI PREVIEW 3.2 — HOME LIMPA */
+/* ORION UI PREVIEW 3.3 — HOME LIMPA */
 #home{
   overflow:hidden;
 }
@@ -797,7 +797,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI PREVIEW 3.2 — SIMULADOR LIMPO */
+/* ORION UI PREVIEW 3.3 — SIMULADOR LIMPO */
 .simulator-input-only{
   grid-template-columns:1fr !important;
 }
@@ -826,9 +826,144 @@ body:before{opacity:.09;background-size:46px 46px}
     0 0 28px rgba(241,44,76,.08);
 }
 
+
+/* ===== CATALOGADOR AO VIVO ===== */
+.catalog-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+  padding:14px 16px;
+  border:1px solid #283642;
+  border-radius:14px;
+  background:linear-gradient(145deg,#15212c,#101923);
+}
+.catalog-toolbar > div{display:flex;flex-direction:column;gap:5px}
+.catalog-toolbar strong{font-size:15px}
+.catalog-alert{
+  margin-bottom:14px;
+  padding:12px 14px;
+  border-radius:11px;
+  border:1px solid #2b3a47;
+  background:#111d27;
+  color:#8494a4;
+  font-size:12px;
+}
+.catalog-alert.online{
+  color:#73e5b1;
+  border-color:rgba(52,211,153,.24);
+  background:rgba(52,211,153,.055);
+}
+.catalog-alert.error{
+  color:#ff99aa;
+  border-color:rgba(241,44,76,.26);
+  background:rgba(241,44,76,.065);
+}
+.catalog-hours{display:flex;flex-direction:column;gap:17px}
+.catalog-hour{
+  border:1px solid #283642;
+  border-radius:15px;
+  overflow:hidden;
+  background:linear-gradient(145deg,#14202b,#0f1821)
+}
+.catalog-hour-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 15px;border-bottom:1px solid #273541
+}
+.catalog-hour-head h3{margin:0;font-size:16px}
+.catalog-hour-head span{color:#8292a2;font-size:10px}
+.catalog-grid-wrap{overflow:auto;padding:12px}
+.catalog-grid{
+  min-width:850px;
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:6px
+}
+.catalog-minute-head{
+  text-align:center;
+  color:#a8b5c2;
+  font-size:11px;
+  font-weight:850;
+  padding:3px 0 7px
+}
+.catalog-minute{
+  min-height:71px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+  padding:5px;
+  border-radius:9px;
+  background:#0b141d;
+  border:1px solid #22313e
+}
+.catalog-result{
+  position:relative;
+  min-height:56px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  font-weight:950;
+  font-size:14px;
+  border:1px solid transparent;
+  overflow:hidden
+}
+.catalog-result small{
+  display:block;
+  margin-top:5px;
+  font-size:8px;
+  font-weight:700;
+  opacity:.76
+}
+.catalog-red{
+  background:linear-gradient(145deg,#ff3655,#d81738);
+  color:white;
+}
+.catalog-black{
+  background:linear-gradient(145deg,#2a3038,#11161c);
+  color:white;
+  border-color:#4a5662
+}
+.catalog-white{
+  background:#f8fafc;
+  color:#e51f42;
+  border-color:#ff6b83
+}
+.catalog-empty{
+  background:#101a23;
+  color:#40505e;
+  border-color:#263540
+}
+.catalog-new{
+  animation:newCatalogResult 1.15s ease;
+  box-shadow:0 0 0 2px #fff,0 0 24px rgba(241,44,76,.48)
+}
+@keyframes newCatalogResult{
+  0%{transform:scale(.78);opacity:.2}
+  55%{transform:scale(1.08)}
+  100%{transform:scale(1);opacity:1}
+}
+@media(max-width:720px){
+  .catalog-toolbar{align-items:stretch}
+  .catalog-toolbar .action-btn{width:100%}
+}
+
 </style>
 </head>
 <body>
+
+
+<div id="lab" class="lab" aria-live="polite">
+  <div class="lab-box">
+    <div class="lab-ring"><div class="lab-dot">SIGMA</div></div>
+    <h2 id="labTitle">Abrindo módulo</h2>
+    <p id="labText">Preparando sua sessão.</p>
+    <div class="progress"><span></span></div>
+  </div>
+</div>
 
 <aside class="player-sidebar">
   <div class="side-logo">
@@ -845,6 +980,7 @@ body:before{opacity:.09;background-size:46px 46px}
     <button class="side-link" data-target="sessoes" onclick="sideNavigate('sessoes','Sessões do Dia',this)"><span class="side-icon">◷</span><span class="side-text">Sessões</span></button>
     <button class="side-link" data-target="ranking" onclick="sideNavigate('ranking','Ranking IA',this)"><span class="side-icon">⌁</span><span class="side-text">Ranking IA</span></button>
     <button class="side-link" data-target="tendencias" onclick="sideNavigate('tendencias','Tendências',this)"><span class="side-icon">↗</span><span class="side-text">Tendências</span></button>
+    <button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">◉</span><span class="side-text">Catalogador</span></button>
     <button class="side-link" data-target="simulador" onclick="sideNavigate('simulador','Simulador ao Vivo',this)"><span class="side-icon">⌖</span><span class="side-text">Simulador</span></button>
   </nav>
   <div class="side-bottom"><b>ORION UI — PREVIEW 1</b><span>Experiência para jogadores</span></div>
@@ -1067,6 +1203,38 @@ body:before{opacity:.09;background-size:46px 46px}
   </div>
 </div>
 
+
+<div id="catalogador" class="screen">
+  <div class="shell">
+    <div class="inner-header">
+      <button class="back" onclick="goHome()">← Voltar para Home</button>
+      <div class="title-group">
+        <h2>Catalogador Ao Vivo</h2>
+        <p>Resultados recentes organizados por hora e minuto.</p>
+      </div>
+      <span id="catalogStatus" class="status-pill beta">CONECTANDO</span>
+    </div>
+
+    <div class="catalog-toolbar">
+      <div>
+        <span class="small">HISTÓRICO MÓVEL</span>
+        <strong id="catalogCount">0 / 300 rodadas</strong>
+      </div>
+      <div>
+        <span class="small">ÚLTIMA ATUALIZAÇÃO</span>
+        <strong id="catalogUpdated">--:--:--</strong>
+      </div>
+      <button class="action-btn secondary-action" onclick="refreshLiveCatalog(true)">↻ Atualizar</button>
+    </div>
+
+    <div id="catalogAlert" class="catalog-alert">
+      Aguardando a primeira leitura da fonte ao vivo.
+    </div>
+
+    <div id="catalogHours" class="catalog-hours"></div>
+  </div>
+</div>
+
 <div id="simulador" class="screen">
   <div class="shell">
     <div class="inner-header">
@@ -1181,19 +1349,40 @@ const loaderMessages={
   sessoes:'Comparando as melhores janelas de cada hora.',
   ranking:'Classificando os horários históricos mais fortes.',
   tendencias:'Comparando aquecimento e perda de força.',
-  simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.'
+  simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.',
+  catalogador:'Conectando à fonte de resultados e montando o histórico ao vivo.'
 };
 function openFeature(id,title){
+  const target=document.getElementById(id);
+  if(!target){
+    console.error('Módulo não encontrado:',id);
+    return;
+  }
+
   const lab=document.getElementById('lab');
-  document.getElementById('labTitle').textContent='Analisando '+title;
-  document.getElementById('labText').textContent=loaderMessages[id]||'Consultando a Base Histórica 1.1 e calibrando o Sigma Core.';
+  const labTitle=document.getElementById('labTitle');
+  const labText=document.getElementById('labText');
+
+  if(labTitle)labTitle.textContent='Abrindo '+title;
+  if(labText)labText.textContent=(loaderMessages[id]||'Preparando módulo.');
+
+  const showModule=()=>{
+    screens.forEach(s=>s.classList.remove('active'));
+    target.classList.add('active');
+    window.scrollTo(0,0);
+    if(id==='catalogador')startLiveCatalog();
+  };
+
+  if(!lab){
+    showModule();
+    return;
+  }
+
   lab.classList.add('show');
   setTimeout(()=>{
     lab.classList.remove('show');
-    screens.forEach(s=>s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo(0,0);
-  },1750);
+    showModule();
+  },650);
 }
 
 const hourlyData = Array.from({length:24},(_,h)=>{
@@ -1346,6 +1535,197 @@ function copyColorSignals(){
   });
 }
 
+
+
+/* ===== CATALOGADOR AO VIVO ===== */
+const CATALOG_STORAGE_KEY='sigma-live-catalog-v1';
+let catalogRounds=[];
+let catalogTimer=null;
+let catalogStarted=false;
+let catalogLatestId=null;
+
+function normalizeCatalogRound(item){
+  if(!item)return null;
+
+  const number=Number(
+    item.roll ?? item.number ?? item.value ?? item.result ?? item.color_number
+  );
+  if(!Number.isFinite(number)||number<0||number>14)return null;
+
+  const createdRaw=
+    item.created_at ?? item.createdAt ?? item.date ?? item.timestamp ?? item.time;
+  const created=new Date(createdRaw);
+  if(Number.isNaN(created.getTime()))return null;
+
+  let color=item.color;
+  if(typeof color==='string'){
+    const c=color.toLowerCase();
+    color=c.includes('white')||c==='b'?'white':
+      c.includes('red')||c==='v'?'red':
+      c.includes('black')||c==='p'?'black':null;
+  }else{
+    color=number===0?'white':number<=7?'red':'black';
+  }
+
+  const id=String(item.id ?? item.round_id ?? item.uuid ?? `${created.toISOString()}-${number}`);
+  return {id,number,color,createdAt:created.toISOString()};
+}
+
+function loadCatalogStorage(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(CATALOG_STORAGE_KEY)||'[]');
+    catalogRounds=Array.isArray(raw)
+      ?raw.map(normalizeCatalogRound).filter(Boolean).slice(-300)
+      :[];
+  }catch{
+    catalogRounds=[];
+  }
+}
+function saveCatalogStorage(){
+  localStorage.setItem(CATALOG_STORAGE_KEY,JSON.stringify(catalogRounds.slice(-300)));
+}
+function mergeCatalogRounds(incoming){
+  const beforeLatest=catalogRounds.length?catalogRounds[catalogRounds.length-1].id:null;
+  const map=new Map(catalogRounds.map(r=>[r.id,r]));
+
+  incoming.map(normalizeCatalogRound).filter(Boolean).forEach(r=>map.set(r.id,r));
+
+  catalogRounds=[...map.values()]
+    .sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt))
+    .slice(-300);
+
+  catalogLatestId=catalogRounds.length?catalogRounds[catalogRounds.length-1].id:null;
+  saveCatalogStorage();
+  return beforeLatest!==catalogLatestId;
+}
+function catalogColorClass(color){
+  return color==='white'?'catalog-white':color==='red'?'catalog-red':'catalog-black';
+}
+function formatCatalogTime(iso){
+  return new Date(iso).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function renderLiveCatalog(isNew=false){
+  const root=document.getElementById('catalogHours');
+  const count=document.getElementById('catalogCount');
+  if(!root||!count)return;
+
+  count.textContent=`${catalogRounds.length} / 300 rodadas`;
+
+  if(!catalogRounds.length){
+    root.innerHTML='<div class="catalog-alert">Nenhuma rodada recebida ainda.</div>';
+    return;
+  }
+
+  const groups={};
+  catalogRounds.forEach(r=>{
+    const d=new Date(r.createdAt);
+    const key=[
+      d.getFullYear(),
+      String(d.getMonth()+1).padStart(2,'0'),
+      String(d.getDate()).padStart(2,'0'),
+      String(d.getHours()).padStart(2,'0')
+    ].join('-');
+    if(!groups[key])groups[key]=[];
+    groups[key].push(r);
+  });
+
+  const keys=Object.keys(groups).sort().reverse();
+  root.innerHTML=keys.map((key,keyIndex)=>{
+    const parts=key.split('-');
+    const hour=parts[3];
+    const date=`${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    const byMinute={};
+    groups[key].forEach(r=>{
+      const minute=String(new Date(r.createdAt).getMinutes()).padStart(2,'0');
+      if(!byMinute[minute])byMinute[minute]=[];
+      byMinute[minute].push(r);
+    });
+
+    let sections='';
+    for(let row=5;row>=0;row--){
+      const heads=Array.from({length:10},(_,col)=>{
+        const minute=String(row*10+col).padStart(2,'0');
+        return `<div class="catalog-minute-head">${minute}</div>`;
+      }).join('');
+
+      const minutes=Array.from({length:10},(_,col)=>{
+        const minute=String(row*10+col).padStart(2,'0');
+        const results=(byMinute[minute]||[]).slice(0,2);
+        const slots=[0,1].map(i=>{
+          const r=results[i];
+          if(!r)return '<div class="catalog-result catalog-empty">○<small>—</small></div>';
+          const newClass=isNew&&r.id===catalogLatestId?' catalog-new':'';
+          const icon=r.color==='white'?'◆':r.number;
+          return `<div class="catalog-result ${catalogColorClass(r.color)}${newClass}">
+            ${icon}<small>${formatCatalogTime(r.createdAt)}</small>
+          </div>`;
+        }).join('');
+        return `<div class="catalog-minute">${slots}</div>`;
+      }).join('');
+
+      sections+=heads+minutes;
+    }
+
+    return `<section class="catalog-hour">
+      <div class="catalog-hour-head">
+        <h3>Hora ${hour}</h3>
+        <span>${date}${keyIndex===0?' • MAIS RECENTE':''}</span>
+      </div>
+      <div class="catalog-grid-wrap"><div class="catalog-grid">${sections}</div></div>
+    </section>`;
+  }).join('');
+}
+function setCatalogState(state,message){
+  const status=document.getElementById('catalogStatus');
+  const alert=document.getElementById('catalogAlert');
+  if(status){
+    status.classList.remove('beta');
+    status.textContent=state==='online'?'● AO VIVO':state==='loading'?'CONECTANDO':'OFFLINE';
+    if(state!=='online')status.classList.add('beta');
+  }
+  if(alert){
+    alert.className=`catalog-alert ${state==='online'?'online':state==='error'?'error':''}`;
+    alert.textContent=message;
+  }
+}
+async function refreshLiveCatalog(manual=false){
+  if(manual)setCatalogState('loading','Atualizando resultados...');
+
+  try{
+    const response=await fetch('/api/blaze-double',{cache:'no-store'});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    const payload=await response.json();
+    const rounds=Array.isArray(payload)?payload:(payload.rounds||payload.records||payload.data||[]);
+    if(!Array.isArray(rounds)||!rounds.length)throw new Error('Fonte retornou lista vazia');
+
+    const changed=mergeCatalogRounds(rounds);
+    renderLiveCatalog(changed);
+
+    const updated=document.getElementById('catalogUpdated');
+    if(updated)updated.textContent=new Date().toLocaleTimeString('pt-BR');
+    setCatalogState('online',`Conectado. ${rounds.length} resultado(s) recebidos nesta leitura.`);
+  }catch(error){
+    console.error('Catalogador:',error);
+    renderLiveCatalog(false);
+    setCatalogState(
+      'error',
+      catalogRounds.length
+        ?'Fonte temporariamente indisponível. Exibindo o histórico salvo neste navegador.'
+        :'Não foi possível conectar à fonte ao vivo. Verifique o deploy da pasta api.'
+    );
+  }
+}
+function startLiveCatalog(){
+  if(!catalogStarted){
+    loadCatalogStorage();
+    renderLiveCatalog(false);
+    catalogStarted=true;
+  }
+  refreshLiveCatalog();
+  clearInterval(catalogTimer);
+  catalogTimer=setInterval(refreshLiveCatalog,5000);
+}
 
 /* ===== SIMULADOR AO VIVO ===== */
 window.currentSimulatorSignals=null;

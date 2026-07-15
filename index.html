@@ -626,7 +626,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI • BASE 1.2 • GESTOR ESTÁVEL — HOME DE MARCA E RADAR TÉRMICO */
+/* ORION UI • BASE 1.2 • GESTOR FIX 1 ESTÁVEL — HOME DE MARCA E RADAR TÉRMICO */
 .sigma-brand-stage{
   min-height:430px;
   margin-top:18px;
@@ -764,7 +764,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI • BASE 1.2 • GESTOR ESTÁVEL — HOME LIMPA */
+/* ORION UI • BASE 1.2 • GESTOR FIX 1 ESTÁVEL — HOME LIMPA */
 #home{
   overflow:hidden;
 }
@@ -797,7 +797,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI • BASE 1.2 • GESTOR ESTÁVEL — SIMULADOR LIMPO */
+/* ORION UI • BASE 1.2 • GESTOR FIX 1 ESTÁVEL — SIMULADOR LIMPO */
 .simulator-input-only{
   grid-template-columns:1fr !important;
 }
@@ -1674,6 +1674,7 @@ function openFeature(id,title){
   document.querySelectorAll('.screen').forEach(screen=>screen.classList.remove('active'));
   target.classList.add('active');
   setActiveSideLink(id);
+  if(id==='gestor' && typeof calculateBankManager==='function')calculateBankManager();
   window.scrollTo(0,0);
 }
 
@@ -1711,7 +1712,9 @@ const periods=[
   {label:'18h → 23h',start:18}
 ];
 function renderPeriodSelector(){
-  document.getElementById('periodSelector').innerHTML=periods.map((p,i)=>`<button class="period-btn ${i===0?'active':''}" onclick="selectPeriod(${p.start},this)">${p.label}</button>`).join('');
+  const selector=document.getElementById('periodSelector');
+  if(!selector)return;
+  selector.innerHTML=periods.map((p,i)=>`<button class="period-btn ${i===0?'active':''}" onclick="selectPeriod(${p.start},this)">${p.label}</button>`).join('');
 }
 function selectPeriod(start,btn){
   document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
@@ -1720,7 +1723,8 @@ function selectPeriod(start,btn){
     const b=x.windows[0];
     return `<tr><td><strong>${String(x.hour).padStart(2,'0')}h</strong></td><td>${b.time}</td><td>${b.level}</td><td class="score">${b.score}</td></tr>`;
   }).join('');
-  document.getElementById('sessionTable').innerHTML=rows;
+  const sessionTable=document.getElementById('sessionTable');
+  if(sessionTable)sessionTable.innerHTML=rows;
 }
 
 const rankingTimes=[{"time":"04:30","score":75,"persistence":34,"level":"SIGMA CORE"},{"time":"06:51","score":75,"persistence":34,"level":"SIGMA CORE"},{"time":"15:52","score":74,"persistence":32,"level":"SIGMA CORE"},{"time":"16:29","score":74,"persistence":32,"level":"SIGMA CORE"},{"time":"17:05","score":74,"persistence":32,"level":"SIGMA CORE"},{"time":"02:35","score":74,"persistence":31,"level":"SIGMA CORE"},{"time":"03:55","score":74,"persistence":31,"level":"SIGMA CORE"},{"time":"08:16","score":74,"persistence":31,"level":"SIGMA CORE"},{"time":"11:20","score":74,"persistence":31,"level":"SIGMA CORE"},{"time":"11:25","score":74,"persistence":31,"level":"SIGMA CORE"},{"time":"12:01","score":73,"persistence":29,"level":"SIGMA CORE"},{"time":"16:10","score":73,"persistence":29,"level":"SIGMA CORE"},{"time":"19:08","score":73,"persistence":29,"level":"SIGMA CORE"},{"time":"19:16","score":73,"persistence":29,"level":"SIGMA CORE"},{"time":"20:49","score":73,"persistence":29,"level":"SIGMA CORE"},{"time":"21:04","score":73,"persistence":29,"level":"SIGMA CORE"},{"time":"01:33","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"01:59","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"03:07","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"05:56","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"07:08","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"07:15","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"09:11","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"13:03","score":73,"persistence":28,"level":"SIGMA CORE"},{"time":"11:54","score":72,"persistence":26,"level":"SIGMA CORE"},{"time":"13:50","score":72,"persistence":26,"level":"SIGMA CORE"},{"time":"15:49","score":72,"persistence":26,"level":"SIGMA CORE"},{"time":"16:23","score":72,"persistence":26,"level":"SIGMA CORE"},{"time":"16:39","score":72,"persistence":26,"level":"SIGMA CORE"},{"time":"17:43","score":72,"persistence":26,"level":"SIGMA CORE"}];
@@ -1742,9 +1746,7 @@ document.getElementById('trendHot').innerHTML=trendRows(cycles.filter(c=>c[3]=='
 document.getElementById('trendCold').innerHTML=trendRows(cycles.filter(c=>c[3]=='Perdendo força'));
 
 renderHourSelector();
-renderPeriodSelector();
 selectOperationalHour(15,document.querySelectorAll('.hour-btn')[15]);
-selectPeriod(0,document.querySelectorAll('.period-btn')[0]);
 
 
 /* ===== SIGMA COLOR IA ===== */

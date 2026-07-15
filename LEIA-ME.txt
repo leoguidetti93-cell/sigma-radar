@@ -1,18 +1,13 @@
-SIGMA RADAR — ORION FIX 2
+SIGMA RADAR — BASE HISTÓRICA 1.2
 
-ALTERAÇÕES:
-1. Cópia do Sigma Color em formato compacto:
-   16:30 ⚫ + ⚪
-2. Simulador ao Vivo liberado.
-3. Entrada dos quatro últimos brancos.
-4. Projeções por média, mediana e fórmula Sigma.
-5. Tratamento de horários atravessando a meia-noite.
-6. Botão para copiar os três horários projetados.
+Rodadas únicas: 90,568
+Duplicidades removidas: 5,782
+Período: 14/06/2026 00:00 até 15/07/2026 13:47
+Nova planilha incorporada: 4,525 registros
 
-GITHUB:
-Substitua somente o arquivo index.html atual por este novo arquivo.
-Faça o commit e aguarde o deploy automático da Vercel.
-Depois pressione Ctrl+F5 no site.
+Arquivos obrigatórios no GitHub:
+- index.html
+- data/sigma-base-1.2.js
 
-CONFIRMAÇÃO:
-No rodapé deve aparecer ORION FIX 2.
+Catalogador: Em construção.
+Simulador: importa uma planilha e usa as 300 rodadas mais recentes.

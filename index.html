@@ -426,9 +426,229 @@ tr:hover td{background:rgba(83,215,255,.025)}
   .row{grid-template-columns:88px 1fr 55px}
   .row .optional{display:none}
 }
+
+/* ===== ORION UI — PLAYER EXPERIENCE ===== */
+:root{
+  --bg:#071018;
+  --panel:#101923;
+  --panel2:#141f2b;
+  --line:#263442;
+  --text:#f5f7fa;
+  --muted:#8493a5;
+  --cyan:#45c7e8;
+  --green:#34d399;
+  --yellow:#f4c95d;
+  --orange:#ff9147;
+  --red:#f12c4c;
+  --red2:#bf1733;
+  --violet:#7c6cf3;
+}
+body{
+  background:
+    radial-gradient(circle at 76% 0%,rgba(241,44,76,.08),transparent 28%),
+    linear-gradient(180deg,#071018,#08111a 42%,#060c12);
+}
+body:before{opacity:.09;background-size:46px 46px}
+.player-sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:238px;z-index:45;
+  display:flex;flex-direction:column;
+  padding:22px 15px 18px;
+  background:linear-gradient(180deg,#101a25,#0a121b);
+  border-right:1px solid #24313e;
+  box-shadow:14px 0 42px rgba(0,0,0,.22)
+}
+.side-logo{padding:7px 10px 22px}
+.side-logo strong{display:block;font-size:27px;letter-spacing:-1.4px}
+.side-logo strong em{font-style:normal;color:var(--red)}
+.side-logo span{display:block;margin-top:5px;color:var(--muted);font-size:11px;letter-spacing:.8px}
+.side-status{
+  display:flex;align-items:center;gap:8px;margin:0 8px 18px;
+  padding:10px 11px;border-radius:11px;background:#121e29;border:1px solid #293744;
+  color:#a9b5c1;font-size:11px;font-weight:800
+}
+.side-status i{
+  width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 10px rgba(52,211,153,.72)
+}
+.side-nav{display:flex;flex-direction:column;gap:4px}
+.side-link{
+  width:100%;border:0;background:transparent;color:#9aa7b4;
+  display:flex;align-items:center;gap:12px;padding:11px 12px;
+  border-radius:10px;cursor:pointer;text-align:left;font-weight:760;font-size:13px;
+  transition:.18s
+}
+.side-link:hover{background:#16232e;color:white}
+.side-link.active{
+  color:white;background:linear-gradient(90deg,rgba(241,44,76,.22),rgba(241,44,76,.04));
+  box-shadow:inset 3px 0 0 var(--red)
+}
+.side-icon{
+  width:27px;height:27px;display:grid;place-items:center;border-radius:8px;
+  background:#1b2834;color:#d8e0e8;font-size:13px
+}
+.side-link.active .side-icon{background:var(--red);color:white}
+.side-bottom{margin-top:auto;padding:15px 10px 2px;border-top:1px solid #22303c}
+.side-bottom b{font-size:11px;color:#d8dfe6}
+.side-bottom span{display:block;color:#6f8192;font-size:10px;margin-top:5px}
+.screen{padding:24px 28px 30px 266px}
+.shell{max-width:1500px}
+.topline{
+  min-height:60px;margin-bottom:17px;padding-bottom:15px;
+  border-bottom:1px solid #21303c
+}
+.brand h1{font-size:27px;letter-spacing:-1px}
+.brand h1 span{color:var(--red)}
+.brand p{font-size:12px;margin-top:3px}
+.status-pill{
+  border-color:#2d3b47;background:#131f2a;color:#b9c4ce;
+  border-radius:8px;padding:8px 10px
+}
+.status-pill.beta{color:#ff9cac;background:rgba(241,44,76,.08);border-color:rgba(241,44,76,.25)}
+.player-topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  margin-bottom:18px
+}
+.player-greeting h2{margin:0;font-size:25px;letter-spacing:-.8px}
+.player-greeting p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.player-clock{text-align:right}
+.player-clock strong{display:block;font-size:21px}
+.player-clock span{color:var(--muted);font-size:10px}
+.quick-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px
+}
+.quick-card{
+  min-height:108px;padding:16px;border-radius:15px;
+  background:linear-gradient(145deg,#15212c,#101923);
+  border:1px solid #273541;position:relative;overflow:hidden
+}
+.quick-card:after{
+  content:"";position:absolute;width:70px;height:70px;border-radius:50%;
+  right:-30px;bottom:-35px;background:rgba(241,44,76,.10)
+}
+.quick-label{color:#8292a2;font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase}
+.quick-value{display:block;font-size:25px;font-weight:950;margin-top:11px;letter-spacing:-1px}
+.quick-sub{display:block;margin-top:5px;color:#728395;font-size:10px}
+.quick-red .quick-value{color:#ff526b}
+.quick-green .quick-value{color:#46dda2}
+.quick-yellow .quick-value{color:#f5cf69}
+.hero{
+  min-height:auto;padding:22px 24px;border-radius:16px;
+  background:linear-gradient(115deg,#15212c,#101922);
+  box-shadow:none;border-color:#273541;margin-bottom:18px
+}
+.hero h2{font-size:27px;line-height:1.08;letter-spacing:-1px;margin-bottom:8px}
+.hero p{font-size:13px;line-height:1.5;max-width:780px}
+.hero:after,.core{display:none}
+.modules{
+  grid-template-columns:repeat(4,1fr);gap:12px;margin-top:0
+}
+.module{
+  min-height:145px;padding:17px;border-radius:15px;
+  background:linear-gradient(145deg,#15212c,#111a24);
+  border-color:#293743;box-shadow:none
+}
+.module:hover{
+  transform:translateY(-3px);border-color:rgba(241,44,76,.45);
+  box-shadow:0 14px 32px rgba(0,0,0,.25)
+}
+.module:after{background:rgba(241,44,76,.09);width:110px;height:110px}
+.module .icon{
+  width:39px;height:39px;margin-bottom:15px;border-radius:10px;
+  background:#1e2b37;border-color:#33424f;color:white;font-size:16px
+}
+.module:hover .icon{background:var(--red);border-color:var(--red)}
+.module h3{font-size:15px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.35px}
+.module p{font-size:11px;line-height:1.4}
+.module .tag{
+  right:12px;top:12px;padding:5px 7px;
+  color:#98a7b5;background:#1b2833
+}
+.module .tag:first-child{color:#ff8da0;background:rgba(241,44,76,.09)}
+.card{
+  border-radius:15px;background:linear-gradient(145deg,#15212c,#101923);
+  border-color:#283642;box-shadow:none
+}
+.inner-header{
+  min-height:61px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #21303c
+}
+.back{background:#151f2a;border-color:#2c3a46;border-radius:9px;padding:9px 12px}
+.action-btn,.file-label{
+  background:var(--red)!important;color:#fff!important;border-color:var(--red)!important;
+  border-radius:9px!important
+}
+.action-btn:hover{background:#d92342!important}
+.secondary-action{background:#192631!important;border-color:#31414e!important}
+.hour-btn.active,.period-btn.active{
+  color:white;background:linear-gradient(135deg,var(--red),var(--red2));
+  box-shadow:0 0 17px rgba(241,44,76,.17)
+}
+.level{color:#ff8397;background:rgba(241,44,76,.08);border:1px solid rgba(241,44,76,.22)}
+.bar i,.fill{background:linear-gradient(90deg,var(--red),#ff6b7e)}
+.score,.rank{color:#ff5f75}
+.pulse{
+  background:radial-gradient(circle,rgba(241,44,76,.3),rgba(241,44,76,.04) 62%);
+  box-shadow:0 0 45px rgba(241,44,76,.15)
+}
+.lab-ring{border-color:rgba(241,44,76,.2);box-shadow:0 0 55px rgba(241,44,76,.13)}
+.lab-ring:before{border-top-color:var(--red)}
+.progress span{background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow))}
+.heat-cell:hover{border-color:white;box-shadow:0 0 17px currentColor}
+.player-section-title{
+  display:flex;align-items:end;justify-content:space-between;gap:14px;
+  margin:19px 1px 11px
+}
+.player-section-title h3{margin:0;font-size:15px}
+.player-section-title span{color:var(--muted);font-size:10px}
+@media(max-width:1100px){
+  .player-sidebar{width:86px;padding-left:10px;padding-right:10px}
+  .side-logo strong{font-size:0}.side-logo strong:before{content:"Σ";font-size:28px;color:var(--red)}
+  .side-logo span,.side-status span,.side-link .side-text,.side-bottom{display:none}
+  .side-link{justify-content:center}.side-icon{width:38px;height:38px}
+  .screen{padding-left:110px}
+  .modules{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:720px){
+  .player-sidebar{
+    width:auto;height:66px;top:auto;right:0;bottom:0;left:0;
+    flex-direction:row;padding:8px 9px;align-items:center;overflow-x:auto;
+    border-right:0;border-top:1px solid #273540
+  }
+  .side-logo,.side-status,.side-bottom{display:none}
+  .side-nav{width:100%;flex-direction:row;justify-content:flex-start}
+  .side-link{min-width:58px;padding:5px;justify-content:center}
+  .side-link.active{box-shadow:inset 0 -3px 0 var(--red)}
+  .side-link .side-text{display:none}
+  .side-icon{width:39px;height:39px}
+  .screen{padding:15px 14px 88px}
+  .quick-stats{grid-template-columns:1fr 1fr}
+  .modules{grid-template-columns:1fr 1fr}
+  .module{min-height:135px}
+}
+
 </style>
 </head>
 <body>
+
+<aside class="player-sidebar">
+  <div class="side-logo">
+    <strong>SIGMA <em>RADAR</em></strong>
+    <span>DOUBLE INTELLIGENCE</span>
+  </div>
+  <div class="side-status"><i></i><span>BASE 1.1 ONLINE</span></div>
+  <nav class="side-nav">
+    <button class="side-link active" data-target="home" onclick="sideNavigate('home','Central Sigma',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button>
+    <button class="side-link" data-target="operacional" onclick="sideNavigate('operacional','Radar Operacional',this)"><span class="side-icon">◎</span><span class="side-text">Radar</span></button>
+    <button class="side-link" data-target="sigmaColor" onclick="sideNavigate('sigmaColor','Sigma Color',this)"><span class="side-icon">●</span><span class="side-text">Sigma Color</span></button>
+    <button class="side-link" data-target="padroes" onclick="sideNavigate('padroes','Ranking de Padrões',this)"><span class="side-icon">◇</span><span class="side-text">Padrões</span></button>
+    <button class="side-link" data-target="temporal" onclick="sideNavigate('temporal','Radar Temporal',this)"><span class="side-icon">▦</span><span class="side-text">Temporal</span></button>
+    <button class="side-link" data-target="sessoes" onclick="sideNavigate('sessoes','Sessões do Dia',this)"><span class="side-icon">◷</span><span class="side-text">Sessões</span></button>
+    <button class="side-link" data-target="ranking" onclick="sideNavigate('ranking','Ranking IA',this)"><span class="side-icon">⌁</span><span class="side-text">Ranking IA</span></button>
+    <button class="side-link" data-target="tendencias" onclick="sideNavigate('tendencias','Tendências',this)"><span class="side-icon">↗</span><span class="side-text">Tendências</span></button>
+    <button class="side-link" data-target="simulador" onclick="sideNavigate('simulador','Simulador ao Vivo',this)"><span class="side-icon">⌖</span><span class="side-text">Simulador</span></button>
+  </nav>
+  <div class="side-bottom"><b>ORION UI — PREVIEW 1</b><span>Experiência para jogadores</span></div>
+</aside>
+
 
 <div style="max-width:1100px;margin:24px auto;padding:20px;border:1px solid #1f2a38;border-radius:18px;background:#0b1017">
 <h2 style="color:#53d7ff;margin-top:0">Plataforma de Inteligência Temporal</h2>
@@ -453,26 +673,54 @@ tr:hover td{background:rgba(83,215,255,.025)}
 
 <div id="home" class="screen active">
   <div class="shell">
-    <div class="topline">
-      <div class="brand">
-        <h1>SIGMA <span>RADAR</span></h1>
-        <p>Centro de inteligência temporal</p>
-      </div>
-      <div>
-        <span class="status-pill">BASE HISTÓRICA 1.1 • ONLINE</span>
-        <span class="status-pill beta">BETA LAB 1.1 • ORION</span>
-      </div>
-    </div>
+    
+<div class="player-topbar">
+  <div class="player-greeting">
+    <h2>Central Sigma</h2>
+    <p>Análises para o Double, organizadas para sua sessão.</p>
+  </div>
+  <div class="player-clock">
+    <strong id="playerClock">--:--</strong>
+    <span id="playerDate">CARREGANDO DATA</span>
+  </div>
+</div>
 
-    <div class="hero">
-      <div>
-        <h2>Escolha o que<br>deseja analisar.</h2>
-        <p>Cada função consulta o motor histórico do Sigma e abre uma experiência dedicada, com leitura visual rápida e foco operacional.</p>
-      </div>
-      <div class="core"><b>ONLINE</b></div>
-    </div>
+<div class="quick-stats">
+  <div class="quick-card quick-red">
+    <span class="quick-label">Melhor janela</span>
+    <strong class="quick-value">15:39–15:48</strong>
+    <span class="quick-sub">Próxima faixa de maior destaque</span>
+  </div>
+  <div class="quick-card">
+    <span class="quick-label">Cor predominante</span>
+    <strong class="quick-value">VERMELHO</strong>
+    <span class="quick-sub">Leitura histórica da sessão</span>
+  </div>
+  <div class="quick-card quick-green">
+    <span class="quick-label">Status</span>
+    <strong class="quick-value">ONLINE</strong>
+    <span class="quick-sub">Base Histórica 1.1 carregada</span>
+  </div>
+  <div class="quick-card quick-yellow">
+    <span class="quick-label">Versão</span>
+    <strong class="quick-value">ORION UI</strong>
+    <span class="quick-sub">Player Experience — Preview 1</span>
+  </div>
+</div>
 
-    <div class="modules">
+<div class="hero">
+  <div>
+    <h2>Escolha sua ferramenta.</h2>
+    <p>Radar de horários, sinais de cores, padrões, mapa temporal e simulação ao vivo em uma única central para o Double.</p>
+  </div>
+</div>
+
+<div class="player-section-title">
+  <h3>Ferramentas da sessão</h3>
+  <span>Selecione um módulo para começar</span>
+</div>
+
+<div class="modules">
       <button class="module" onclick="openFeature('operacional','Radar Operacional')" style="--glow:rgba(71,243,162,.13)">
         <span class="tag">ATIVO</span><div class="icon">◎</div>
         <h3>Radar Operacional</h3><p>Veja a próxima janela, o estado atual e a sequência de oportunidades do dia.</p>
@@ -507,7 +755,7 @@ tr:hover td{background:rgba(83,215,255,.025)}
       </button>
     </div>
   </div>
-    <div style="text-align:center;color:#6f7e92;font-size:11px;margin-top:24px">SIGMA RADAR • INTELIGÊNCIA TEMPORAL • BETA LAB 1.1 • ORION FIX 2 • © 2026</div>
+    <div style="text-align:center;color:#6f7e92;font-size:11px;margin-top:24px">SIGMA RADAR • INTELIGÊNCIA TEMPORAL • BETA LAB 1.1 • ORION UI PREVIEW 1 • © 2026</div>
   </div>
 </div>
 
@@ -785,6 +1033,36 @@ window.SIGMA_BASE_11={"meta":{"version":"1.1","records":87680,"duplicatesRemoved
 </script>
 <script>
 const screens=[...document.querySelectorAll('.screen')];
+
+function setActiveSideLink(target){
+  document.querySelectorAll('.side-link').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.target===target);
+  });
+}
+function sideNavigate(id,title,button){
+  if(id==='home'){
+    goHome();
+    setActiveSideLink('home');
+    return;
+  }
+  openFeature(id,title);
+  setActiveSideLink(id);
+}
+const originalGoHome=goHome;
+goHome=function(){
+  originalGoHome();
+  setActiveSideLink('home');
+};
+function updatePlayerClock(){
+  const now=new Date();
+  const clock=document.getElementById('playerClock');
+  const date=document.getElementById('playerDate');
+  if(clock)clock.textContent=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  if(date)date.textContent=now.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'}).toUpperCase();
+}
+updatePlayerClock();
+setInterval(updatePlayerClock,1000);
+
 function goHome(){screens.forEach(s=>s.classList.remove('active'));document.getElementById('home').classList.add('active');window.scrollTo(0,0)}
 const loaderMessages={
   sigmaColor:'Calculando predominância e selecionando os 12 sinais da sessão.',

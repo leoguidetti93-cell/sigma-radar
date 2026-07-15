@@ -626,7 +626,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI • BASE 1.2 ESTÁVEL — HOME DE MARCA E RADAR TÉRMICO */
+/* ORION UI • BASE 1.2 • GESTOR ESTÁVEL — HOME DE MARCA E RADAR TÉRMICO */
 .sigma-brand-stage{
   min-height:430px;
   margin-top:18px;
@@ -764,7 +764,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI • BASE 1.2 ESTÁVEL — HOME LIMPA */
+/* ORION UI • BASE 1.2 • GESTOR ESTÁVEL — HOME LIMPA */
 #home{
   overflow:hidden;
 }
@@ -797,7 +797,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI • BASE 1.2 ESTÁVEL — SIMULADOR LIMPO */
+/* ORION UI • BASE 1.2 • GESTOR ESTÁVEL — SIMULADOR LIMPO */
 .simulator-input-only{
   grid-template-columns:1fr !important;
 }
@@ -951,6 +951,245 @@ body:before{opacity:.09;background-size:46px 46px}
   .catalog-toolbar .action-btn{width:100%}
 }
 
+
+/* ===== GESTOR DE BANCA ===== */
+.bank-grid{
+  display:grid;
+  grid-template-columns:minmax(320px,.8fr) minmax(420px,1.2fr);
+  gap:16px;
+}
+.bank-config-card,.bank-summary-card{padding:22px}
+.bank-field{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin-top:17px;
+}
+.bank-field>span{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.55px;
+  text-transform:uppercase;
+}
+.bank-money-input{
+  display:flex;
+  align-items:center;
+  border:1px solid #30404d;
+  border-radius:11px;
+  background:#0b151e;
+  overflow:hidden;
+}
+.bank-money-input b{
+  padding:0 13px;
+  color:#8393a2;
+  font-size:13px;
+}
+.bank-money-input input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:white;
+  padding:14px 12px 14px 0;
+  font-size:22px;
+  font-weight:900;
+}
+.bank-options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.bank-options button{
+  border:1px solid #30404d;
+  border-radius:10px;
+  background:#101b25;
+  color:#8e9dab;
+  padding:12px;
+  cursor:pointer;
+  font-weight:900;
+  transition:.16s;
+}
+.bank-options button:hover{color:white;border-color:#536271}
+.bank-options button.active{
+  color:white;
+  border-color:var(--red);
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  box-shadow:0 8px 22px rgba(241,44,76,.18);
+}
+.bank-field select{
+  width:100%;
+  border:1px solid #30404d;
+  border-radius:10px;
+  background:#0b151e;
+  color:white;
+  padding:13px;
+  outline:0;
+  font-weight:800;
+}
+.bank-recalculate{width:100%;margin-top:18px}
+.bank-summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+  margin-top:16px;
+}
+.bank-summary-grid>div{
+  padding:16px;
+  border:1px solid #293946;
+  border-radius:13px;
+  background:#0c161f;
+}
+.bank-summary-grid span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:850;
+  text-transform:uppercase;
+}
+.bank-summary-grid strong{
+  display:block;
+  margin-top:8px;
+  font-size:23px;
+  letter-spacing:-.7px;
+}
+.bank-profit-box{
+  border-color:rgba(52,211,153,.28)!important;
+  background:rgba(52,211,153,.055)!important;
+}
+.bank-profit-box strong{color:#50dfa5}
+.bank-risk-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:15px;
+  padding:14px 15px;
+  border-radius:12px;
+  border:1px solid #293946;
+  background:#0c161f;
+  color:var(--muted);
+  font-size:11px;
+}
+.bank-risk{
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:9px;
+  letter-spacing:.7px;
+}
+.bank-risk.low{color:#57e4ab;background:rgba(52,211,153,.1)}
+.bank-risk.medium{color:#f6ce69;background:rgba(244,201,93,.1)}
+.bank-risk.high{color:#ff8296;background:rgba(241,44,76,.1)}
+.bank-progress{margin-top:18px}
+.bank-progress>div{
+  display:flex;
+  justify-content:space-between;
+  color:#8191a0;
+  font-size:10px;
+  margin-bottom:8px;
+}
+.bank-progress i{
+  display:block;
+  height:8px;
+  border-radius:999px;
+  background:#0a131b;
+  border:1px solid #283844;
+  overflow:hidden;
+}
+.bank-progress b{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#f5c85c,var(--red));
+  transition:width .3s ease;
+}
+.bank-compare-card,.bank-table-card{margin-top:16px}
+.bank-section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+.bank-section-head h3{margin:6px 0 0}
+.bank-comparison{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:11px;
+  margin-top:16px;
+}
+.bank-compare-item{
+  padding:16px;
+  border:1px solid #293946;
+  border-radius:13px;
+  background:#0c161f;
+  cursor:pointer;
+  transition:.18s;
+}
+.bank-compare-item:hover{transform:translateY(-2px);border-color:#536271}
+.bank-compare-item.active{
+  border-color:rgba(241,44,76,.5);
+  box-shadow:inset 0 0 0 1px rgba(241,44,76,.1),0 10px 28px rgba(241,44,76,.07);
+}
+.bank-compare-item>span{
+  color:#ff7086;
+  font-size:10px;
+  font-weight:900;
+}
+.bank-compare-item strong{
+  display:block;
+  font-size:22px;
+  margin:10px 0 5px;
+}
+.bank-compare-item small{
+  display:block;
+  color:#7e8e9d;
+  line-height:1.5;
+}
+.bank-table-wrap{
+  overflow:auto;
+  margin-top:16px;
+  border:1px solid #283844;
+  border-radius:12px;
+}
+.bank-table{
+  width:100%;
+  min-width:700px;
+  border-collapse:collapse;
+}
+.bank-table th{
+  padding:12px 14px;
+  background:#0b151e;
+  color:#8393a1;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.55px;
+  text-align:right;
+}
+.bank-table th:first-child,.bank-table td:first-child{text-align:center}
+.bank-table td{
+  padding:12px 14px;
+  border-top:1px solid #22323e;
+  text-align:right;
+  color:#dfe6ec;
+  font-size:12px;
+}
+.bank-table tr:hover td{background:rgba(255,255,255,.018)}
+.bank-table td:nth-child(2){font-weight:900;color:white}
+.bank-table td:last-child{color:#50dfa5;font-weight:900}
+.bank-warning{
+  margin:14px 0 0;
+  color:#728392;
+  font-size:10px;
+  line-height:1.55;
+}
+@media(max-width:900px){
+  .bank-grid{grid-template-columns:1fr}
+  .bank-comparison{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .bank-summary-grid{grid-template-columns:1fr}
+  .bank-section-head{align-items:stretch;flex-direction:column}
+}
+
 </style>
 </head>
 <body>
@@ -977,7 +1216,7 @@ body:before{opacity:.09;background-size:46px 46px}
     <button class="side-link" data-target="sigmaColor" onclick="sideNavigate('sigmaColor','Sigma Color',this)"><span class="side-icon">●</span><span class="side-text">Sigma Color</span></button>
     <button class="side-link" data-target="padroes" onclick="sideNavigate('padroes','Ranking de Padrões',this)"><span class="side-icon">◇</span><span class="side-text">Padrões</span></button>
     <button class="side-link" data-target="temporal" onclick="sideNavigate('temporal','Radar Temporal',this)"><span class="side-icon">▦</span><span class="side-text">Temporal</span></button>
-    <button class="side-link" data-target="sessoes" onclick="sideNavigate('sessoes','Sessões do Dia',this)"><span class="side-icon">◷</span><span class="side-text">Sessões</span></button>
+    <button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestor de Banca',this)"><span class="side-icon">R$</span><span class="side-text">Gestor de Banca</span></button>
     <button class="side-link" data-target="ranking" onclick="sideNavigate('ranking','Ranking IA',this)"><span class="side-icon">⌁</span><span class="side-text">Ranking IA</span></button>
     <button class="side-link" data-target="tendencias" onclick="sideNavigate('tendencias','Tendências',this)"><span class="side-icon">↗</span><span class="side-text">Tendências</span></button>
     <button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">◉</span><span class="side-text">Catalogador</span></button>
@@ -1123,24 +1362,131 @@ body:before{opacity:.09;background-size:46px 46px}
   </div>
 </div>
 
-<div id="sessoes" class="screen">
+
+<div id="gestor" class="screen">
   <div class="shell">
     <div class="inner-header">
       <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Sessões do Dia</h2><p>Melhor janela de 10 minutos de cada hora.</p></div>
-      <span class="status-pill">BLOCOS DE 6 HORAS</span>
+      <div class="title-group">
+        <h2>Gestor de Banca</h2>
+        <p>Progressão calculada para manter o mesmo lucro líquido em qualquer entrada vencedora.</p>
+      </div>
+      <span class="status-pill beta">GESTÃO SIGMA</span>
     </div>
 
-    <div class="card" style="margin-bottom:18px">
-      <div class="small">SELECIONE O PERÍODO</div>
-      <div id="periodSelector" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px"></div>
+    <div class="bank-grid">
+      <div class="card bank-config-card">
+        <span class="small">CONFIGURAÇÃO</span>
+
+        <label class="bank-field">
+          <span>Valor da banca</span>
+          <div class="bank-money-input">
+            <b>R$</b>
+            <input id="bankrollValue" type="number" min="1" step="0.01" value="1000" oninput="calculateBankManager()">
+          </div>
+        </label>
+
+        <div class="bank-field">
+          <span>Quantidade de entradas</span>
+          <div class="bank-options" id="bankEntryOptions">
+            <button type="button" data-entries="18" onclick="selectBankEntries(18,this)">18</button>
+            <button type="button" data-entries="24" class="active" onclick="selectBankEntries(24,this)">24</button>
+            <button type="button" data-entries="30" onclick="selectBankEntries(30,this)">30</button>
+          </div>
+        </div>
+
+        <div class="bank-field">
+          <span>Utilização máxima da banca</span>
+          <div class="bank-options" id="bankUsageOptions">
+            <button type="button" data-usage="60" onclick="selectBankUsage(60,this)">60%</button>
+            <button type="button" data-usage="75" onclick="selectBankUsage(75,this)">75%</button>
+            <button type="button" data-usage="95" class="active" onclick="selectBankUsage(95,this)">95%</button>
+          </div>
+        </div>
+
+        <label class="bank-field">
+          <span>Payout</span>
+          <select id="bankPayout" onchange="calculateBankManager()">
+            <option value="14" selected>Branco — 14x</option>
+            <option value="20">Crash — 20x</option>
+            <option value="50">Crash — 50x</option>
+            <option value="100">Crash — 100x</option>
+          </select>
+        </label>
+
+        <button class="action-btn bank-recalculate" onclick="calculateBankManager()">↻ Recalcular plano</button>
+      </div>
+
+      <div class="card bank-summary-card">
+        <span class="small">RESUMO DO PLANO</span>
+        <div class="bank-summary-grid">
+          <div>
+            <span>Banca utilizada</span>
+            <strong id="bankUsed">R$ 0,00</strong>
+          </div>
+          <div>
+            <span>Reserva</span>
+            <strong id="bankReserve">R$ 0,00</strong>
+          </div>
+          <div>
+            <span>Primeira entrada</span>
+            <strong id="bankFirstStake">R$ 0,00</strong>
+          </div>
+          <div class="bank-profit-box">
+            <span>Lucro fixo</span>
+            <strong id="bankFixedProfit">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="bank-risk-line">
+          <span>Perfil de risco</span>
+          <strong id="bankRiskBadge" class="bank-risk high">ALTO</strong>
+        </div>
+
+        <div class="bank-progress">
+          <div><span id="bankUsageLabel">95% da banca</span><span id="bankBudgetLabel">R$ 0,00</span></div>
+          <i><b id="bankUsageBar"></b></i>
+        </div>
+      </div>
     </div>
 
-    <div class="card">
-      <table>
-        <thead><tr><th>Hora</th><th>Melhor janela</th><th>Nível</th><th>Score</th></tr></thead>
-        <tbody id="sessionTable"></tbody>
-      </table>
+    <div class="card bank-compare-card">
+      <div class="bank-section-head">
+        <div>
+          <span class="small">COMPARADOR</span>
+          <h3>18 × 24 × 30 entradas</h3>
+        </div>
+      </div>
+      <div id="bankComparison" class="bank-comparison"></div>
+    </div>
+
+    <div class="card bank-table-card">
+      <div class="bank-section-head">
+        <div>
+          <span class="small">PROGRESSÃO COMPLETA</span>
+          <h3 id="bankPlanTitle">Plano de 24 entradas</h3>
+        </div>
+        <button id="copyBankPlanBtn" class="action-btn secondary-action" onclick="copyBankPlan()">⧉ Copiar sequência</button>
+      </div>
+
+      <div class="bank-table-wrap">
+        <table class="bank-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Entrada</th>
+              <th>Total investido</th>
+              <th>Retorno no acerto</th>
+              <th>Lucro líquido</th>
+            </tr>
+          </thead>
+          <tbody id="bankPlanBody"></tbody>
+        </table>
+      </div>
+
+      <p class="bank-warning">
+        A progressão mantém o mesmo lucro nominal se houver acerto, mas pode consumir todo o valor destinado ao plano caso nenhuma entrada vença. Use apenas valores que não comprometam sua renda.
+      </p>
     </div>
   </div>
 </div>
@@ -1316,7 +1662,7 @@ const loaderMessages={
   padroes:'Minerando sequências de quatro casas e validando resultados até G1.',
   temporal:'Mapeando temperaturas históricas em janelas de três minutos.',
   operacional:'Consultando os ciclos e oportunidades da sessão escolhida.',
-  sessoes:'Comparando as melhores janelas de cada hora.',
+  gestor:'Calculando a progressão e o lucro fixo do plano.',
   ranking:'Classificando os horários históricos mais fortes.',
   tendencias:'Comparando aquecimento e perda de força.',
   simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.',
@@ -1774,6 +2120,165 @@ function copySimulatorSignals(){
   if(field)field.addEventListener('change',calculateLiveSimulator);
 });
 calculateLiveSimulator();
+
+
+/* ===== GESTOR DE BANCA ===== */
+let bankSelectedEntries=24;
+let bankSelectedUsage=95;
+let currentBankPlan=[];
+
+function bankMoney(cents){
+  return (cents/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+function ceilStakeCents(value){
+  return Math.max(1,Math.ceil(value-1e-9));
+}
+function createProgression(firstStakeCents,entries,payout){
+  const profitTarget=(payout-1)*firstStakeCents;
+  const plan=[];
+  let accumulated=0;
+
+  for(let index=1;index<=entries;index++){
+    const stake=index===1
+      ? firstStakeCents
+      : ceilStakeCents((profitTarget+accumulated)/(payout-1));
+
+    accumulated+=stake;
+    const returnCents=stake*payout;
+    const profit=returnCents-accumulated;
+
+    plan.push({
+      index,
+      stake,
+      accumulated,
+      returnCents,
+      profit
+    });
+  }
+  return plan;
+}
+function findMaximumFirstStake(budgetCents,entries,payout){
+  let low=1,high=Math.max(1,budgetCents),best=1;
+
+  while(low<=high){
+    const middle=Math.floor((low+high)/2);
+    const plan=createProgression(middle,entries,payout);
+    const used=plan[plan.length-1].accumulated;
+
+    if(used<=budgetCents){
+      best=middle;
+      low=middle+1;
+    }else{
+      high=middle-1;
+    }
+  }
+  return best;
+}
+function buildBankPlan(bankrollCents,usage,entries,payout){
+  const budget=Math.floor(bankrollCents*usage/100);
+  const firstStake=findMaximumFirstStake(budget,entries,payout);
+  const plan=createProgression(firstStake,entries,payout);
+  const used=plan[plan.length-1].accumulated;
+
+  return {
+    entries,
+    payout,
+    budget,
+    firstStake,
+    plan,
+    used,
+    reserve:bankrollCents-used,
+    fixedProfit:plan[0].profit
+  };
+}
+function selectBankEntries(entries,button){
+  bankSelectedEntries=entries;
+  document.querySelectorAll('#bankEntryOptions button').forEach(item=>item.classList.remove('active'));
+  button.classList.add('active');
+  calculateBankManager();
+}
+function selectBankUsage(usage,button){
+  bankSelectedUsage=usage;
+  document.querySelectorAll('#bankUsageOptions button').forEach(item=>item.classList.remove('active'));
+  button.classList.add('active');
+  calculateBankManager();
+}
+function selectComparedPlan(entries){
+  bankSelectedEntries=entries;
+  document.querySelectorAll('#bankEntryOptions button').forEach(item=>{
+    item.classList.toggle('active',Number(item.dataset.entries)===entries);
+  });
+  calculateBankManager();
+}
+function bankRiskInfo(usage){
+  if(usage<=60)return {label:'CONSERVADOR',className:'low'};
+  if(usage<=75)return {label:'MODERADO',className:'medium'};
+  return {label:'ALTO',className:'high'};
+}
+function calculateBankManager(){
+  const bankrollValue=Number(document.getElementById('bankrollValue')?.value||0);
+  const payout=Number(document.getElementById('bankPayout')?.value||14);
+  const bankrollCents=Math.max(100,Math.round(bankrollValue*100));
+
+  const result=buildBankPlan(
+    bankrollCents,
+    bankSelectedUsage,
+    bankSelectedEntries,
+    payout
+  );
+  currentBankPlan=result.plan;
+
+  document.getElementById('bankUsed').textContent=bankMoney(result.used);
+  document.getElementById('bankReserve').textContent=bankMoney(result.reserve);
+  document.getElementById('bankFirstStake').textContent=bankMoney(result.firstStake);
+  document.getElementById('bankFixedProfit').textContent=bankMoney(result.fixedProfit);
+  document.getElementById('bankUsageLabel').textContent=`${bankSelectedUsage}% da banca`;
+  document.getElementById('bankBudgetLabel').textContent=bankMoney(result.budget);
+  document.getElementById('bankUsageBar').style.width=`${Math.min(100,result.used/bankrollCents*100)}%`;
+  document.getElementById('bankPlanTitle').textContent=`Plano de ${bankSelectedEntries} entradas • ${payout}x`;
+
+  const risk=bankRiskInfo(bankSelectedUsage);
+  const badge=document.getElementById('bankRiskBadge');
+  badge.textContent=risk.label;
+  badge.className=`bank-risk ${risk.className}`;
+
+  document.getElementById('bankPlanBody').innerHTML=result.plan.map(row=>`
+    <tr>
+      <td>${String(row.index).padStart(2,'0')}</td>
+      <td>${bankMoney(row.stake)}</td>
+      <td>${bankMoney(row.accumulated)}</td>
+      <td>${bankMoney(row.returnCents)}</td>
+      <td>${bankMoney(row.profit)}</td>
+    </tr>
+  `).join('');
+
+  const comparisons=[18,24,30].map(entries=>
+    buildBankPlan(bankrollCents,bankSelectedUsage,entries,payout)
+  );
+
+  document.getElementById('bankComparison').innerHTML=comparisons.map(item=>`
+    <div class="bank-compare-item ${item.entries===bankSelectedEntries?'active':''}" onclick="selectComparedPlan(${item.entries})">
+      <span>${item.entries} ENTRADAS</span>
+      <strong>${bankMoney(item.fixedProfit)}</strong>
+      <small>Lucro fixo<br>1ª entrada: ${bankMoney(item.firstStake)}<br>Uso: ${bankMoney(item.used)}</small>
+    </div>
+  `).join('');
+}
+function copyBankPlan(){
+  if(!currentBankPlan.length)return;
+
+  const lines=currentBankPlan.map(row=>
+    `${String(row.index).padStart(2,'0')} — ${bankMoney(row.stake)}`
+  );
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>{
+    const button=document.getElementById('copyBankPlanBtn');
+    if(!button)return;
+    const original=button.textContent;
+    button.textContent='✓ Sequência copiada';
+    setTimeout(()=>button.textContent=original,1600);
+  });
+}
+calculateBankManager();
 
 /* ===== RANKING DE PADRÕES IA ===== */
 function patternDots(raw){

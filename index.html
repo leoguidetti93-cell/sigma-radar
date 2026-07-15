@@ -626,7 +626,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI PREVIEW 2 — HOME DE MARCA E RADAR TÉRMICO */
+/* ORION UI PREVIEW 3 — HOME DE MARCA E RADAR TÉRMICO */
 .sigma-brand-stage{
   min-height:430px;
   margin-top:18px;
@@ -763,6 +763,39 @@ body:before{opacity:.09;background-size:46px 46px}
   .sigma-flame{width:270px;height:270px}
 }
 
+
+/* ORION UI PREVIEW 3 — HOME LIMPA */
+#home{
+  overflow:hidden;
+}
+#home .shell{
+  min-height:calc(100vh - 54px);
+  display:flex;
+  align-items:center;
+}
+.clean-home{
+  width:100%;
+}
+.sigma-brand-stage-clean{
+  min-height:calc(100vh - 100px);
+  margin:0;
+  border-radius:18px;
+}
+.sigma-brand-stage-clean .sigma-flame{
+  transform:translate(-50%,-50%);
+}
+.sigma-brand-stage-clean .sigma-brand-copy{
+  transform:translateY(-8px);
+}
+@media(max-width:720px){
+  #home .shell{
+    min-height:calc(100vh - 110px);
+  }
+  .sigma-brand-stage-clean{
+    min-height:calc(100vh - 135px);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -774,7 +807,7 @@ body:before{opacity:.09;background-size:46px 46px}
   </div>
   <div class="side-status"><i></i><span>BASE 1.1 ONLINE</span></div>
   <nav class="side-nav">
-    <button class="side-link active" data-target="home" onclick="sideNavigate('home','Central Sigma',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button>
+    <button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button>
     <button class="side-link" data-target="operacional" onclick="sideNavigate('operacional','Radar Operacional',this)"><span class="side-icon">◎</span><span class="side-text">Radar</span></button>
     <button class="side-link" data-target="sigmaColor" onclick="sideNavigate('sigmaColor','Sigma Color',this)"><span class="side-icon">●</span><span class="side-text">Sigma Color</span></button>
     <button class="side-link" data-target="padroes" onclick="sideNavigate('padroes','Ranking de Padrões',this)"><span class="side-icon">◇</span><span class="side-text">Padrões</span></button>
@@ -811,58 +844,28 @@ body:before{opacity:.09;background-size:46px 46px}
 
 <div id="home" class="screen active">
   <div class="shell">
-<div class="player-topbar">
-  <div class="player-greeting">
-    <h2>Central Sigma</h2>
-    <p>Análises para o Double, organizadas para sua sessão.</p>
-  </div>
-  <div class="player-clock">
-    <strong id="playerClock">--:--</strong>
-    <span id="playerDate">CARREGANDO DATA</span>
-  </div>
-</div>
+  <div class="clean-home">
+    <div class="sigma-brand-stage sigma-brand-stage-clean">
+      <div class="sigma-flame" aria-hidden="true">
+        <div class="flame-outer"></div>
+        <div class="flame-inner"></div>
+        <div class="flame-core"></div>
+      </div>
 
-<div class="quick-stats">
-  <div class="quick-card quick-red">
-    <span class="quick-label">Melhor janela</span>
-    <strong class="quick-value">15:39–15:48</strong>
-    <span class="quick-sub">Próxima faixa de maior destaque</span>
-  </div>
-  <div class="quick-card">
-    <span class="quick-label">Cor predominante</span>
-    <strong class="quick-value">VERMELHO</strong>
-    <span class="quick-sub">Leitura histórica da sessão</span>
-  </div>
-  <div class="quick-card quick-green">
-    <span class="quick-label">Status</span>
-    <strong class="quick-value">ONLINE</strong>
-    <span class="quick-sub">Base Histórica 1.1 carregada</span>
-  </div>
-  <div class="quick-card quick-yellow">
-    <span class="quick-label">Versão</span>
-    <strong class="quick-value">ORION UI</strong>
-    <span class="quick-sub">Player Experience — Preview 1</span>
-  </div>
-</div>
-<div class="sigma-brand-stage">
-  <div class="sigma-flame" aria-hidden="true">
-    <div class="flame-outer"></div>
-    <div class="flame-inner"></div>
-    <div class="flame-core"></div>
-  </div>
-  <div class="sigma-brand-copy">
-    <span class="sigma-overline">CENTRAL DE OPERAÇÕES</span>
-    <h2>SIGMA</h2>
-    <strong>RADAR</strong>
-    <p>INTELIGÊNCIA PARA QUEM OPERA</p>
-  </div>
-  <div class="sigma-brand-status">
-    <span><i></i> SISTEMA ONLINE</span>
-    <span>BASE HISTÓRICA 1.1</span>
-  </div>
-</div>
+      <div class="sigma-brand-copy">
+        <span class="sigma-overline">CENTRAL DE OPERAÇÕES</span>
+        <h2>SIGMA</h2>
+        <strong>RADAR</strong>
+        <p>INTELIGÊNCIA PARA QUEM OPERA</p>
+      </div>
 
+      <div class="sigma-brand-status">
+        <span><i></i> SISTEMA ONLINE</span>
+        <span>BASE HISTÓRICA 1.1</span>
+      </div>
+    </div>
   </div>
+</div>
 </div>
 
 <div id="operacional" class="screen">

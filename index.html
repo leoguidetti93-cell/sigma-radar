@@ -626,7 +626,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI PREVIEW 3.1 — HOME DE MARCA E RADAR TÉRMICO */
+/* ORION UI PREVIEW 3.2 — HOME DE MARCA E RADAR TÉRMICO */
 .sigma-brand-stage{
   min-height:430px;
   margin-top:18px;
@@ -764,7 +764,7 @@ body:before{opacity:.09;background-size:46px 46px}
 }
 
 
-/* ORION UI PREVIEW 3.1 — HOME LIMPA */
+/* ORION UI PREVIEW 3.2 — HOME LIMPA */
 #home{
   overflow:hidden;
 }
@@ -794,6 +794,36 @@ body:before{opacity:.09;background-size:46px 46px}
   .sigma-brand-stage-clean{
     min-height:calc(100vh - 135px);
   }
+}
+
+
+/* ORION UI PREVIEW 3.2 — SIMULADOR LIMPO */
+.simulator-input-only{
+  grid-template-columns:1fr !important;
+}
+.simulator-input-only > .card{
+  width:100%;
+}
+.simulation-title{
+  margin:0;
+  font-size:18px;
+  color:var(--text);
+}
+.simulation-results{
+  margin-top:18px;
+}
+.projection-card{
+  min-height:210px;
+}
+.projection-time{
+  margin:0;
+  font-size:clamp(50px,6vw,72px);
+}
+.sigma-projection{
+  border-color:rgba(241,44,76,.48);
+  box-shadow:
+    inset 0 0 0 1px rgba(241,44,76,.13),
+    0 0 28px rgba(241,44,76,.08);
 }
 
 </style>
@@ -1048,8 +1078,8 @@ body:before{opacity:.09;background-size:46px 46px}
       <span class="status-pill">CÁLCULO EM TEMPO REAL</span>
     </div>
 
-    <div class="grid two">
-      <div class="card">
+    <div class="grid simulator-input-only">
+<div class="card">
         <div class="small">INFORME OS QUATRO ÚLTIMOS BRANCOS</div>
         <p style="color:var(--muted);line-height:1.55;margin:8px 0 18px">
           Digite os horários na ordem em que aconteceram. O sistema também reconhece sequências que atravessam a meia-noite.
@@ -1080,42 +1110,25 @@ body:before{opacity:.09;background-size:46px 46px}
         </div>
         <div id="simulatorError" class="sim-error"></div>
       </div>
-
-      <div class="card">
-        <div class="small">INTERVALOS IDENTIFICADOS</div>
-        <div id="intervalDisplay" class="interval-display">
-          <span>13 min</span><span>16 min</span><span>13 min</span>
-        </div>
-        <div class="sim-formula">
-          <div><span>Média</span><strong id="meanValue">14 min</strong></div>
-          <div><span>Mediana</span><strong id="medianValue">13 min</strong></div>
-          <div><span>Combinação Sigma</span><strong id="sigmaValue">21 min</strong></div>
-        </div>
-      </div>
-    </div>
+</div>
 
     <div class="card" style="margin-top:18px">
-      <div class="small">TRÊS PROJEÇÕES DA SESSÃO</div>
+      <h3 class="simulation-title">Três projeções da sessão</h3>
       <div id="simulatorResults" class="simulation-results">
         <div class="projection-card">
-          <span class="projection-label">MÉDIA DOS INTERVALOS</span>
           <strong class="projection-time" id="meanSignal">15:04</strong>
-          <span class="projection-offset" id="meanOffset">+14 minutos</span>
+          
         </div>
         <div class="projection-card">
-          <span class="projection-label">MEDIANA DOS INTERVALOS</span>
           <strong class="projection-time" id="medianSignal">15:03</strong>
-          <span class="projection-offset" id="medianOffset">+13 minutos</span>
+          
         </div>
         <div class="projection-card sigma-projection">
-          <span class="projection-label">COMBINAÇÃO SIGMA</span>
           <strong class="projection-time" id="sigmaSignal">15:11</strong>
-          <span class="projection-offset" id="sigmaOffset">+21 minutos</span>
+          
         </div>
       </div>
-      <div class="sim-note">
-        Fórmula Sigma: <strong>(média + mediana + 14) ÷ 2</strong>. O resultado é arredondado para o minuto mais próximo e somado ao último branco informado.
-      </div>
+      
     </div>
   </div>
 </div>
@@ -1404,21 +1417,24 @@ function calculateLiveSimulator(){
     sigma:formatClock(last+sigmaRounded)
   };
 
-  document.getElementById('intervalDisplay').innerHTML=
-    intervals.map(v=>`<span>${v} min</span>`).join('');
-  document.getElementById('meanValue').textContent=
-    `${String(mean.toFixed(2)).replace('.',',')} min`;
-  document.getElementById('medianValue').textContent=
-    `${String(median.toFixed(2)).replace('.',',')} min`;
-  document.getElementById('sigmaValue').textContent=
-    `${String(sigma.toFixed(2)).replace('.',',')} min`;
+  const intervalDisplay=document.getElementById('intervalDisplay');
+  if(intervalDisplay) intervalDisplay.innerHTML=intervals.map(v=>`<span>${v} min</span>`).join('');
+  const meanValue=document.getElementById('meanValue');
+  if(meanValue) meanValue.textContent=`${String(mean.toFixed(2)).replace('.',',')} min`;
+  const medianValue=document.getElementById('medianValue');
+  if(medianValue) medianValue.textContent=`${String(median.toFixed(2)).replace('.',',')} min`;
+  const sigmaValue=document.getElementById('sigmaValue');
+  if(sigmaValue) sigmaValue.textContent=`${String(sigma.toFixed(2)).replace('.',',')} min`;
 
   document.getElementById('meanSignal').textContent=projections.mean;
   document.getElementById('medianSignal').textContent=projections.median;
   document.getElementById('sigmaSignal').textContent=projections.sigma;
-  document.getElementById('meanOffset').textContent=`+${meanRounded} minutos`;
-  document.getElementById('medianOffset').textContent=`+${medianRounded} minutos`;
-  document.getElementById('sigmaOffset').textContent=`+${sigmaRounded} minutos`;
+  const meanOffset=document.getElementById('meanOffset');
+  if(meanOffset) meanOffset.textContent=`+${meanRounded} minutos`;
+  const medianOffset=document.getElementById('medianOffset');
+  if(medianOffset) medianOffset.textContent=`+${medianRounded} minutos`;
+  const sigmaOffset=document.getElementById('sigmaOffset');
+  if(sigmaOffset) sigmaOffset.textContent=`+${sigmaRounded} minutos`;
 
   window.currentSimulatorSignals={
     projections,

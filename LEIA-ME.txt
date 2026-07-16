@@ -1,0 +1,35 @@
+SIGMA RADAR — ORION 1.4 — CENTRAL DE OPERAÇÕES
+
+ARQUIVOS PARA ENVIAR À RAIZ DO GITHUB:
+- index.html
+- vercel.json
+- pasta analista
+- pasta api
+
+FUNCIONALIDADES:
+- Novo módulo Sinais do Analista entre Início e Radar.
+- Até 3 sinais ativos.
+- Janela fixa de ±1 minuto.
+- Cronômetro e status AGUARDANDO / AO VIVO / JANELA ENCERRADA.
+- Histórico dos últimos 10 sinais.
+- PAGO / FALHOU.
+- Registro do minuto exato do branco.
+- Estatísticas do dia.
+- Painel privado em /analista.
+- Atualização automática a cada 4 segundos.
+
+VARIÁVEIS NECESSÁRIAS NA VERCEL:
+- SUPABASE_URL
+- SUPABASE_PUBLISHABLE_KEY
+- SUPABASE_SECRET_KEY
+- ANALISTA_PASSWORD
+
+IMPORTANTE:
+A Publishable Key permanece configurada para futuras funções, embora esta versão
+use as APIs do servidor para não expor permissões administrativas no navegador.
+
+DEPLOY:
+1. Envie todos os arquivos e pastas mantendo a estrutura.
+2. Aguarde a Vercel ficar Ready.
+3. Abra https://www.sigmaradar.com.br/analista
+4. Entre com a senha configurada em ANALISTA_PASSWORD.

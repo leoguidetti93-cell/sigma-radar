@@ -1207,6 +1207,60 @@ body:before{opacity:.09;background-size:46px 46px}
 #temporal .h-label{position:sticky;left:0;z-index:4;background:#111d27;border-radius:3px}
 #temporal .m-label{height:16px;font-size:7px}
 
+
+/* ===== FILTRO INTERATIVO DO RADAR TEMPORAL ===== */
+.heat-filter-legend{
+  gap:7px;
+  flex-wrap:wrap;
+  user-select:none;
+}
+.heat-filter{
+  appearance:none;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:transform .16s ease,opacity .16s ease,box-shadow .16s ease,border-color .16s ease;
+}
+.heat-filter:not(.heat-filter-color){
+  width:auto;
+  height:26px;
+  padding:0 10px;
+  border-radius:999px;
+  background:#15222d;
+  color:#91a0ae;
+  border-color:#2c3b47;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.55px;
+}
+.heat-filter-color{
+  width:24px!important;
+  height:10px!important;
+  min-width:24px;
+  padding:0;
+  border-radius:999px!important;
+}
+.heat-filter:hover{
+  transform:translateY(-2px) scale(1.08);
+}
+.heat-filter.active{
+  border-color:#fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,.16),0 0 16px rgba(241,44,76,.22);
+  color:#fff;
+}
+.heat-filter-caption{
+  margin-left:2px;
+  white-space:nowrap;
+}
+.heat-cell.heat-muted{
+  opacity:.06;
+  filter:saturate(.15);
+  pointer-events:none;
+}
+.heat-cell.heat-highlight{
+  opacity:1;
+  box-shadow:0 0 7px currentColor;
+}
+
 </style>
 </head>
 <body>
@@ -1363,9 +1417,14 @@ body:before{opacity:.09;background-size:46px 46px}
       <div class="heat-shell">
         <div class="heat-grid" id="heatGrid"></div>
       </div>
-      <div class="legend">
-        <span class="t1"></span><span class="t3"></span><span class="t5"></span><span class="t7"></span><span class="t9"></span>
-        FRIO → QUENTE
+      <div class="legend heat-filter-legend" aria-label="Filtro do mapa térmico">
+        <button type="button" class="heat-filter active" onclick="filterHeatMap('all',this)">TODOS</button>
+        <button type="button" class="heat-filter heat-filter-color t1" onclick="filterHeatMap('1,2',this)" title="Muito frio"></button>
+        <button type="button" class="heat-filter heat-filter-color t3" onclick="filterHeatMap('3,4',this)" title="Frio"></button>
+        <button type="button" class="heat-filter heat-filter-color t5" onclick="filterHeatMap('5,6',this)" title="Morno"></button>
+        <button type="button" class="heat-filter heat-filter-color t7" onclick="filterHeatMap('7,8',this)" title="Quente"></button>
+        <button type="button" class="heat-filter heat-filter-color t9" onclick="filterHeatMap('9',this)" title="Muito quente"></button>
+        <span class="heat-filter-caption">FRIO → QUENTE</span>
       </div>
     </div>
   </div>
@@ -2375,9 +2434,28 @@ for(let hour=0;hour<24;hour++){
   for(let minute=0;minute<60;minute++){
     const value=sigmaBase.heatValues[hour][minute];
     const score=Math.min(99,50+value*5);
-    heat.innerHTML+=`<div class="heat-cell t${value}" data-time="${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}" data-score="${score}"></div>`;
+    heat.innerHTML+=`<div class="heat-cell t${value}" data-level="${value}" data-time="${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}" data-score="${score}"></div>`;
   }
 }
+
+function filterHeatMap(levels,button){
+  const allowed=levels==='all'
+    ? null
+    : new Set(String(levels).split(',').map(Number));
+
+  document.querySelectorAll('.heat-filter').forEach(item=>{
+    item.classList.toggle('active',item===button);
+  });
+
+  document.querySelectorAll('.heat-cell').forEach(cell=>{
+    const level=Number(cell.dataset.level);
+    const visible=!allowed||allowed.has(level);
+
+    cell.classList.toggle('heat-muted',!visible);
+    cell.classList.toggle('heat-highlight',visible&&Boolean(allowed));
+  });
+}
+
 const tip=document.getElementById('tooltip');
 document.querySelectorAll('.heat-cell').forEach(el=>{
   el.addEventListener('mousemove',event=>{

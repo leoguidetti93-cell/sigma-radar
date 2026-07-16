@@ -3,7 +3,7 @@ const crypto=require('crypto');
 function env(name){
   const value=process.env[name];
   if(!value)throw new Error(`Variável ausente: ${name}`);
-  return value;
+  return String(value).trim();
 }
 
 function json(res,status,data){
@@ -41,8 +41,16 @@ function secretHeaders(extra={}){
   return {'apikey':key,'Authorization':`Bearer ${key}`,'Content-Type':'application/json',...extra};
 }
 
+function supabaseEndpoint(path){
+  const raw=env('SUPABASE_URL').replace(/\/+$/,'');
+  const base=raw.replace(/\/rest\/v1$/i,'');
+  const cleanPath=String(path||'').replace(/^\/+/, '');
+  return `${base}/rest/v1/${cleanPath}`;
+}
+
 async function supabase(path,options={}){
-  const response=await fetch(`${env('SUPABASE_URL')}/rest/v1/${path}`,{
+  const url=supabaseEndpoint(path);
+  const response=await fetch(url,{
     ...options,
     headers:secretHeaders(options.headers||{})
   });

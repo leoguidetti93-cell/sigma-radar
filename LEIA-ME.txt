@@ -33,3 +33,9 @@ DEPLOY:
 2. Aguarde a Vercel ficar Ready.
 3. Abra https://www.sigmaradar.com.br/analista
 4. Entre com a senha configurada em ANALISTA_PASSWORD.
+
+
+ATUALIZAÇÃO BASE 1.4
+- Motor estatístico recalculado exclusivamente com as 30.000 rodadas mais recentes.
+- Interface, menus, APIs e estrutura preservados.
+- Período: 07/07/2026 06:11:55 até 17/07/2026 16:46:26.

@@ -1,41 +1,81 @@
-SIGMA RADAR — ORION 1.4 — CENTRAL DE OPERAÇÕES
+SIGMA RADAR — ORION UI 2.0
 
-ARQUIVOS PARA ENVIAR À RAIZ DO GITHUB:
-- index.html
-- vercel.json
-- pasta analista
-- pasta api
+OBJETIVO DESTA VERSÃO
+Reestruturar o projeto em arquivos modulares, sem adicionar funcionalidades
+e sem alterar os cálculos ou o comportamento da ORION 1.4.
 
-FUNCIONALIDADES:
-- Novo módulo Sinais do Analista entre Início e Radar.
-- Até 3 sinais ativos.
-- Janela fixa de ±1 minuto.
-- Cronômetro e status AGUARDANDO / AO VIVO / JANELA ENCERRADA.
-- Histórico dos últimos 10 sinais.
-- PAGO / FALHOU.
-- Registro do minuto exato do branco.
-- Estatísticas do dia.
-- Painel privado em /analista.
-- Atualização automática a cada 4 segundos.
+ESTRUTURA
 
-VARIÁVEIS NECESSÁRIAS NA VERCEL:
+index.html
+
+css/
+  base.css
+  layout.css
+  modules.css
+  support.css
+  temporal-filter.css
+  central-operacoes.css
+
+data/
+  sigma-base-2.0.js
+
+js/
+  core.js
+  sigma-color.js
+  catalogador.js
+  simulador.js
+  gestor-banca.js
+  padroes.js
+  central-operacoes.js
+
+analista/
+  index.html
+  css/analista.css
+  js/analista.js
+
+api/
+  _lib.js
+  analista-login.js
+  analista-sinais.js
+  sinais.js
+
+vercel.json
+
+PRESERVADO
+- Base Histórica 1.3
+- Central de Operações
+- Painel /analista
+- Login do analista
+- Supabase e APIs
+- Sinais ativos e histórico
+- Assertividade PAGO x FALHOU
+- Radar Operacional
+- Sigma Color
+- Ranking de Padrões
+- Radar Temporal minuto a minuto e filtro por cores
+- Gestor de Banca
+- Ranking IA
+- Tendências
+- Simulador
+- Botão do Telegram
+- Catalogador em construção
+
+MIGRAÇÃO NO GITHUB
+Esta versão substitui a estrutura anterior. Envie todo o conteúdo deste pacote
+para a raiz do repositório, mantendo todas as pastas.
+
+As variáveis da Vercel permanecem iguais:
 - SUPABASE_URL
 - SUPABASE_PUBLISHABLE_KEY
 - SUPABASE_SECRET_KEY
 - ANALISTA_PASSWORD
 
-IMPORTANTE:
-A Publishable Key permanece configurada para futuras funções, embora esta versão
-use as APIs do servidor para não expor permissões administrativas no navegador.
-
-DEPLOY:
-1. Envie todos os arquivos e pastas mantendo a estrutura.
-2. Aguarde a Vercel ficar Ready.
-3. Abra https://www.sigmaradar.com.br/analista
-4. Entre com a senha configurada em ANALISTA_PASSWORD.
+IMPORTANTE
+Não apague as variáveis da Vercel e não altere a tabela sinais no Supabase.
 
 
-ATUALIZAÇÃO BASE 1.4
-- Motor estatístico recalculado exclusivamente com as 30.000 rodadas mais recentes.
-- Interface, menus, APIs e estrutura preservados.
-- Período: 07/07/2026 06:11:55 até 17/07/2026 16:46:26.
+ATUALIZAÇÃO SIGMA BASE 2.0
+- Base anterior removida integralmente.
+- Estatísticas recalculadas exclusivamente com 30.000 rodadas da planilha atual.
+- Período: 11/07/2026 22:14:07 até 22/07/2026 08:47:07.
+- Tendências e módulo Analista preservados.

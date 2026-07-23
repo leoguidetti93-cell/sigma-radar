@@ -485,7 +485,33 @@
 </div>
 
 
-<div id="catalogador" class="screen"><div class="shell"><div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Catalogador</h2><p>Integração ao vivo reservada para uma próxima versão.</p></div><span class="status-pill beta">EM CONSTRUÇÃO</span></div><div class="card" style="min-height:470px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><div style="font-size:64px;color:var(--red)">◉</div><h2>Catalogador em construção</h2><p style="color:var(--muted)">O módulo será liberado após a conclusão da integração rodada a rodada.</p></div></div></div>
+<div id="catalogador" class="screen">
+  <div class="shell">
+    <div class="inner-header">
+      <button class="back" onclick="goHome()">← Voltar para Home</button>
+      <div class="title-group">
+        <h2>Catalogador ao Vivo</h2>
+        <p>Resultados recentes do Double organizados por hora e minuto.</p>
+      </div>
+      <span id="catalogStatus" class="status-pill beta">CONECTANDO</span>
+    </div>
+
+    <div class="catalog-toolbar">
+      <div>
+        <span class="small">HISTÓRICO LOCAL</span>
+        <strong id="catalogCount">0 / 300 rodadas</strong>
+      </div>
+      <div>
+        <span class="small">ÚLTIMA ATUALIZAÇÃO</span>
+        <strong id="catalogUpdated">—</strong>
+      </div>
+      <button class="primary-btn action-btn" type="button" onclick="refreshLiveCatalog(true)">↻ Atualizar agora</button>
+    </div>
+
+    <div id="catalogAlert" class="catalog-alert">Preparando conexão com a fonte de resultados...</div>
+    <div id="catalogHours" class="catalog-hours"></div>
+  </div>
+</div>
 <div id="simulador" class="screen">
   <div class="shell">
     <div class="inner-header">

@@ -38,7 +38,7 @@ const loaderMessages={
   gestor:'Calculando a progressão e o lucro fixo do plano.',
   ranking:'Classificando os horários históricos mais fortes.',
   tendencias:'Projetando as janelas mais promissoras para os próximos ciclos da semana.',
-  simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.',
+  simulador:'Calculando intervalos entre brancos e construindo quatro projeções ao vivo.',
   catalogador:'Conectando à fonte de resultados e montando o histórico ao vivo.'
 };
 function openFeature(id,title){
@@ -48,6 +48,7 @@ function openFeature(id,title){
   target.classList.add('active');
   setActiveSideLink(id);
   if(id==='gestor' && typeof calculateBankManager==='function')calculateBankManager();
+  if(id==='catalogador' && typeof startLiveCatalog==='function')startLiveCatalog();
   window.scrollTo(0,0);
 }
 

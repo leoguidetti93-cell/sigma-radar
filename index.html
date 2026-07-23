@@ -502,30 +502,17 @@
 
     <div class="sigma-live-actions">
       <button class="primary" onclick="refreshLiveCatalog()">↻ Sincronizar agora</button>
-      <button onclick="openLiveSettings()">⚙ Configurar conexão</button>
       <button onclick="injectTestRound(false)">▶ Testar pedra</button>
       <button onclick="injectTestRound(true)">◇ Testar branco</button>
       <button onclick="clearLiveHistory()">⌫ Limpar memória</button>
     </div>
 
-    <div id="catalogAlert" class="sigma-live-message offline">Aguardando configuração do canal ao vivo.</div>
+    <div id="catalogAlert" class="sigma-live-message offline">Inicializando conexão automática do SIGMA LIVE ENGINE…</div>
     <div id="catalogHours" class="sigma-catalog-board"></div>
     <div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O Engine preserva as 500 rodadas mais recentes neste navegador.</div>
   </div>
 </div>
 
-<div id="catalogConfigModal" class="sigma-modal" aria-hidden="true" onclick="if(event.target===this)closeLiveSettings()">
-  <div class="sigma-modal-card">
-    <div class="sigma-modal-head"><div><span class="small">SIGMA LIVE ENGINE</span><h3>Configurar conexão do Double</h3></div><button onclick="closeLiveSettings()">×</button></div>
-    <label>URL completa do WebSocket
-      <input id="catalogSocketUrl" type="text" spellcheck="false" placeholder="wss://servidor/.../replication/?EIO=3&transport=websocket">
-    </label>
-    <p class="sigma-modal-help">No Chrome: Blaze → F12 → Network → Socket → selecione a conexão que recebe <b>doubletick</b> → Headers → copie o campo <b>Request URL</b>. Cole aqui uma única vez; o endereço ficará salvo somente neste navegador.</p>
-    <label class="sigma-check"><input id="catalogWhiteFx" type="checkbox" checked> Ativar animação especial quando sair branco</label>
-    <label class="sigma-check"><input id="catalogAutoReconnect" type="checkbox" checked> Reconectar automaticamente se o canal cair</label>
-    <div class="sigma-modal-actions"><button onclick="closeLiveSettings()">Cancelar</button><button class="save" onclick="saveLiveSettings()">Salvar e conectar</button></div>
-  </div>
-</div>
 <div id="simulador" class="screen">
   <div class="shell">
     <div class="inner-header">

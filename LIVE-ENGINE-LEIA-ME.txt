@@ -1,39 +1,9 @@
-SIGMA ORION 3.0 LIVE — INSTALAÇÃO
-=================================
+SIGMA ORION 3.0 LIVE — CORREÇÃO AUTOMÁTICA
 
-1. Envie TODO o conteúdo deste pacote para o repositório do site.
-   Não envie apenas o index.html. As pastas js, css, api e data são necessárias.
-
-2. Aguarde a Vercel mostrar o deploy como READY.
-
-3. Abra SIGMA ORION > Catalogador > Configurar conexão.
-
-4. Para obter a URL:
-   - Abra https://blaze.bet.br/pt/games/double
-   - Pressione F12
-   - Network > Socket
-   - Clique na conexão em que Messages mostra:
-     42["data",{"id":"doubletick", ... }]
-   - Vá em Headers
-   - Copie a Request URL inteira, começando por wss://
-   - Cole no SIGMA e clique em Salvar e conectar.
-
-A URL fica armazenada apenas no navegador. Não contém senha nem saldo.
-Se a Blaze mudar o endereço, basta repetir o procedimento e salvar a nova URL.
-
-RECURSOS DESTA VERSÃO
-- SIGMA LIVE ENGINE em tempo real pelo evento doubletick
-- Memória circular das últimas 500 rodadas
-- Deduplicação pelo ID oficial da rodada
-- Suporte a dois resultados no mesmo minuto
-- Linhas automáticas 00–09, 10–19, 20–29, 30–39, 40–49 e 50–59
-- Abertura automática da nova linha quando muda o bloco de 10 minutos
-- Animação de entrada de cada pedra
-- Animação especial de branco
-- Persistência local após recarregar a página
-- Evento interno "sigma:live-round" para integrar os demais módulos
-- API de recuperação mantida como fonte secundária
-
-TESTE VISUAL
-Use "Testar pedra" e "Testar branco" para conferir a grade e animações antes de conectar.
-Esses botões inserem dados identificados como teste apenas na memória local.
+- Nenhuma URL precisa ser colada.
+- O popup de configuração foi removido.
+- O Catalogador inicia automaticamente ao abrir.
+- O coletor SIGMA consulta os resultados e atualiza a tela sozinho.
+- Memória ativa de 500 rodadas, sem duplicações.
+- Atualização automática a cada 5 segundos.
+- Caso a fonte esteja temporariamente indisponível, o sistema preserva o histórico local e tenta novamente.

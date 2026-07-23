@@ -7,6 +7,7 @@
   const SOCKET_KEY = 'sigma-live-socket-url-v1';
   const SETTINGS_KEY = 'sigma-live-settings-v1';
   const API_FALLBACK = '/api/blaze-double';
+  const API_POLL_MS = 5000;
 
   let rounds = [];
   let socket = null;
@@ -253,8 +254,8 @@
   function connectLiveEngine(customUrl){
     const url = normalizeSocketUrl(customUrl ?? state.socketUrl);
     if (!url) {
-      setConnection('offline','Cole a URL completa do WebSocket da Blaze em “Configurar conexão”.','Aguardando configuração');
-      openLiveSettings(false);
+      setConnection('connecting','Conectando automaticamente pelo coletor SIGMA…','SIGMA AUTO');
+      hydrateFromApi(false);
       return;
     }
     state.socketUrl = url;
@@ -296,9 +297,10 @@
       const list = Array.isArray(payload) ? payload : payload.rounds ?? payload.records ?? payload.data ?? [];
       if (!Array.isArray(list) || !list.length) throw new Error('lista vazia');
       mergeRounds(list,false);
-      if (!state.connected) setConnection('connecting','Histórico sincronizado. Aguardando o canal ao vivo…','API de recuperação');
+      lastMessageAt = Date.now();
+      setConnection('online','Resultados sincronizados automaticamente pelo SIGMA LIVE ENGINE.','SIGMA AUTO • Double');
     } catch (error) {
-      if (manual && !state.connected) setConnection('offline','A API de recuperação não respondeu. O histórico local foi preservado.','Memória local');
+      if (!state.connected) setConnection('offline','O coletor automático ainda não respondeu. Tentando novamente…','SIGMA AUTO');
     }
   }
 
@@ -356,8 +358,12 @@
     }
     hydrateFromApi(false);
     clearInterval(fallbackTimer);
-    fallbackTimer=setInterval(()=>hydrateFromApi(false),30000);
-    connectLiveEngine();
+    fallbackTimer=setInterval(()=>hydrateFromApi(false),API_POLL_MS);
+    if (state.socketUrl) connectLiveEngine();
+    else {
+      setConnection('connecting','Inicializando conexão automática…','SIGMA AUTO');
+      hydrateFromApi(false);
+    }
   }
 
   window.startLiveCatalog = startLiveCatalog;

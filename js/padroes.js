@@ -47,7 +47,7 @@ function initializeHistoricalModules(){
   const patternStatus = document.getElementById('patternDataStatus');
 
   if(colorStatus){
-    colorStatus.textContent = hasColors ? 'BASE 2.0 • CARREGADA' : 'BASE 1.1 • FALHA';
+    colorStatus.textContent = hasColors ? 'BASE 2.1.0 • CARREGADA' : 'BASE 1.1 • FALHA';
     if(!hasColors) colorStatus.classList.add('beta');
   }
   if(patternStatus){

@@ -1,4 +1,4 @@
-SIGMA RADAR — ORION UI 2.0
+SIGMA RADAR — ORION UI 2.1.0
 
 OBJETIVO DESTA VERSÃO
 Reestruturar o projeto em arquivos modulares, sem adicionar funcionalidades
@@ -17,7 +17,7 @@ css/
   central-operacoes.css
 
 data/
-  sigma-base-2.0.js
+  sigma-base-2.1.0.js
 
 js/
   core.js
@@ -74,8 +74,11 @@ IMPORTANTE
 Não apague as variáveis da Vercel e não altere a tabela sinais no Supabase.
 
 
-ATUALIZAÇÃO SIGMA BASE 2.0
-- Base anterior removida integralmente.
-- Estatísticas recalculadas exclusivamente com 30.000 rodadas da planilha atual.
-- Período: 11/07/2026 22:14:07 até 22/07/2026 08:47:07.
-- Tendências e módulo Analista preservados.
+ATUALIZAÇÃO SIGMA BASE 2.1.0
+
+- A Base 2.0 anterior foi removida completamente.
+- Nova base recalculada exclusivamente com 57.641 rodadas válidas da planilha enviada.
+- Período: 03/07/2026 13:23 até 23/07/2026 14:50.
+- Radar Operacional. Sigma Color. Ranking. Padrões e Radar Temporal foram recalculados.
+- Tendências e Analista foram preservados sem alterações de lógica.
+- Interface. menus. APIs e estrutura visual preservados.

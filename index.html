@@ -492,62 +492,73 @@
       <button class="back" onclick="goHome()">← Voltar para Home</button>
       <div class="title-group">
         <h2>Simulador ao Vivo</h2>
-        <p>Projeções calculadas a partir dos quatro últimos horários de branco.</p>
+        <p>Informe os quatro últimos brancos e a pedra imediatamente anterior a cada um.</p>
       </div>
       <span class="status-pill">CÁLCULO EM TEMPO REAL</span>
     </div>
 
     <div class="grid simulator-input-only">
-<div class="card">
-        <div class="small">INFORME OS QUATRO ÚLTIMOS BRANCOS</div>
+      <div class="card">
+        <div class="small">ÚLTIMOS QUATRO BRANCOS</div>
         <p style="color:var(--muted);line-height:1.55;margin:8px 0 18px">
-          Digite os horários na ordem em que aconteceram. O sistema também reconhece sequências que atravessam a meia-noite.
+          Digite na ordem em que aconteceram. Horários iguais são aceitos quando dois brancos pagarem no mesmo minuto.
         </p>
 
-        <div class="live-time-grid">
+        <div class="live-time-grid simulator-pair-grid">
           <label class="live-time-field">
             <span>Branco 1</span>
             <input id="whiteTime1" type="time" value="14:08" step="60">
+            <small>Pedra anterior</small>
+            <input id="previousStone1" class="stone-input" type="number" value="5" min="0" max="14" step="1" inputmode="numeric">
           </label>
           <label class="live-time-field">
             <span>Branco 2</span>
             <input id="whiteTime2" type="time" value="14:21" step="60">
+            <small>Pedra anterior</small>
+            <input id="previousStone2" class="stone-input" type="number" value="9" min="0" max="14" step="1" inputmode="numeric">
           </label>
           <label class="live-time-field">
             <span>Branco 3</span>
             <input id="whiteTime3" type="time" value="14:37" step="60">
+            <small>Pedra anterior</small>
+            <input id="previousStone3" class="stone-input" type="number" value="3" min="0" max="14" step="1" inputmode="numeric">
           </label>
           <label class="live-time-field">
             <span>Branco 4</span>
             <input id="whiteTime4" type="time" value="14:50" step="60">
+            <small>Pedra anterior</small>
+            <input id="previousStone4" class="stone-input" type="number" value="8" min="0" max="14" step="1" inputmode="numeric">
           </label>
         </div>
 
         <div class="sim-actions">
           <button class="action-btn" onclick="calculateLiveSimulator()">⌁ Calcular projeções</button>
-          <button id="copySimulatorBtn" class="action-btn secondary-action" onclick="copySimulatorSignals()">⧉ Copiar horários</button>
+          <button id="copySimulatorBtn" class="action-btn secondary-action" onclick="copySimulatorSignals()">⧉ Copiar lista</button>
         </div>
         <div id="simulatorError" class="sim-error"></div>
       </div>
-</div>
+    </div>
 
     <div class="card" style="margin-top:18px">
-      <h3 class="simulation-title">Três projeções da sessão</h3>
-      <div id="simulatorResults" class="simulation-results">
+      <h3 class="simulation-title">Quatro pontos da sessão</h3>
+      <div id="simulatorResults" class="simulation-results simulator-four-results">
         <div class="projection-card">
-          <strong class="projection-time" id="meanSignal">15:04</strong>
-          
+          <span class="projection-label">PONTO 1</span>
+          <strong class="projection-time" id="point1Signal">15:04</strong>
         </div>
         <div class="projection-card">
-          <strong class="projection-time" id="medianSignal">15:03</strong>
-          
+          <span class="projection-label">PONTO 2</span>
+          <strong class="projection-time" id="point2Signal">15:07</strong>
         </div>
         <div class="projection-card sigma-projection">
-          <strong class="projection-time" id="sigmaSignal">15:11</strong>
-          
+          <span class="projection-label">PONTO 3</span>
+          <strong class="projection-time" id="point3Signal">15:10</strong>
+        </div>
+        <div class="projection-card">
+          <span class="projection-label">PONTO 4</span>
+          <strong class="projection-time" id="point4Signal">14:56</strong>
         </div>
       </div>
-      
     </div>
   </div>
 </div>

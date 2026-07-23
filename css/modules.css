@@ -617,3 +617,42 @@
 .radar-method-note p{margin:9px 0 0;color:var(--muted);font-size:11px;line-height:1.6}
 @media(max-width:980px){.radar-decision-grid{grid-template-columns:1fr}.radar-window-head .big-time{font-size:34px}}
 @media(max-width:620px){.radar-window-head{display:block}.radar-window-head .level{display:inline-block;margin-top:10px}.radar-window-head .big-time{font-size:28px}.radar-metrics{grid-template-columns:1fr 1fr}.radar-session-summary{align-items:stretch;flex-direction:column}.radar-session-badge{min-width:0;width:100%}}
+
+/* ===== SIMULADOR • 4 BRANCOS + PEDRAS ANTERIORES ===== */
+.simulator-pair-grid .live-time-field{
+  gap:8px;
+}
+.simulator-pair-grid .live-time-field > small{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.stone-input{
+  width:100%;
+}
+.simulator-four-results{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.simulator-four-results .projection-card{
+  min-height:190px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+}
+.projection-label{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.3px;
+}
+@media(max-width:980px){
+  .simulator-four-results{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:560px){
+  .simulator-four-results{grid-template-columns:1fr;}
+}

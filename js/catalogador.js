@@ -367,10 +367,7 @@
   }
 
   window.startLiveCatalog = startLiveCatalog;
-  window.refreshLiveCatalog = () => { hydrateFromApi(true); if (!state.connected) connectLiveEngine(); };
   window.openLiveSettings = openLiveSettings;
   window.closeLiveSettings = closeLiveSettings;
   window.saveLiveSettings = saveLiveSettings;
-  window.clearLiveHistory = clearLiveHistory;
-  window.injectTestRound = injectTestRound;
 })();

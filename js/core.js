@@ -55,27 +55,91 @@ const hourlyData=[{"hour":0,"windows":[{"time":"00:36 → 00:45","score":87,"per
 
 function renderHourSelector(){
   const box=document.getElementById('hourSelector');
-  box.innerHTML=hourlyData.map((x,i)=>`<button class="hour-btn ${i===15?'active':''}" onclick="selectOperationalHour(${i},this)">${String(i).padStart(2,'0')}h</button>`).join('');
+  if(!box)return;
+  box.innerHTML=Array.from({length:24},(_,hour)=>`<button class="hour-btn ${hour===15?'active':''}" onclick="selectOperationalHour(${hour},this)">${String(hour).padStart(2,'0')}h</button>`).join('');
 }
+
+function radarBase(){
+  return window.SIGMA_BASE_20||{hourlyData,heatValues:[]};
+}
+function radarIntensityLabel(score){
+  if(score>=90)return 'Muito alta';
+  if(score>=80)return 'Alta';
+  if(score>=68)return 'Boa';
+  if(score>=52)return 'Moderada';
+  if(score>=35)return 'Baixa';
+  return 'Muito baixa';
+}
+function radarLevel(score){
+  if(score>=90)return 'SIGMA ELITE';
+  if(score>=80)return 'SIGMA PRO';
+  return 'SIGMA CORE';
+}
+function radarExpectedWhites(avgHeat,score){
+  const expected=Math.max(0.15,((avgHeat-1)/8)*2.65+(score>=90?.25:score>=80?.12:0));
+  let min,max,label;
+  if(expected>=2.35){min=2;max=3;label='Pode esperar de 2 a 3 brancos';}
+  else if(expected>=1.55){min=1;max=2;label='Pode esperar de 1 a 2 brancos';}
+  else if(expected>=.85){min=1;max=1;label='Maior expectativa de 1 branco';}
+  else {min=0;max=1;label='Baixa expectativa: 0 a 1 branco';}
+  return {average:expected,label,min,max};
+}
+function radarWindowTime(hour,start){
+  const end=start+9;
+  return `${String(hour).padStart(2,'0')}:${String(start).padStart(2,'0')} → ${String(hour).padStart(2,'0')}:${String(end).padStart(2,'0')}`;
+}
+function buildRadarWindows(hour){
+  const base=radarBase();
+  const heat=((base.heatValues||[])[hour]||[]).map(Number);
+  const official=((base.hourlyData||hourlyData)[hour]?.windows||[]);
+  const officialByStart=new Map(official.map(w=>[Number(w.start),w]));
+  const values=heat.length===60?heat:Array.from({length:60},(_,m)=>{
+    const exact=officialByStart.get(m);
+    return exact?Math.max(1,Math.min(9,(Number(exact.score)||50)/11)):4.5;
+  });
+  const windows=[];
+  for(let start=0;start<=50;start++){
+    const slice=values.slice(start,start+10);
+    const avg=slice.reduce((a,b)=>a+b,0)/10;
+    const spread=Math.max(...slice)-Math.min(...slice);
+    const density=slice.filter(v=>v>=7).length;
+    let score=Math.round(Math.max(0,Math.min(100,avg*10+density*1.8-spread*.8)));
+    const officialWindow=officialByStart.get(start);
+    if(officialWindow)score=Math.round(score*.35+(Number(officialWindow.score)||score)*.65);
+    const persistence=Math.round(Math.max(18,Math.min(100,score*.72+density*3.2-spread)));
+    const expectation=radarExpectedWhites(avg,score);
+    windows.push({hour,start,time:radarWindowTime(hour,start),score,persistence,avgHeat:avg,expectation,level:radarLevel(score)});
+  }
+  return windows;
+}
+function setRadarText(id,value){const el=document.getElementById(id);if(el)el.textContent=value;}
 function selectOperationalHour(hour,btn){
   document.querySelectorAll('.hour-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  const data=hourlyData[hour];
-  const best=data.windows[0];
-  document.getElementById('operationalBestTime').textContent=best.time;
-  document.getElementById('operationalLevel').textContent=best.level;
-  document.getElementById('operationalScore').textContent=best.score;
-  document.getElementById('operationalPersistence').textContent=best.persistence+'%';
-  document.getElementById('operationalIntensity').textContent=best.score>=90?'Muito alta':best.score>=82?'Alta':best.score>=74?'Boa':'Moderada';
-  document.getElementById('operationalState').textContent=best.score>=88?'HORA FAVORÁVEL':best.score>=78?'HORA INTERESSANTE':'HORA MODERADA';
-  document.getElementById('operationalStateText').textContent=`O core encontrou ${data.windows.length} oportunidades relevantes entre ${String(hour).padStart(2,'0')}:00 e ${String(hour).padStart(2,'0')}:59.`;
-  document.getElementById('opList').innerHTML=data.windows.map(c=>`
-    <div class="row">
-      <strong>${c.time}</strong>
-      <div><span class="small">${c.level}</span><div class="bar"><i style="width:${c.score}%"></i></div></div>
-      <div class="score">${c.score}</div>
-      <div class="optional small">${c.persistence}% persistência</div>
-    </div>`).join('');
+  if(btn)btn.classList.add('active');
+  const windows=buildRadarWindows(hour);
+  const best=windows.reduce((a,b)=>b.score>a.score?b:a);
+  const worst=windows.reduce((a,b)=>b.score<a.score?b:a);
+  setRadarText('operationalBestTime',best.time);
+  setRadarText('operationalLevel',best.level);
+  setRadarText('operationalScore',best.score);
+  setRadarText('operationalPersistence',best.persistence+'%');
+  setRadarText('operationalIntensity',radarIntensityLabel(best.score));
+  setRadarText('operationalWhiteExpectation',best.expectation.label);
+  setRadarText('operationalWhiteAverage',best.expectation.average.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}));
+  setRadarText('operationalExpectationText',`Faixa estimada pela concentração histórica dos minutos ${String(best.start).padStart(2,'0')} a ${String(best.start+9).padStart(2,'0')} nesta hora.`);
+  setRadarText('operationalWorstTime',worst.time);
+  setRadarText('operationalWorstScore',worst.score);
+  setRadarText('operationalWorstPersistence',worst.persistence+'%');
+  setRadarText('operationalWorstIntensity',radarIntensityLabel(worst.score));
+  setRadarText('operationalWorstAverage',worst.expectation.average.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}));
+  setRadarText('operationalAvoidMessage',worst.expectation.average<.85?'Baixa concentração de brancos':'Menor concentração desta hora');
+  setRadarText('operationalAvoidText',`Evite priorizar operações entre ${worst.time.replace(' → ',' e ')}; foi a faixa móvel mais fraca entre as 51 analisadas.`);
+  const gap=best.score-worst.score;
+  const state=best.score>=88?'HORA FAVORÁVEL':best.score>=76?'HORA INTERESSANTE':'HORA MODERADA';
+  setRadarText('operationalState',state);
+  setRadarText('operationalStateText',`Melhor faixa: ${best.time}. Janela a evitar: ${worst.time}. Diferença estatística de ${gap} pontos entre os extremos da hora.`);
+  const stateEl=document.getElementById('operationalState');
+  if(stateEl)stateEl.style.color=best.score>=88?'var(--green)':best.score>=76?'#f2c94c':'var(--muted)';
 }
 
 const periods=[

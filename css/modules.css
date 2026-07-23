@@ -587,3 +587,33 @@
 .agenda-score span{font-size:10px;color:var(--muted);letter-spacing:.08em}
 .agenda-note{margin-top:18px}
 @media(max-width:760px){.agenda-summary{align-items:flex-start}.agenda-summary-score{min-width:104px}.agenda-day{grid-template-columns:1fr}.agenda-day-date{border-right:0;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:12px}.agenda-window{grid-template-columns:1fr 72px}.agenda-confidence{grid-column:1/-1;grid-row:2}.agenda-toolbar{align-items:flex-end}.agenda-toolbar .primary-btn{padding:11px 13px}.agenda-time{font-size:16px}}
+
+
+/* Radar Operacional — melhor e pior janela móvel de 10 minutos */
+.radar-decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.radar-window-card{position:relative;overflow:hidden;border-width:1px}
+.radar-window-card:before{content:"";position:absolute;inset:0 0 auto 0;height:3px}
+.radar-window-best{border-color:rgba(80,223,165,.22);background:linear-gradient(145deg,rgba(80,223,165,.065),rgba(255,255,255,.018))}
+.radar-window-best:before{background:linear-gradient(90deg,#50dfa5,transparent)}
+.radar-window-avoid{border-color:rgba(255,84,112,.22);background:linear-gradient(145deg,rgba(255,84,112,.06),rgba(255,255,255,.018))}
+.radar-window-avoid:before{background:linear-gradient(90deg,#ff5470,transparent)}
+.radar-window-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.radar-window-head .big-time{font-size:39px;margin-top:7px;white-space:nowrap}
+.radar-danger-level{color:#ff7890;border-color:rgba(255,84,112,.35);background:rgba(255,84,112,.08)}
+.radar-expectation{margin:20px 0 0;padding:18px;border:1px solid rgba(80,223,165,.16);border-radius:17px;background:rgba(80,223,165,.055)}
+.radar-expectation>span{display:block;font-size:9px;letter-spacing:.13em;color:#78cca9;margin-bottom:7px}
+.radar-expectation strong{display:block;font-size:20px;color:#eafff6}
+.radar-expectation p{margin:7px 0 0;color:var(--muted);font-size:11px;line-height:1.5}
+.radar-expectation-danger{border-color:rgba(255,84,112,.16);background:rgba(255,84,112,.045)}
+.radar-expectation-danger>span{color:#ff879a}.radar-expectation-danger strong{color:#ffe8ec}
+.radar-metrics{grid-template-columns:repeat(4,1fr);margin-top:16px}
+.radar-session-summary{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.radar-session-summary h2{margin:7px 0 6px;color:var(--green)}
+.radar-session-summary p{margin:0;color:var(--muted);line-height:1.55}
+.radar-session-badge{min-width:225px;text-align:center;padding:15px 18px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.025)}
+.radar-session-badge span{display:block;font-size:28px;color:var(--green)}
+.radar-session-badge strong{display:block;font-size:11px;letter-spacing:.08em;margin:5px 0}
+.radar-session-badge small{color:var(--muted);font-size:9px}
+.radar-method-note p{margin:9px 0 0;color:var(--muted);font-size:11px;line-height:1.6}
+@media(max-width:980px){.radar-decision-grid{grid-template-columns:1fr}.radar-window-head .big-time{font-size:34px}}
+@media(max-width:620px){.radar-window-head{display:block}.radar-window-head .level{display:inline-block;margin-top:10px}.radar-window-head .big-time{font-size:28px}.radar-metrics{grid-template-columns:1fr 1fr}.radar-session-summary{align-items:stretch;flex-direction:column}.radar-session-badge{min-width:0;width:100%}}

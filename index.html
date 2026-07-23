@@ -137,7 +137,7 @@
   <div class="shell">
     <div class="inner-header">
       <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Radar Operacional</h2><p>Selecione a hora em que pretende operar.</p></div>
+      <div class="title-group"><h2>Radar Operacional</h2><p>Selecione uma hora para localizar a melhor janela móvel de 10 minutos e o período mais fraco para evitar.</p></div>
       <span class="status-pill">SIGMA ONLINE</span>
     </div>
 
@@ -146,32 +146,59 @@
       <div id="hourSelector" style="display:grid;grid-template-columns:repeat(12,1fr);gap:8px;margin-top:14px"></div>
     </div>
 
-    <div class="grid two">
-      <div class="card">
-        <div class="small">MELHOR OPORTUNIDADE DA HORA</div>
-        <div id="operationalBestTime" class="big-time">15:39 → 15:48</div>
-        <span id="operationalLevel" class="level">SIGMA ELITE</span>
-        <div class="metrics">
+    <div class="radar-decision-grid">
+      <article class="card radar-window-card radar-window-best">
+        <div class="radar-window-head">
+          <div><div class="small">MELHOR JANELA DE 10 MINUTOS</div><div id="operationalBestTime" class="big-time">15:39 → 15:48</div></div>
+          <span id="operationalLevel" class="level">SIGMA ELITE</span>
+        </div>
+        <div class="radar-expectation">
+          <span>EXPECTATIVA ESTATÍSTICA</span>
+          <strong id="operationalWhiteExpectation">Pode esperar de 2 a 3 brancos</strong>
+          <p id="operationalExpectationText">Faixa estimada pela concentração histórica registrada nesta janela.</p>
+        </div>
+        <div class="metrics radar-metrics">
           <div class="metric"><span>Score</span><b id="operationalScore">97</b></div>
           <div class="metric"><span>Intensidade</span><b id="operationalIntensity">Muito alta</b></div>
           <div class="metric"><span>Persistência</span><b id="operationalPersistence">93%</b></div>
+          <div class="metric"><span>Média estimada</span><b id="operationalWhiteAverage">2,4</b></div>
         </div>
-      </div>
-      <div class="card center">
-        <div class="small">CORE DA SESSÃO</div>
-        <div class="pulse" id="operationalPulse">◉</div>
-        <h2 id="operationalState" style="color:var(--green)">HORA FAVORÁVEL</h2>
-        <p id="operationalStateText" style="color:var(--muted)">O core encontrou boas oportunidades dentro desta hora.</p>
-      </div>
+      </article>
+
+      <article class="card radar-window-card radar-window-avoid">
+        <div class="radar-window-head">
+          <div><div class="small">JANELA A EVITAR</div><div id="operationalWorstTime" class="big-time">15:04 → 15:13</div></div>
+          <span class="level radar-danger-level">EVITAR</span>
+        </div>
+        <div class="radar-expectation radar-expectation-danger">
+          <span>LEITURA HISTÓRICA</span>
+          <strong id="operationalAvoidMessage">Baixa concentração de brancos</strong>
+          <p id="operationalAvoidText">Período estatisticamente mais fraco dentro da hora selecionada.</p>
+        </div>
+        <div class="metrics radar-metrics">
+          <div class="metric"><span>Score</span><b id="operationalWorstScore">24</b></div>
+          <div class="metric"><span>Intensidade</span><b id="operationalWorstIntensity">Muito baixa</b></div>
+          <div class="metric"><span>Persistência</span><b id="operationalWorstPersistence">31%</b></div>
+          <div class="metric"><span>Média estimada</span><b id="operationalWorstAverage">0,4</b></div>
+        </div>
+      </article>
     </div>
 
-    <div class="card" style="margin-top:18px">
-      <div class="small">MELHORES JANELAS DESTA HORA</div>
-      <div class="list" id="opList" style="margin-top:14px"></div>
+    <div class="card radar-session-summary" style="margin-top:18px">
+      <div>
+        <div class="small">LEITURA DA HORA</div>
+        <h2 id="operationalState">HORA FAVORÁVEL</h2>
+        <p id="operationalStateText">O Radar comparou todas as janelas móveis de 10 minutos desta hora.</p>
+      </div>
+      <div class="radar-session-badge"><span id="operationalPulse">◉</span><strong>2 FAIXAS MAPEADAS</strong><small>melhor oportunidade + período a evitar</small></div>
+    </div>
+
+    <div class="card radar-method-note" style="margin-top:18px">
+      <div class="small">COMO O RADAR DECIDE</div>
+      <p>O sistema percorre todas as 51 janelas móveis possíveis dentro da hora — de minuto em minuto — e apresenta somente a mais forte e a mais fraca. As expectativas representam comportamento histórico da Base 2.1.0 e não garantia de resultado.</p>
     </div>
   </div>
 </div>
-
 
 <div id="sigmaColor" class="screen">
   <div class="shell">

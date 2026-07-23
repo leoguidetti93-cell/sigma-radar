@@ -38,7 +38,7 @@ const loaderMessages={
   gestor:'Calculando a progressão e o lucro fixo do plano.',
   ranking:'Classificando os horários históricos mais fortes.',
   tendencias:'Projetando as janelas mais promissoras para os próximos ciclos da semana.',
-  simulador:'Calculando intervalos entre brancos e construindo quatro projeções ao vivo.',
+  simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.',
   catalogador:'Conectando à fonte de resultados e montando o histórico ao vivo.'
 };
 function openFeature(id,title){

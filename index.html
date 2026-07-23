@@ -489,27 +489,41 @@
   <div class="shell">
     <div class="inner-header">
       <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group">
-        <h2>Catalogador ao Vivo</h2>
-        <p>Resultados recentes do Double organizados por hora e minuto.</p>
-      </div>
-      <span id="catalogStatus" class="status-pill beta">CONECTANDO</span>
+      <div class="title-group"><h2>Catalogador ao Vivo</h2><p>Resultados do Double organizados em linhas automáticas de 10 minutos.</p></div>
+      <span id="catalogStatus" class="status-pill sigma-live-pill offline">● OFFLINE</span>
     </div>
 
-    <div class="catalog-toolbar">
-      <div>
-        <span class="small">HISTÓRICO LOCAL</span>
-        <strong id="catalogCount">0 / 300 rodadas</strong>
-      </div>
-      <div>
-        <span class="small">ÚLTIMA ATUALIZAÇÃO</span>
-        <strong id="catalogUpdated">—</strong>
-      </div>
-      <button class="primary-btn action-btn" type="button" onclick="refreshLiveCatalog(true)">↻ Atualizar agora</button>
+    <div class="sigma-live-toolbar">
+      <div class="sigma-live-kpi live"><span>LIVE ENGINE</span><strong><i id="catalogLiveDot" class="sigma-live-dot offline"></i><span id="catalogSource">—</span></strong><small>evento doubletick</small></div>
+      <div class="sigma-live-kpi"><span>MEMÓRIA ATIVA</span><strong id="catalogCount">0 / 500 rodadas</strong><small>sem duplicações</small></div>
+      <div class="sigma-live-kpi"><span>ÚLTIMA RODADA</span><strong id="catalogLastRoll">—</strong><small id="catalogLastTime">—</small></div>
+      <div class="sigma-live-kpi"><span>ÚLTIMAS 50</span><strong><b style="color:#ff3158" id="catalogRed50">0</b> · <b id="catalogBlack50">0</b> · <b style="color:#fff" id="catalogWhite50">0</b></strong><small>vermelho · preto · branco</small></div>
     </div>
 
-    <div id="catalogAlert" class="catalog-alert">Preparando conexão com a fonte de resultados...</div>
-    <div id="catalogHours" class="catalog-hours"></div>
+    <div class="sigma-live-actions">
+      <button class="primary" onclick="refreshLiveCatalog()">↻ Sincronizar agora</button>
+      <button onclick="openLiveSettings()">⚙ Configurar conexão</button>
+      <button onclick="injectTestRound(false)">▶ Testar pedra</button>
+      <button onclick="injectTestRound(true)">◇ Testar branco</button>
+      <button onclick="clearLiveHistory()">⌫ Limpar memória</button>
+    </div>
+
+    <div id="catalogAlert" class="sigma-live-message offline">Aguardando configuração do canal ao vivo.</div>
+    <div id="catalogHours" class="sigma-catalog-board"></div>
+    <div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O Engine preserva as 500 rodadas mais recentes neste navegador.</div>
+  </div>
+</div>
+
+<div id="catalogConfigModal" class="sigma-modal" aria-hidden="true" onclick="if(event.target===this)closeLiveSettings()">
+  <div class="sigma-modal-card">
+    <div class="sigma-modal-head"><div><span class="small">SIGMA LIVE ENGINE</span><h3>Configurar conexão do Double</h3></div><button onclick="closeLiveSettings()">×</button></div>
+    <label>URL completa do WebSocket
+      <input id="catalogSocketUrl" type="text" spellcheck="false" placeholder="wss://servidor/.../replication/?EIO=3&transport=websocket">
+    </label>
+    <p class="sigma-modal-help">No Chrome: Blaze → F12 → Network → Socket → selecione a conexão que recebe <b>doubletick</b> → Headers → copie o campo <b>Request URL</b>. Cole aqui uma única vez; o endereço ficará salvo somente neste navegador.</p>
+    <label class="sigma-check"><input id="catalogWhiteFx" type="checkbox" checked> Ativar animação especial quando sair branco</label>
+    <label class="sigma-check"><input id="catalogAutoReconnect" type="checkbox" checked> Reconectar automaticamente se o canal cair</label>
+    <div class="sigma-modal-actions"><button onclick="closeLiveSettings()">Cancelar</button><button class="save" onclick="saveLiveSettings()">Salvar e conectar</button></div>
   </div>
 </div>
 <div id="simulador" class="screen">
@@ -594,6 +608,7 @@
 <script src="/data/sigma-base-2.1.0.js"></script>
 <script src="/js/core.js"></script>
 <script src="/js/sigma-color.js"></script>
+<script src="/js/live-engine-config.js"></script>
 <script src="/js/catalogador.js"></script>
 <script src="/js/simulador.js"></script>
 <script src="/js/gestor-banca.js"></script>

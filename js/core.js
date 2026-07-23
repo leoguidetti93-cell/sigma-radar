@@ -37,7 +37,7 @@ const loaderMessages={
   operacional:'Consultando os ciclos e oportunidades da sessão escolhida.',
   gestor:'Calculando a progressão e o lucro fixo do plano.',
   ranking:'Classificando os horários históricos mais fortes.',
-  tendencias:'Comparando aquecimento e perda de força.',
+  tendencias:'Projetando as janelas mais promissoras para os próximos ciclos da semana.',
   simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.',
   catalogador:'Conectando à fonte de resultados e montando o histórico ao vivo.'
 };
@@ -111,12 +111,102 @@ document.getElementById('rankTable').innerHTML=rankingTimes.map((c,i)=>`
   <td class="score">${c.score}</td>
 </tr>`).join('');
 
-const cycles=[["19:05 → 19:14","SIGMA ELITE",91,"Aquecendo"],["15:44 → 15:53","SIGMA ELITE",91,"Aquecendo"],["19:08 → 19:17","SIGMA ELITE",90,"Aquecendo"],["10:49 → 10:58","SIGMA ELITE",89,"Aquecendo"],["07:10 → 07:19","SIGMA ELITE",89,"Aquecendo"],["07:06 → 07:15","SIGMA CORE",78,"Perdendo força"],["11:16 → 11:25","SIGMA CORE",77,"Perdendo força"],["09:17 → 09:26","SIGMA CORE",77,"Perdendo força"],["19:04 → 19:13","SIGMA CORE",76,"Perdendo força"],["19:03 → 19:12","SIGMA CORE",76,"Perdendo força"]];
-function trendRows(arr){
- return arr.map(c=>`<div class="row"><strong>${c[0]}</strong><div><span class="small">${c[1]}</span><div class="bar"><i style="width:${c[2]}%"></i></div></div><div class="score">${c[2]}</div></div>`).join('')
+function pad2(value){return String(value).padStart(2,'0')}
+function addDays(date,days){const copy=new Date(date);copy.setDate(copy.getDate()+days);return copy}
+function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
+
+function buildTrendSlots(){
+  const base=(window.SIGMA_BASE_20&&window.SIGMA_BASE_20.hourlyData)||hourlyData;
+  const strengths=base.map(item=>{
+    const windows=(item.windows||[]).slice(0,5);
+    const avgScore=windows.reduce((sum,w)=>sum+(Number(w.score)||0),0)/Math.max(1,windows.length);
+    const avgPersistence=windows.reduce((sum,w)=>sum+(Number(w.persistence)||0),0)/Math.max(1,windows.length);
+    const historical=windows.reduce((sum,w)=>sum+(Number(w.historicalRate)||0),0)/Math.max(1,windows.length);
+    const recent=windows.reduce((sum,w)=>sum+(Number(w.recentRate)||0),0)/Math.max(1,windows.length);
+    const composite=avgScore*.52+avgPersistence*.28+clamp(historical*5,0,100)*.12+clamp(recent*4,0,100)*.08;
+    return {hour:item.hour,score:Math.round(composite),persistence:Math.round(avgPersistence),peak:windows[0]};
+  });
+
+  const candidates=[];
+  for(let startHour=0;startHour<24;startHour++){
+    for(const duration of [2,3]){
+      if(startHour+duration>24)continue;
+      const block=strengths.slice(startHour,startHour+duration);
+      const score=Math.round(block.reduce((s,x)=>s+x.score,0)/duration);
+      const persistence=Math.round(block.reduce((s,x)=>s+x.persistence,0)/duration);
+      const peak=Math.max(...block.map(x=>Number(x.peak?.score)||0));
+      candidates.push({startHour,endHour:startHour+duration,score:Math.round(score*.82+peak*.18),persistence});
+    }
+  }
+
+  candidates.sort((a,b)=>b.score-a.score||b.persistence-a.persistence);
+  const chosen=[];
+  for(const item of candidates){
+    if(chosen.some(x=>Math.abs(x.startHour-item.startHour)<2))continue;
+    chosen.push(item);
+    if(chosen.length===7)break;
+  }
+  return chosen;
 }
-document.getElementById('trendHot').innerHTML=trendRows(cycles.filter(c=>c[3]=='Aquecendo'));
-document.getElementById('trendCold').innerHTML=trendRows(cycles.filter(c=>c[3]=='Perdendo força'));
+
+function agendaConfidence(score){
+  if(score>=91)return {label:'Probabilidade muito alta',level:'SIGMA ELITE'};
+  if(score>=86)return {label:'Probabilidade alta',level:'SIGMA PRO'};
+  if(score>=80)return {label:'Boa probabilidade',level:'SIGMA CORE'};
+  return {label:'Probabilidade moderada',level:'SIGMA CORE'};
+}
+
+function renderTrendAgenda(){
+  const container=document.getElementById('trendAgenda');
+  if(!container)return;
+  const now=new Date();
+  const slots=buildTrendSlots();
+  const days=[];
+  for(let offset=0;offset<7;offset++){
+    const date=addDays(now,offset);
+    let selected=slots[(offset*2)%slots.length];
+    if(offset===0 && selected.endHour<=now.getHours())selected=slots.find(s=>s.endHour>now.getHours())||slots[0];
+    const secondary=slots.find((s,i)=>i!==((offset*2)%slots.length)&&Math.abs(s.startHour-selected.startHour)>=4);
+    const windows=[selected];
+    if(secondary && (offset===1||offset===3||offset===5))windows.push(secondary);
+    days.push({date,offset,windows});
+  }
+
+  const total=days.reduce((sum,d)=>sum+d.windows.length,0);
+  const count=document.getElementById('agendaWindowCount');
+  if(count)count.textContent=total;
+  const period=document.getElementById('agendaPeriod');
+  if(period){
+    const first=days[0].date.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    const last=days[days.length-1].date.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    period.textContent=`${first} a ${last}`;
+  }
+
+  container.innerHTML=days.map(day=>{
+    const dateLabel=day.date.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    const weekday=day.date.toLocaleDateString('pt-BR',{weekday:'long'});
+    const relative=day.offset===0?'HOJE':day.offset===1?'AMANHÃ':`EM ${day.offset} DIAS`;
+    return `<article class="agenda-day">
+      <div class="agenda-day-date">
+        <span class="weekday">${weekday}</span>
+        <strong>${dateLabel}</strong>
+        <span class="relative">${relative}</span>
+      </div>
+      <div class="agenda-window-list">
+        ${day.windows.map((slot,index)=>{
+          const confidence=agendaConfidence(slot.score);
+          return `<div class="agenda-window ${index===0?'best':''}">
+            <div class="agenda-time">${pad2(slot.startHour)}:00 às ${pad2(slot.endHour)}:00<span>POSSÍVEL JANELA DE AQUECIMENTO</span></div>
+            <div class="agenda-confidence"><strong>${confidence.label}</strong><div class="bar"><i style="width:${slot.score}%"></i></div><span class="small">${confidence.level} · ${slot.persistence}% persistência</span></div>
+            <div class="agenda-score"><strong>${slot.score}</strong><span>SCORE</span></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </article>`;
+  }).join('');
+}
+
+renderTrendAgenda();
 
 renderHourSelector();
 selectOperationalHour(15,document.querySelectorAll('.hour-btn')[15]);

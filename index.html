@@ -419,10 +419,40 @@
 
 <div id="tendencias" class="screen">
   <div class="shell">
-    <div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Tendências</h2><p>Leitura de movimento das principais faixas horárias.</p></div><span class="status-pill">ANÁLISE DINÂMICA</span></div>
-    <div class="grid two">
-      <div class="card"><h3>Aquecendo</h3><div class="list" id="trendHot"></div></div>
-      <div class="card"><h3>Perdendo força</h3><div class="list" id="trendCold"></div></div>
+    <div class="inner-header">
+      <button class="back" onclick="goHome()">← Voltar para Home</button>
+      <div class="title-group">
+        <h2>Agenda Inteligente</h2>
+        <p>Possíveis melhores janelas para os próximos ciclos da semana.</p>
+      </div>
+      <span class="status-pill">PROJEÇÃO SEMANAL</span>
+    </div>
+
+    <div class="card agenda-summary">
+      <div>
+        <div class="small">LEITURA DA BASE 2.1.0</div>
+        <h3>Agenda de janelas promissoras</h3>
+        <p>O Sigma cruza força histórica, persistência e recorrência horária para destacar os períodos mais interessantes dos próximos dias.</p>
+      </div>
+      <div class="agenda-summary-score">
+        <span class="small">JANELAS MAPEADAS</span>
+        <strong id="agendaWindowCount">—</strong>
+      </div>
+    </div>
+
+    <div class="agenda-toolbar">
+      <div>
+        <span class="small">PERÍODO ANALISADO</span>
+        <strong id="agendaPeriod">Próximos 7 dias</strong>
+      </div>
+      <button class="primary-btn" type="button" onclick="renderTrendAgenda()">↻ Atualizar agenda</button>
+    </div>
+
+    <div id="trendAgenda" class="trend-agenda"></div>
+
+    <div class="card agenda-note">
+      <span class="small">COMO INTERPRETAR</span>
+      <p>As janelas são projeções estatísticas baseadas na recorrência da Base 2.1.0. Elas indicam períodos historicamente mais promissores, não resultados garantidos.</p>
     </div>
   </div>
 </div>

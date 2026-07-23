@@ -4,10 +4,10 @@
 
   const MAX_ROUNDS = 500;
   const STORAGE_KEY = 'sigma-live-rounds-v3';
-  const SOCKET_KEY = 'sigma-live-socket-url-v1';
-  const SETTINGS_KEY = 'sigma-live-settings-v1';
+    const SETTINGS_KEY = 'sigma-live-settings-v1';
   const API_FALLBACK = '/api/blaze-double';
-  const API_POLL_MS = 5000;
+  const API_POLL_MS = 2500;
+  const DEFAULT_SOCKET_URL = 'wss://api-gaming.blaze.bet.br/replication/?EIO=3&transport=websocket';
 
   let rounds = [];
   let socket = null;
@@ -20,7 +20,7 @@
   let lastRenderedBlock = '';
 
   const state = {
-    socketUrl: '',
+    socketUrl: DEFAULT_SOCKET_URL,
     connected: false,
     source: 'nenhuma',
     whiteFx: true,
@@ -72,13 +72,12 @@
       state.whiteFx = settings.whiteFx !== false;
       state.autoReconnect = settings.autoReconnect !== false;
     } catch {}
-    state.socketUrl = localStorage.getItem(SOCKET_KEY) || window.SIGMA_LIVE_SOCKET_URL || '';
+    state.socketUrl = window.SIGMA_LIVE_SOCKET_URL || DEFAULT_SOCKET_URL;
   }
 
   function saveState(){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(rounds.slice(-MAX_ROUNDS)));
     localStorage.setItem(SETTINGS_KEY, JSON.stringify({whiteFx:state.whiteFx,autoReconnect:state.autoReconnect}));
-    if (state.socketUrl) localStorage.setItem(SOCKET_KEY, state.socketUrl);
   }
 
   function mergeRounds(items, animateNewest = false){
@@ -220,22 +219,33 @@
   function parseSocketPacket(data){
     if (typeof data !== 'string') return;
     lastMessageAt = Date.now();
-    if (data === '2') { try { socket?.send('3'); } catch {} return; }
-    if (data.startsWith('0')) { try { socket?.send('40'); } catch {} return; }
-    if (data.startsWith('40')) return;
-    const idx = data.indexOf('[');
-    if (idx < 0 || !data.slice(0,idx).includes('42')) return;
-    try {
-      const packet = JSON.parse(data.slice(idx));
-      const eventName = packet[0];
-      const body = packet[1];
-      if (eventName !== 'data' || !body || body.id !== 'doubletick') return;
-      const round = normalizeRound(body.payload);
-      if (!round) return;
-      mergeRounds([round], true);
-      setConnection('online','Rodada recebida em tempo real pelo SIGMA LIVE ENGINE.','Socket.IO • doubletick');
-    } catch (error) {
-      console.debug('SIGMA LIVE: pacote ignorado', error);
+
+    // Engine.IO pode agrupar vários pacotes usando o separador 0x1e.
+    const frames = data.split('\x1e').filter(Boolean);
+    for (const frame of frames) {
+      if (frame === '2') { try { socket?.send('3'); } catch {} continue; }
+      if (frame.startsWith('0')) { try { socket?.send('40'); } catch {} continue; }
+      if (frame === '40' || frame.startsWith('40{')) {
+        setConnection('connecting','Socket.IO conectado. Aguardando a próxima rodada concluída…','Socket.IO • double.tick');
+        continue;
+      }
+      if (!frame.startsWith('42')) continue;
+
+      try {
+        const packet = JSON.parse(frame.slice(2));
+        const eventName = packet?.[0];
+        const body = packet?.[1];
+        const payload = body?.payload;
+        if (eventName !== 'data' || body?.id !== 'double.tick') continue;
+        if (!payload || payload.status !== 'complete') continue;
+
+        const round = normalizeRound(payload);
+        if (!round) continue;
+        mergeRounds([round], true);
+        setConnection('online','Rodada concluída recebida em tempo real.','Socket.IO • double.tick');
+      } catch (error) {
+        console.debug('SIGMA LIVE: pacote ignorado', error);
+      }
     }
   }
 
@@ -262,18 +272,22 @@
     saveState();
     clearTimeout(reconnectTimer);
     if (socket) { try { socket.onclose=null; socket.close(); } catch {} }
-    setConnection('connecting','Conectando ao evento doubletick…','Socket.IO');
+    setConnection('connecting','Conectando ao evento double.tick…','Socket.IO');
     try {
       socket = new WebSocket(url);
       socket.onopen = () => {
         reconnectAttempt = 0;
-        setConnection('connecting','Canal aberto. Aguardando o próximo doubletick…','Socket.IO');
+        setConnection('connecting','Canal aberto. Iniciando handshake Engine.IO…','Socket.IO');
       };
       socket.onmessage = event => parseSocketPacket(event.data);
-      socket.onerror = () => setConnection('offline','A conexão foi bloqueada ou o endereço mudou. Confira a URL do Socket.','Socket.IO');
+      socket.onerror = () => {
+        setConnection('connecting','Socket direto indisponível. Mantendo sincronização automática pela API…','SIGMA AUTO');
+        hydrateFromApi(false);
+      };
       socket.onclose = () => {
         state.connected = false;
-        setConnection('offline','Canal ao vivo desconectado. Tentando reconectar…','Socket.IO');
+        setConnection('connecting','Socket desconectado. API ativa enquanto reconectamos…','SIGMA AUTO');
+        hydrateFromApi(false);
         if (state.autoReconnect) scheduleReconnect();
       };
     } catch (error) {
@@ -304,45 +318,6 @@
     }
   }
 
-  function openLiveSettings(focus=true){
-    const modal = $('catalogConfigModal');
-    const input = $('catalogSocketUrl');
-    if (!modal || !input) return;
-    input.value = state.socketUrl;
-    if ($('catalogWhiteFx')) $('catalogWhiteFx').checked = state.whiteFx;
-    if ($('catalogAutoReconnect')) $('catalogAutoReconnect').checked = state.autoReconnect;
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden','false');
-    if (focus) setTimeout(()=>input.focus(),80);
-  }
-
-  function closeLiveSettings(){
-    const modal = $('catalogConfigModal');
-    if (modal) { modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
-  }
-
-  function saveLiveSettings(){
-    const input = $('catalogSocketUrl');
-    state.socketUrl = normalizeSocketUrl(input?.value || '');
-    state.whiteFx = $('catalogWhiteFx')?.checked !== false;
-    state.autoReconnect = $('catalogAutoReconnect')?.checked !== false;
-    saveState();
-    closeLiveSettings();
-    connectLiveEngine();
-  }
-
-  function clearLiveHistory(){
-    if (!confirm('Apagar as 500 rodadas armazenadas neste navegador?')) return;
-    rounds=[]; latestRoundId=null; saveState(); renderCatalog(false); updateStats();
-  }
-
-  function injectTestRound(forceWhite=false){
-    const now = new Date();
-    const roll = forceWhite ? 0 : Math.floor(Math.random()*15);
-    mergeRounds([{id:`test-${Date.now()}`,roll,color:roll===0?0:roll<=7?1:2,created_at:now.toISOString(),status:'rolling'}],true);
-    setConnection('connecting','Rodada de teste inserida. Ela não veio da Blaze.','MODO TESTE');
-  }
-
   function startLiveCatalog(){
     if (!started) {
       loadState();
@@ -359,15 +334,9 @@
     hydrateFromApi(false);
     clearInterval(fallbackTimer);
     fallbackTimer=setInterval(()=>hydrateFromApi(false),API_POLL_MS);
-    if (state.socketUrl) connectLiveEngine();
-    else {
-      setConnection('connecting','Inicializando conexão automática…','SIGMA AUTO');
-      hydrateFromApi(false);
-    }
+    setConnection('connecting','Inicializando Socket.IO e contingência automática…','SIGMA LIVE');
+    connectLiveEngine(DEFAULT_SOCKET_URL);
   }
 
   window.startLiveCatalog = startLiveCatalog;
-  window.openLiveSettings = openLiveSettings;
-  window.closeLiveSettings = closeLiveSettings;
-  window.saveLiveSettings = saveLiveSettings;
 })();

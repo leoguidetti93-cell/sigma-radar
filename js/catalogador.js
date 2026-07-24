@@ -219,7 +219,7 @@
         (_,i) => `<div class="sigma-global-minute-head">${pad(i)}</div>`
       ).join('');
 
-      root.innerHTML = `<div class="sigma-mobile-round-legend"><span><b>2ª</b> rodada em cima</span><span><b>1ª</b> rodada embaixo</span></div><div class="sigma-global-head-wrap"><div class="sigma-global-heads">${globalHeads}</div></div>${root.innerHTML}`;
+      root.innerHTML = `<div class="sigma-global-head-wrap"><div class="sigma-global-heads">${globalHeads}</div></div>${root.innerHTML}`;
     }
 
     lastRenderedBlock = newestBlock;

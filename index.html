@@ -487,21 +487,30 @@
 
 <div id="catalogador" class="screen">
   <div class="shell">
-    <div class="inner-header">
+    <div class="inner-header catalog-clean-header">
       <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Catalogador ao Vivo</h2><p>Resultados do Double organizados em linhas automáticas de 10 minutos.</p></div>
-      <span id="catalogStatus" class="status-pill sigma-live-pill offline">● OFFLINE</span>
+      <div class="title-group"><h2>Catalogador ao Vivo</h2></div>
+      <span id="catalogStatus" class="status-pill sigma-live-pill offline">● STATUS: DESCONECTADO</span>
     </div>
 
-    <div class="sigma-live-toolbar">
-      <div class="sigma-live-kpi live"><span>LIVE ENGINE</span><strong><i id="catalogLiveDot" class="sigma-live-dot offline"></i><span id="catalogSource">—</span></strong><small>evento double.tick</small></div>
-      <div class="sigma-live-kpi"><span>MEMÓRIA ATIVA</span><strong id="catalogCount">0 / 500 rodadas</strong><small>sem duplicações</small></div>
-      <div class="sigma-live-kpi"><span>ÚLTIMA RODADA</span><strong id="catalogLastRoll">—</strong><small id="catalogLastTime">—</small></div>
-      <div class="sigma-live-kpi"><span>ÚLTIMAS 50</span><strong><b style="color:#ff3158" id="catalogRed50">0</b> · <b id="catalogBlack50">0</b> · <b style="color:#fff" id="catalogWhite50">0</b></strong><small>vermelho · preto · branco</small></div>
+    <div class="catalog-summary-grid">
+      <div class="catalog-last-card">
+        <span class="catalog-card-label">ÚLTIMA RODADA</span>
+        <div id="catalogLastStone" class="catalog-last-stone empty">—</div>
+        <small id="catalogLastTime">—</small>
+      </div>
+
+      <div class="catalog-hour-card">
+        <span class="catalog-card-label">DISTRIBUIÇÃO — ÚLTIMA HORA</span>
+        <div class="catalog-percent-grid">
+          <div><i class="catalog-color-dot red"></i><span>Vermelho</span><strong id="catalogRedHour">0%</strong></div>
+          <div><i class="catalog-color-dot black"></i><span>Preto</span><strong id="catalogBlackHour">0%</strong></div>
+          <div><i class="catalog-color-dot white"></i><span>Branco</span><strong id="catalogWhiteHour">0%</strong></div>
+        </div>
+      </div>
     </div>
 
-
-    <div id="catalogAlert" class="sigma-live-message offline">Conectando ao SIGMA LIVE SERVER…</div>
+    <div id="catalogAlert" class="sigma-live-message offline catalog-alert-hidden" aria-live="polite">Conectando ao SIGMA LIVE SERVER…</div>
     <div id="catalogHours" class="sigma-catalog-board"></div>
     <div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O ORION preserva as 500 rodadas mais recentes neste navegador.</div>
   </div>

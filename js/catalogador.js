@@ -201,8 +201,6 @@
       byMinute.forEach(list => list.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)));
 
       const start = block.date.getMinutes();
-      const hour = pad(block.date.getHours());
-      const dateLabel = block.date.toLocaleDateString('pt-BR');
       const current = index === 0;
       const heads = Array.from({length:10},(_,i) => `<div class="sigma-minute-head">${pad(start+i)}</div>`).join('');
       const cells = Array.from({length:10},(_,i) => {
@@ -211,8 +209,7 @@
         return `<div class="sigma-minute-cell">${stoneHtml(list[0],animateNewest && list[0]?.id===latestRoundId)}${stoneHtml(list[1],animateNewest && list[1]?.id===latestRoundId)}</div>`;
       }).join('');
 
-      return `<section class="sigma-live-row${current?' is-current':''}${current && newestBlock!==lastRenderedBlock?' row-enter':''}">
-        <div class="sigma-row-meta"><strong>${hour}:${pad(start)}–${hour}:${pad(start+9)}</strong><span>${dateLabel}${current?' • LINHA ATUAL':''}</span></div>
+      return `<section class="sigma-live-row sigma-live-row-clean${current?' is-current':''}${current && newestBlock!==lastRenderedBlock?' row-enter':''}">
         <div class="sigma-row-grid"><div class="sigma-row-heads">${heads}</div><div class="sigma-row-cells">${cells}</div></div>
       </section>`;
     }).join('');
@@ -223,16 +220,29 @@
 
   function updateStats(){
     const latest = rounds[rounds.length-1];
-    const recent50 = rounds.slice(-50);
-    const whites = recent50.filter(r => r.roll===0).length;
-    const reds = recent50.filter(r => r.color==='red').length;
-    const blacks = recent50.filter(r => r.color==='black').length;
+    const oneHourAgo = Date.now() - (60 * 60 * 1000);
+    const lastHour = rounds.filter(r => new Date(r.createdAt).getTime() >= oneHourAgo);
+    const total = lastHour.length;
+    const whites = lastHour.filter(r => r.roll === 0 || r.color === 'white').length;
+    const reds = lastHour.filter(r => r.color === 'red').length;
+    const blacks = lastHour.filter(r => r.color === 'black').length;
+    const percent = value => total ? Math.round((value / total) * 100) : 0;
 
-    if ($('catalogLastRoll')) $('catalogLastRoll').textContent = latest ? String(latest.roll) : '—';
+    const lastStone = $('catalogLastStone');
+    if (lastStone) {
+      if (latest) {
+        lastStone.className = `catalog-last-stone ${latest.color || 'unknown'}`;
+        lastStone.textContent = latest.roll === 0 ? '□' : String(latest.roll);
+      } else {
+        lastStone.className = 'catalog-last-stone empty';
+        lastStone.textContent = '—';
+      }
+    }
+
     if ($('catalogLastTime')) $('catalogLastTime').textContent = latest ? formatTime(latest.createdAt,true) : '—';
-    if ($('catalogWhite50')) $('catalogWhite50').textContent = whites;
-    if ($('catalogRed50')) $('catalogRed50').textContent = reds;
-    if ($('catalogBlack50')) $('catalogBlack50').textContent = blacks;
+    if ($('catalogWhiteHour')) $('catalogWhiteHour').textContent = `${percent(whites)}%`;
+    if ($('catalogRedHour')) $('catalogRedHour').textContent = `${percent(reds)}%`;
+    if ($('catalogBlackHour')) $('catalogBlackHour').textContent = `${percent(blacks)}%`;
     if ($('catalogUpdated')) $('catalogUpdated').textContent = lastMessageAt
       ? new Date(lastMessageAt).toLocaleTimeString('pt-BR')
       : '—';
@@ -246,10 +256,10 @@
     if (pill) {
       pill.className = `status-pill sigma-live-pill ${status}`;
       pill.textContent = status==='online'
-        ? '● AO VIVO'
+        ? '● STATUS: CONECTADO'
         : status==='connecting'
-          ? '● CONECTANDO'
-          : '● OFFLINE';
+          ? '● STATUS: CONECTANDO'
+          : '● STATUS: DESCONECTADO';
     }
 
     if (dot) dot.className = `sigma-live-dot ${status}`;

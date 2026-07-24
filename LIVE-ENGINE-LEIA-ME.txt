@@ -1,14 +1,9 @@
-SIGMA ORION 3.0.2 — CATALOGADOR LIVE
+SIGMA ORION 3.0 LIVE — CORREÇÃO AUTOMÁTICA
 
-Correções aplicadas:
-- Endpoint Socket.IO automático da Blaze
-- Engine.IO v3 com handshake e ping/pong
-- Evento correto: double.tick
-- Apenas payloads com status complete são catalogados
-- Deduplicação por ID
-- Memória circular de 500 rodadas
-- API automática de contingência a cada 2,5 segundos
-- Sem popup, URL manual ou botões de teste
-
-Publicação:
-Envie todo o conteúdo desta pasta para o repositório GitHub conectado à Vercel.
+- Nenhuma URL precisa ser colada.
+- O popup de configuração foi removido.
+- O Catalogador inicia automaticamente ao abrir.
+- O coletor SIGMA consulta os resultados e atualiza a tela sozinho.
+- Memória ativa de 500 rodadas, sem duplicações.
+- Atualização automática a cada 5 segundos.
+- Caso a fonte esteja temporariamente indisponível, o sistema preserva o histórico local e tenta novamente.

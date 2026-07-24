@@ -1,31 +1,24 @@
-/* SIGMA LIVE ENGINE + CATALOGADOR 3.0 */
+/* SIGMA ORION — CATALOGADOR LIVE SERVER 3.1 */
 (() => {
   'use strict';
 
   const MAX_ROUNDS = 500;
   const STORAGE_KEY = 'sigma-live-rounds-v3';
-    const SETTINGS_KEY = 'sigma-live-settings-v1';
-  const API_FALLBACK = '/api/blaze-double';
-  const API_POLL_MS = 2500;
-  const DEFAULT_SOCKET_URL = 'wss://api-gaming.blaze.bet.br/replication/?EIO=3&transport=websocket';
+  const LIVE_BASE = 'https://sigma-live-server.onrender.com';
+  const MEMORY_URL = `${LIVE_BASE}/memory?limit=${MAX_ROUNDS}`;
+  const HEALTH_URL = `${LIVE_BASE}/health`;
+  const EVENTS_URL = `${LIVE_BASE}/events`;
+  const POLL_MS = 10000;
 
   let rounds = [];
-  let socket = null;
+  let eventSource = null;
+  let pollTimer = null;
   let reconnectTimer = null;
-  let reconnectAttempt = 0;
-  let fallbackTimer = null;
   let started = false;
   let latestRoundId = null;
   let lastMessageAt = 0;
   let lastRenderedBlock = '';
-
-  const state = {
-    socketUrl: DEFAULT_SOCKET_URL,
-    connected: false,
-    source: 'nenhuma',
-    whiteFx: true,
-    autoReconnect: true
-  };
+  let reconnectAttempt = 0;
 
   function $(id){ return document.getElementById(id); }
   function pad(value){ return String(value).padStart(2,'0'); }
@@ -44,59 +37,80 @@
 
   function normalizeRound(item){
     if (!item) return null;
-    const src = item.payload && typeof item.payload === 'object' ? item.payload : item;
+    const src = item.round && typeof item.round === 'object'
+      ? item.round
+      : item.payload && typeof item.payload === 'object'
+        ? item.payload
+        : item;
+
+    if (src.status && src.status !== 'complete') return null;
+
     const roll = Number(src.roll ?? src.number ?? src.value ?? src.result);
     if (!Number.isInteger(roll) || roll < 0 || roll > 14) return null;
-    const created = parseDate(src.created_at ?? src.createdAt ?? src.timestamp ?? src.time ?? Date.now());
+
+    const created = parseDate(
+      src.created_at ?? src.createdAt ?? src.timestamp ?? src.time ?? src.received_at ?? Date.now()
+    );
     if (!created) return null;
+
     const id = String(src.id ?? src.round_id ?? src.uuid ?? `${created.toISOString()}-${roll}`);
+
     return {
       id,
       roll,
       color: inferColor(roll, src.color),
       createdAt: created.toISOString(),
       updatedAt: src.updated_at ?? src.updatedAt ?? null,
-      status: src.status ?? null,
+      status: 'complete',
       roomId: src.room_id ?? src.roomId ?? null,
-      receivedAt: new Date().toISOString()
+      receivedAt: src.received_at ?? src.receivedAt ?? new Date().toISOString()
     };
   }
 
   function loadState(){
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      rounds = Array.isArray(saved) ? saved.map(normalizeRound).filter(Boolean).slice(-MAX_ROUNDS) : [];
-    } catch { rounds = []; }
-    try {
-      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
-      state.whiteFx = settings.whiteFx !== false;
-      state.autoReconnect = settings.autoReconnect !== false;
-    } catch {}
-    state.socketUrl = window.SIGMA_LIVE_SOCKET_URL || DEFAULT_SOCKET_URL;
+      rounds = Array.isArray(saved)
+        ? saved.map(normalizeRound).filter(Boolean).slice(-MAX_ROUNDS)
+        : [];
+    } catch {
+      rounds = [];
+    }
   }
 
   function saveState(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(rounds.slice(-MAX_ROUNDS)));
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify({whiteFx:state.whiteFx,autoReconnect:state.autoReconnect}));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rounds.slice(-MAX_ROUNDS)));
+    } catch (error) {
+      console.warn('SIGMA: não foi possível preservar a memória local.', error);
+    }
   }
 
   function mergeRounds(items, animateNewest = false){
     const previousNewest = rounds.length ? rounds[rounds.length - 1].id : null;
-    const map = new Map(rounds.map(r => [r.id, r]));
+    const map = new Map(rounds.map(round => [round.id, round]));
+
     for (const raw of items || []) {
       const round = normalizeRound(raw);
       if (!round) continue;
       const previous = map.get(round.id);
       map.set(round.id, previous ? {...previous, ...round} : round);
     }
+
     rounds = [...map.values()]
       .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt))
       .slice(-MAX_ROUNDS);
+
     latestRoundId = rounds.length ? rounds[rounds.length - 1].id : null;
     saveState();
-    const isNew = Boolean(animateNewest && latestRoundId && latestRoundId !== previousNewest);
+
+    const isNew = Boolean(
+      animateNewest && latestRoundId && latestRoundId !== previousNewest
+    );
+
     renderCatalog(isNew);
     updateStats();
+
     if (isNew) broadcastRound(rounds[rounds.length - 1]);
     return isNew;
   }
@@ -121,46 +135,69 @@
 
   function groupBlocks(){
     const map = new Map();
+
     rounds.forEach(round => {
       const d = new Date(round.createdAt);
       const start = blockStart(d.getMinutes());
       const key = blockKey(d);
-      if (!map.has(key)) map.set(key, {key,date:new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),start),rounds:[]});
+
+      if (!map.has(key)) {
+        map.set(key, {
+          key,
+          date: new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),start),
+          rounds: []
+        });
+      }
+
       map.get(key).rounds.push(round);
     });
 
     const now = new Date();
     const currentKey = blockKey(now);
+
     if (!map.has(currentKey)) {
       const start = blockStart(now.getMinutes());
-      map.set(currentKey,{key:currentKey,date:new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours(),start),rounds:[]});
+      map.set(currentKey, {
+        key: currentKey,
+        date: new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours(),start),
+        rounds: []
+      });
     }
 
     return [...map.values()].sort((a,b) => b.date - a.date).slice(0, 28);
   }
 
   function stoneHtml(round, isNewest){
-    if (!round) return '<div class="sigma-stone sigma-stone-empty"><span>•</span><small>—</small></div>';
+    if (!round) {
+      return '<div class="sigma-stone sigma-stone-empty"><span>•</span><small>—</small></div>';
+    }
+
     const white = round.roll === 0;
     const newest = isNewest ? ' sigma-stone-new' : '';
-    const fx = white && isNewest && state.whiteFx ? ' sigma-white-hit' : '';
-    const value = white ? '<span class="sigma-white-mark">◇</span>' : `<span>${round.roll}</span>`;
+    const fx = white && isNewest ? ' sigma-white-hit' : '';
+    const value = white
+      ? '<span class="sigma-white-mark">◇</span>'
+      : `<span>${round.roll}</span>`;
+
     return `<div class="sigma-stone sigma-stone-${round.color}${newest}${fx}" data-round-id="${round.id}" title="${formatTime(round.createdAt,true)} • ID ${round.id}">${value}<small>${formatTime(round.createdAt)}</small></div>`;
   }
 
   function renderCatalog(animateNewest = false){
     const root = $('catalogHours');
     if (!root) return;
+
     const blocks = groupBlocks();
     const newestBlock = blocks[0]?.key || '';
 
     root.innerHTML = blocks.map((block,index) => {
       const byMinute = new Map();
+
       block.rounds.forEach(round => {
         const minute = new Date(round.createdAt).getMinutes();
         if (!byMinute.has(minute)) byMinute.set(minute, []);
         byMinute.get(minute).push(round);
       });
+
       byMinute.forEach(list => list.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)));
 
       const start = block.date.getMinutes();
@@ -173,6 +210,7 @@
         const list = (byMinute.get(minute) || []).slice(0,2);
         return `<div class="sigma-minute-cell">${stoneHtml(list[0],animateNewest && list[0]?.id===latestRoundId)}${stoneHtml(list[1],animateNewest && list[1]?.id===latestRoundId)}</div>`;
       }).join('');
+
       return `<section class="sigma-live-row${current?' is-current':''}${current && newestBlock!==lastRenderedBlock?' row-enter':''}">
         <div class="sigma-row-meta"><strong>${hour}:${pad(start)}–${hour}:${pad(start+9)}</strong><span>${dateLabel}${current?' • LINHA ATUAL':''}</span></div>
         <div class="sigma-row-grid"><div class="sigma-row-heads">${heads}</div><div class="sigma-row-cells">${cells}</div></div>
@@ -180,8 +218,7 @@
     }).join('');
 
     lastRenderedBlock = newestBlock;
-    const count = $('catalogCount');
-    if (count) count.textContent = `${rounds.length} / ${MAX_ROUNDS} rodadas`;
+    if ($('catalogCount')) $('catalogCount').textContent = `${rounds.length} / ${MAX_ROUNDS} rodadas`;
   }
 
   function updateStats(){
@@ -190,152 +227,180 @@
     const whites = recent50.filter(r => r.roll===0).length;
     const reds = recent50.filter(r => r.color==='red').length;
     const blacks = recent50.filter(r => r.color==='black').length;
+
     if ($('catalogLastRoll')) $('catalogLastRoll').textContent = latest ? String(latest.roll) : '—';
     if ($('catalogLastTime')) $('catalogLastTime').textContent = latest ? formatTime(latest.createdAt,true) : '—';
     if ($('catalogWhite50')) $('catalogWhite50').textContent = whites;
     if ($('catalogRed50')) $('catalogRed50').textContent = reds;
     if ($('catalogBlack50')) $('catalogBlack50').textContent = blacks;
-    if ($('catalogUpdated')) $('catalogUpdated').textContent = lastMessageAt ? new Date(lastMessageAt).toLocaleTimeString('pt-BR') : '—';
+    if ($('catalogUpdated')) $('catalogUpdated').textContent = lastMessageAt
+      ? new Date(lastMessageAt).toLocaleTimeString('pt-BR')
+      : '—';
   }
 
-  function setConnection(status, message, source = state.source){
-    state.connected = status === 'online';
-    state.source = source;
+  function setConnection(status, message, source){
     const pill = $('catalogStatus');
     const alert = $('catalogAlert');
     const dot = $('catalogLiveDot');
+
     if (pill) {
       pill.className = `status-pill sigma-live-pill ${status}`;
-      pill.textContent = status==='online'?'● AO VIVO':status==='connecting'?'● CONECTANDO':'● OFFLINE';
+      pill.textContent = status==='online'
+        ? '● AO VIVO'
+        : status==='connecting'
+          ? '● CONECTANDO'
+          : '● OFFLINE';
     }
+
     if (dot) dot.className = `sigma-live-dot ${status}`;
+
     if (alert) {
       alert.className = `sigma-live-message ${status}`;
       alert.textContent = message;
     }
+
     if ($('catalogSource')) $('catalogSource').textContent = source || '—';
   }
 
-  function parseSocketPacket(data){
-    if (typeof data !== 'string') return;
-    lastMessageAt = Date.now();
-
-    // Engine.IO pode agrupar vários pacotes usando o separador 0x1e.
-    const frames = data.split('\x1e').filter(Boolean);
-    for (const frame of frames) {
-      if (frame === '2') { try { socket?.send('3'); } catch {} continue; }
-      if (frame.startsWith('0')) { try { socket?.send('40'); } catch {} continue; }
-      if (frame === '40' || frame.startsWith('40{')) {
-        setConnection('connecting','Socket.IO conectado. Aguardando a próxima rodada concluída…','Socket.IO • double.tick');
-        continue;
-      }
-      if (!frame.startsWith('42')) continue;
-
-      try {
-        const packet = JSON.parse(frame.slice(2));
-        const eventName = packet?.[0];
-        const body = packet?.[1];
-        const payload = body?.payload;
-        if (eventName !== 'data' || body?.id !== 'double.tick') continue;
-        if (!payload || payload.status !== 'complete') continue;
-
-        const round = normalizeRound(payload);
-        if (!round) continue;
-        mergeRounds([round], true);
-        setConnection('online','Rodada concluída recebida em tempo real.','Socket.IO • double.tick');
-      } catch (error) {
-        console.debug('SIGMA LIVE: pacote ignorado', error);
-      }
-    }
-  }
-
-  function normalizeSocketUrl(url){
-    let value = String(url || '').trim();
-    if (!value) return '';
-    value = value.replace(/^https:/i,'wss:').replace(/^http:/i,'ws:');
-    if (!/^wss?:\/\//i.test(value)) value = `wss://${value}`;
-    if (!/[?&]transport=websocket/i.test(value)) {
-      const sep = value.includes('?') ? '&' : '?';
-      value += `${sep}EIO=3&transport=websocket`;
-    }
-    return value;
-  }
-
-  function connectLiveEngine(customUrl){
-    const url = normalizeSocketUrl(customUrl ?? state.socketUrl);
-    if (!url) {
-      setConnection('connecting','Conectando automaticamente pelo coletor SIGMA…','SIGMA AUTO');
-      hydrateFromApi(false);
-      return;
-    }
-    state.socketUrl = url;
-    saveState();
-    clearTimeout(reconnectTimer);
-    if (socket) { try { socket.onclose=null; socket.close(); } catch {} }
-    setConnection('connecting','Conectando ao evento double.tick…','Socket.IO');
+  async function hydrateFromServer(animateNewest = false){
     try {
-      socket = new WebSocket(url);
-      socket.onopen = () => {
-        reconnectAttempt = 0;
-        setConnection('connecting','Canal aberto. Iniciando handshake Engine.IO…','Socket.IO');
-      };
-      socket.onmessage = event => parseSocketPacket(event.data);
-      socket.onerror = () => {
-        setConnection('connecting','Socket direto indisponível. Mantendo sincronização automática pela API…','SIGMA AUTO');
-        hydrateFromApi(false);
-      };
-      socket.onclose = () => {
-        state.connected = false;
-        setConnection('connecting','Socket desconectado. API ativa enquanto reconectamos…','SIGMA AUTO');
-        hydrateFromApi(false);
-        if (state.autoReconnect) scheduleReconnect();
-      };
+      const response = await fetch(MEMORY_URL, {cache:'no-store'});
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const payload = await response.json();
+      const list = Array.isArray(payload) ? payload : payload.rounds || [];
+
+      mergeRounds(list, animateNewest);
+      lastMessageAt = Date.now();
+      updateStats();
+
+      setConnection(
+        'online',
+        list.length
+          ? 'Memória sincronizada. Aguardando novas rodadas ao vivo.'
+          : 'Servidor conectado. Aguardando a próxima rodada completa.',
+        'SIGMA LIVE SERVER'
+      );
+
+      return true;
     } catch (error) {
-      setConnection('offline',`Não foi possível abrir o Socket: ${error.message}`,'Socket.IO');
-      scheduleReconnect();
+      setConnection(
+        'connecting',
+        'Acordando o servidor e tentando sincronizar as rodadas…',
+        'SIGMA LIVE SERVER'
+      );
+      console.warn('SIGMA: falha ao sincronizar memória.', error);
+      return false;
     }
   }
 
-  function scheduleReconnect(){
+  function closeEventStream(){
+    if (eventSource) {
+      try { eventSource.close(); } catch {}
+      eventSource = null;
+    }
+  }
+
+  function scheduleEventReconnect(){
     clearTimeout(reconnectTimer);
     reconnectAttempt += 1;
-    const wait = Math.min(30000, 2000 * Math.pow(1.7, reconnectAttempt-1));
-    reconnectTimer = setTimeout(() => connectLiveEngine(), wait);
+    const wait = Math.min(30000, 1500 * Math.pow(1.7, reconnectAttempt - 1));
+    reconnectTimer = setTimeout(connectEventStream, wait);
   }
 
-  async function hydrateFromApi(manual=false){
+  function connectEventStream(){
+    closeEventStream();
+    setConnection('connecting','Abrindo canal de rodadas em tempo real…','SIGMA LIVE SERVER');
+
     try {
-      const response = await fetch(API_FALLBACK,{cache:'no-store'});
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const payload = await response.json();
-      const list = Array.isArray(payload) ? payload : payload.rounds ?? payload.records ?? payload.data ?? [];
-      if (!Array.isArray(list) || !list.length) throw new Error('lista vazia');
-      mergeRounds(list,false);
-      lastMessageAt = Date.now();
-      setConnection('online','Resultados sincronizados automaticamente pelo SIGMA LIVE ENGINE.','SIGMA AUTO • Double');
+      eventSource = new EventSource(EVENTS_URL);
+
+      eventSource.onopen = () => {
+        reconnectAttempt = 0;
+        lastMessageAt = Date.now();
+        setConnection('online','Canal ao vivo conectado. Aguardando a próxima rodada completa.','SIGMA LIVE SERVER • /events');
+      };
+
+      eventSource.addEventListener('round', event => {
+        try {
+          const payload = JSON.parse(event.data);
+          lastMessageAt = Date.now();
+          mergeRounds([payload.round || payload], true);
+          setConnection('online','Nova rodada recebida em tempo real.','SIGMA LIVE SERVER • /events');
+        } catch (error) {
+          console.warn('SIGMA: evento de rodada inválido.', error);
+        }
+      });
+
+      eventSource.addEventListener('state', event => {
+        try {
+          const state = JSON.parse(event.data);
+          lastMessageAt = Date.now();
+          if (state.socketIoConnected && state.subscribed) {
+            setConnection('online','Servidor conectado à sala double_room_1.','SIGMA LIVE SERVER • double.tick');
+          } else {
+            setConnection('connecting','Servidor reconectando à fonte de resultados…','SIGMA LIVE SERVER');
+          }
+        } catch {}
+      });
+
+      eventSource.addEventListener('heartbeat', () => {
+        lastMessageAt = Date.now();
+        updateStats();
+      });
+
+      eventSource.onerror = () => {
+        closeEventStream();
+        setConnection('connecting','Canal ao vivo interrompido. Reconectando…','SIGMA LIVE SERVER');
+        scheduleEventReconnect();
+      };
     } catch (error) {
-      if (!state.connected) setConnection('offline','O coletor automático ainda não respondeu. Tentando novamente…','SIGMA AUTO');
+      console.warn('SIGMA: não foi possível abrir /events.', error);
+      scheduleEventReconnect();
     }
   }
 
-  function startLiveCatalog(){
+  async function checkHealth(){
+    try {
+      const response = await fetch(HEALTH_URL, {cache:'no-store'});
+      if (!response.ok) return;
+      const health = await response.json();
+
+      if (health.socketIoConnected && health.subscribed) {
+        setConnection('online','Servidor ativo e inscrito no Double.','SIGMA LIVE SERVER • double_room_1');
+      }
+    } catch {}
+  }
+
+  function startPolling(){
+    clearInterval(pollTimer);
+    pollTimer = setInterval(async () => {
+      await hydrateFromServer(true);
+      if (!eventSource) connectEventStream();
+    }, POLL_MS);
+  }
+
+  async function startLiveCatalog(){
     if (!started) {
       loadState();
       renderCatalog(false);
       updateStats();
-      started=true;
+      started = true;
+
       window.SIGMA_LIVE_ENGINE = {
         get rounds(){ return rounds.slice(); },
         get latest(){ return rounds[rounds.length-1] || null; },
-        connect: connectLiveEngine,
-        hydrate: hydrateFromApi
+        hydrate: hydrateFromServer,
+        reconnect: connectEventStream,
+        server: LIVE_BASE
       };
     }
-    hydrateFromApi(false);
-    clearInterval(fallbackTimer);
-    fallbackTimer=setInterval(()=>hydrateFromApi(false),API_POLL_MS);
-    setConnection('connecting','Inicializando Socket.IO e contingência automática…','SIGMA LIVE');
-    connectLiveEngine(DEFAULT_SOCKET_URL);
+
+    setConnection('connecting','Conectando ao SIGMA LIVE SERVER…','SIGMA LIVE SERVER');
+    await hydrateFromServer(false);
+    await checkHealth();
+    connectEventStream();
+    startPolling();
   }
 
   window.startLiveCatalog = startLiveCatalog;

@@ -1,2 +1,2 @@
-/* SIGMA LIVE ENGINE 3.0.2 — conexão automática */
-window.SIGMA_LIVE_SOCKET_URL = 'wss://api-gaming.blaze.bet.br/replication/?EIO=3&transport=websocket';
+/* SIGMA ORION 3.1 — fonte oficial do Catalogador */
+window.SIGMA_LIVE_SERVER_URL = 'https://sigma-live-server.onrender.com';

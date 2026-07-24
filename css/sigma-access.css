@@ -15,3 +15,7 @@ html.sigma-access-locked,html.sigma-access-locked body{overflow:hidden!important
 .sigma-access-message{min-height:20px;margin-top:16px;font-size:13px;color:#ff7b9f}.sigma-access-message.success{color:#3ce6a1}
 .sigma-access-account{margin-top:14px;padding:13px;border:1px solid #2d3441;border-radius:12px;color:#cfd5df;font-size:13px}.sigma-access-account strong{color:#fff}
 .sigma-access-secondary{margin-top:12px;border:0;background:none;color:#9ea7b7;text-decoration:underline;cursor:pointer}
+
+
+/* ORION 3.5.1 — Marca do acesso sem inclinação */
+.sigma-access-mark{font-style:normal!important;transform:none!important;rotate:0deg!important;skew:0deg!important;font-family:Arial,Helvetica,sans-serif!important;}

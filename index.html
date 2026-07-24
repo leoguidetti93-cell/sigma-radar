@@ -3,15 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIGMA RADAR — ORION UI 2.1.0</title>
+<title>SIGMA RADAR — ORION UI 3.4 LICENSED</title>
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/layout.css">
 <link rel="stylesheet" href="/css/modules.css">
 <link rel="stylesheet" href="/css/support.css">
 <link rel="stylesheet" href="/css/temporal-filter.css">
 <link rel="stylesheet" href="/css/central-operacoes.css">
+<link rel="stylesheet" href="/css/sigma-access.css">
 </head>
 <body>
+
+<div id="sigmaAccessGate" class="sigma-access-gate" aria-live="polite">
+  <div class="sigma-access-panel">
+    <div class="sigma-access-mark">Σ</div>
+    <span class="sigma-access-kicker">SIGMA ACCESS</span>
+    <h1 id="sigmaAccessTitle">Validando acesso</h1>
+    <p id="sigmaAccessDescription">Conectando ao servidor de licenças...</p>
+    <form id="sigmaAccessForm" hidden>
+      <label for="sigmaLicenseInput">Chave de licença</label>
+      <input id="sigmaLicenseInput" type="text" maxlength="6" autocomplete="off" spellcheck="false" placeholder="EX.: VVCNE9">
+      <button id="sigmaActivateButton" type="submit">ATIVAR ORION</button>
+    </form>
+    <div id="sigmaAccessMessage" class="sigma-access-message"></div>
+    <div id="sigmaAccessAccount" class="sigma-access-account" hidden></div>
+    <button id="sigmaForgetLicense" class="sigma-access-secondary" type="button" hidden>Usar outra licença</button>
+  </div>
+</div>
 
 
 <div id="lab" class="lab" aria-live="polite">
@@ -42,7 +60,7 @@
     <button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">◉</span><span class="side-text">Catalogador</span></button>
     <button class="side-link" data-target="simulador" onclick="sideNavigate('simulador','Simulador ao Vivo',this)"><span class="side-icon">⌖</span><span class="side-text">Simulador</span></button>
   </nav>
-  <div class="side-bottom"><b>ORION UI — 3.1 LIVE</b><span>Experiência para jogadores</span></div>
+  <div class="side-bottom"><b>ORION UI — 3.4 LICENSED</b><span>Experiência para jogadores</span></div>
 </aside>
 
 
@@ -595,6 +613,7 @@
 
 <div id="tooltip" class="tooltip"></div>
 
+<script src="/js/sigma-access.js"></script>
 <script src="/data/sigma-base-2.1.0.js"></script>
 <script src="/js/core.js"></script>
 <script src="/js/live-engine-config.js"></script>

@@ -1,618 +1,538 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIGMA RADAR — ORION UI 3.4 LICENSED</title>
-<link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/layout.css">
-<link rel="stylesheet" href="/css/modules.css">
-<link rel="stylesheet" href="/css/support.css">
-<link rel="stylesheet" href="/css/temporal-filter.css">
-<link rel="stylesheet" href="/css/central-operacoes.css">
-<link rel="stylesheet" href="/css/sigma-access.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIGMA RADAR — ORION UI 3.5</title>
+<link href="/css/base.css" rel="stylesheet"/>
+<link href="/css/layout.css" rel="stylesheet"/>
+<link href="/css/modules.css" rel="stylesheet"/>
+<link href="/css/support.css" rel="stylesheet"/>
+<link href="/css/temporal-filter.css" rel="stylesheet"/>
+<link href="/css/central-operacoes.css" rel="stylesheet"/>
+<link href="/css/sigma-access.css" rel="stylesheet"/>
 </head>
 <body>
-
-<div id="sigmaAccessGate" class="sigma-access-gate" aria-live="polite">
-  <div class="sigma-access-panel">
-    <div class="sigma-access-mark">Σ</div>
-    <span class="sigma-access-kicker">SIGMA ACCESS</span>
-    <h1 id="sigmaAccessTitle">Validando acesso</h1>
-    <p id="sigmaAccessDescription">Conectando ao servidor de licenças...</p>
-    <form id="sigmaAccessForm" hidden>
-      <label for="sigmaLicenseInput">Chave de licença</label>
-      <input id="sigmaLicenseInput" type="text" maxlength="6" autocomplete="off" spellcheck="false" placeholder="EX.: VVCNE9">
-      <button id="sigmaActivateButton" type="submit">ATIVAR ORION</button>
-    </form>
-    <div id="sigmaAccessMessage" class="sigma-access-message"></div>
-    <div id="sigmaAccessAccount" class="sigma-access-account" hidden></div>
-    <button id="sigmaForgetLicense" class="sigma-access-secondary" type="button" hidden>Usar outra licença</button>
-  </div>
+<div aria-live="polite" class="sigma-access-gate" id="sigmaAccessGate">
+<div class="sigma-access-panel">
+<div class="sigma-access-mark">Σ</div>
+<span class="sigma-access-kicker">SIGMA ACCESS</span>
+<h1 id="sigmaAccessTitle">Validando acesso</h1>
+<p id="sigmaAccessDescription">Conectando ao servidor de licenças...</p>
+<form hidden="" id="sigmaAccessForm">
+<label for="sigmaLicenseInput">Chave de licença</label>
+<input autocomplete="off" id="sigmaLicenseInput" maxlength="6" placeholder="EX.: VVCNE9" spellcheck="false" type="text"/>
+<button id="sigmaActivateButton" type="submit">ATIVAR ORION</button>
+</form>
+<div class="sigma-access-message" id="sigmaAccessMessage"></div>
+<div class="sigma-access-account" hidden="" id="sigmaAccessAccount"></div>
+<button class="sigma-access-secondary" hidden="" id="sigmaForgetLicense" type="button">Usar outra licença</button>
 </div>
-
-
-<div id="lab" class="lab" aria-live="polite">
-  <div class="lab-box">
-    <div class="lab-ring"><div class="lab-dot">SIGMA</div></div>
-    <h2 id="labTitle">Abrindo módulo</h2>
-    <p id="labText">Preparando sua sessão.</p>
-    <div class="progress"><span></span></div>
-  </div>
 </div>
-
+<div aria-live="polite" class="lab" id="lab">
+<div class="lab-box">
+<div class="lab-ring"><div class="lab-dot">SIGMA</div></div>
+<h2 id="labTitle">Abrindo módulo</h2>
+<p id="labText">Preparando sua sessão.</p>
+<div class="progress"><span></span></div>
+</div>
+</div>
 <aside class="player-sidebar">
-  <div class="side-logo">
-    <strong>SIGMA <em>RADAR</em></strong>
-    <span>INTELIGÊNCIA PARA O DOUBLE</span>
-  </div>
-  <div class="side-status"><i></i><span>BASE 2.1.0 • HÍBRIDO 80/20</span></div>
-  <nav class="side-nav">
-    <button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button>
-    <button class="side-link" data-target="centralOperacoes" onclick="sideNavigate('centralOperacoes','Central de Operações',this)"><span class="side-icon">⚪</span><span class="side-text">Sinais do Analista</span><span id="analystMenuBadge" class="analyst-menu-badge" hidden>0</span></button>
-    <button class="side-link" data-target="operacional" onclick="sideNavigate('operacional','Radar Operacional',this)"><span class="side-icon">◎</span><span class="side-text">Radar</span></button>
-    <button class="side-link" data-target="sigmaColor" onclick="sideNavigate('sigmaColor','Sigma Color',this)"><span class="side-icon">●</span><span class="side-text">Sigma Color</span></button>
-    <button class="side-link" data-target="padroes" onclick="sideNavigate('padroes','Ranking de Padrões',this)"><span class="side-icon">◇</span><span class="side-text">Padrões</span></button>
-    <button class="side-link" data-target="temporal" onclick="sideNavigate('temporal','Radar Temporal',this)"><span class="side-icon">▦</span><span class="side-text">Temporal</span></button>
-    <button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestor de Banca',this)"><span class="side-icon">R$</span><span class="side-text">Gestor de Banca</span></button>
-    <button class="side-link" data-target="ranking" onclick="sideNavigate('ranking','Ranking IA',this)"><span class="side-icon">⌁</span><span class="side-text">Ranking IA</span></button>
-    <button class="side-link" data-target="tendencias" onclick="sideNavigate('tendencias','Tendências',this)"><span class="side-icon">↗</span><span class="side-text">Tendências</span></button>
-    <button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">◉</span><span class="side-text">Catalogador</span></button>
-    <button class="side-link" data-target="simulador" onclick="sideNavigate('simulador','Simulador ao Vivo',this)"><span class="side-icon">⌖</span><span class="side-text">Simulador</span></button>
-  </nav>
-  <div class="side-bottom"><b>ORION UI — 3.4 LICENSED</b><span>Experiência para jogadores</span></div>
+<div class="side-logo">
+<strong>SIGMA <em>RADAR</em></strong>
+<span>INTELIGÊNCIA PARA O DOUBLE</span>
+</div>
+<div class="side-status"><i></i><span>BASE 2.1.0 • HÍBRIDO 80/20</span></div>
+<nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="centralOperacoes" onclick="sideNavigate('centralOperacoes','Analista SIGMA',this)"><span class="side-icon">Σ</span><span class="side-text">Analista SIGMA</span><span class="analyst-menu-badge" hidden="" id="analystMenuBadge">0</span></button><button class="side-link" data-target="sigmaColor" onclick="sideNavigate('sigmaColor','Listas de Cores',this)"><span class="side-icon">◉</span><span class="side-text">Listas de Cores</span></button><button class="side-link" data-target="temporal" onclick="sideNavigate('temporal','Mapa de Calor',this)"><span class="side-icon">▦</span><span class="side-text">Mapa de Calor</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button><button class="side-link" data-target="ranking" onclick="sideNavigate('ranking','Mais Pagos',this)"><span class="side-icon">↗</span><span class="side-text">Mais Pagos</span></button><button class="side-link" data-target="tendencias" onclick="sideNavigate('tendencias','Agenda',this)"><span class="side-icon">⌁</span><span class="side-text">Agenda</span></button></nav>
+<div class="side-bottom"><b>ORION UI — 3.5</b><span>Experiência para jogadores</span></div>
 </aside>
-
-
-<div id="home" class="screen active">
-  <div class="shell">
-  <div class="clean-home">
-    <div class="sigma-brand-stage sigma-brand-stage-clean">
-      <div class="sigma-flame" aria-hidden="true">
-        <div class="flame-outer"></div>
-        <div class="flame-inner"></div>
-        <div class="flame-core"></div>
-      </div>
-
-      <div class="sigma-brand-copy">
-        <span class="sigma-overline">CENTRAL DE OPERAÇÕES</span>
-        <h2>SIGMA</h2>
-        <strong>RADAR</strong>
-        <p>INTELIGÊNCIA PARA QUEM OPERA</p>
-      </div>
-
-      <div class="sigma-brand-status">
-        <span><i></i> SISTEMA ONLINE</span>
-        <span>BASE HISTÓRICA 1.3</span>
-      </div>
-    </div>
-  </div>
+<div class="screen active" id="home">
+<div class="shell">
+<div class="clean-home">
+<div class="sigma-brand-stage sigma-brand-stage-clean">
+<div aria-hidden="true" class="sigma-home-symbol">Σ</div>
+<div class="sigma-brand-copy">
+<span class="sigma-overline">CENTRAL DE OPERAÇÕES</span>
+<h2>SIGMA</h2>
+<strong>RADAR</strong>
+<p>INTELIGÊNCIA PARA QUEM OPERA</p>
+</div>
+<div class="sigma-brand-status">
+<span><i></i> SISTEMA ONLINE</span>
+<span>BASE HISTÓRICA 1.3</span>
 </div>
 </div>
-
-
-<div id="centralOperacoes" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group">
-        <h2>Central de Operações</h2>
-        <p>Sinais manuais publicados pelo Analista Sigma.</p>
-      </div>
-      <span id="analystConnectionStatus" class="status-pill">CONECTANDO</span>
-    </div>
-
-    <div class="analyst-rule">
-      <span>⚪</span>
-      <div>
-        <strong>Regra oficial dos sinais</strong>
-        <p>Todo sinal possui janela operacional de <b>±1 minuto</b>: minuto anterior, minuto central e minuto seguinte.</p>
-      </div>
-    </div>
-
-    <div class="analyst-stats">
-      <div class="analyst-stat">
-        <span>Sinais ativos</span>
-        <strong id="analystActiveCount">0</strong>
-      </div>
-      <div class="analyst-stat analyst-win-stat">
-        <span>Pagos hoje</span>
-        <strong id="analystPaidToday">0</strong>
-      </div>
-      <div class="analyst-stat analyst-loss-stat">
-        <span>Falharam hoje</span>
-        <strong id="analystFailedToday">0</strong>
-      </div>
-      <div class="analyst-stat">
-        <span>Assertividade hoje</span>
-        <strong id="analystAccuracyToday">—</strong>
-      </div>
-    </div>
-
-    <div class="player-section-title">
-      <h3>Sinais ativos</h3>
-      <span>Até três operações simultâneas</span>
-    </div>
-
-    <div id="analystActiveSignals" class="analyst-active-grid">
-      <div class="analyst-empty">Buscando sinais do analista...</div>
-    </div>
-
-    <div class="player-section-title analyst-history-title">
-      <h3>Últimos 10 sinais</h3>
-      <span>Histórico encerrado pelo analista</span>
-    </div>
-
-    <div class="card analyst-history-card">
-      <div id="analystHistory" class="analyst-history-list">
-        <div class="analyst-empty">Carregando histórico...</div>
-      </div>
-    </div>
-  </div>
 </div>
-
-<div id="operacional" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Radar Operacional</h2><p>Selecione uma hora para localizar a melhor janela móvel de 10 minutos e o período mais fraco para evitar.</p></div>
-      <span class="status-pill">SIGMA ONLINE</span>
-    </div>
-
-    <div class="card" style="margin-bottom:18px">
-      <div class="small">ESCOLHA A HORA DA SESSÃO</div>
-      <div id="hourSelector" style="display:grid;grid-template-columns:repeat(12,1fr);gap:8px;margin-top:14px"></div>
-    </div>
-
-    <div class="radar-decision-grid">
-      <article class="card radar-window-card radar-window-best">
-        <div class="radar-window-head">
-          <div><div class="small">MELHOR JANELA DE 10 MINUTOS</div><div id="operationalBestTime" class="big-time">15:39 → 15:48</div></div>
-          <span id="operationalLevel" class="level">SIGMA ELITE</span>
-        </div>
-        <div class="radar-expectation">
-          <span>EXPECTATIVA ESTATÍSTICA</span>
-          <strong id="operationalWhiteExpectation">Pode esperar de 2 a 3 brancos</strong>
-          <p id="operationalExpectationText">Faixa estimada pela concentração histórica registrada nesta janela.</p>
-        </div>
-        <div class="metrics radar-metrics">
-          <div class="metric"><span>Score</span><b id="operationalScore">97</b></div>
-          <div class="metric"><span>Intensidade</span><b id="operationalIntensity">Muito alta</b></div>
-          <div class="metric"><span>Persistência</span><b id="operationalPersistence">93%</b></div>
-          <div class="metric"><span>Média estimada</span><b id="operationalWhiteAverage">2,4</b></div>
-        </div>
-      </article>
-
-      <article class="card radar-window-card radar-window-avoid">
-        <div class="radar-window-head">
-          <div><div class="small">JANELA A EVITAR</div><div id="operationalWorstTime" class="big-time">15:04 → 15:13</div></div>
-          <span class="level radar-danger-level">EVITAR</span>
-        </div>
-        <div class="radar-expectation radar-expectation-danger">
-          <span>LEITURA HISTÓRICA</span>
-          <strong id="operationalAvoidMessage">Baixa concentração de brancos</strong>
-          <p id="operationalAvoidText">Período estatisticamente mais fraco dentro da hora selecionada.</p>
-        </div>
-        <div class="metrics radar-metrics">
-          <div class="metric"><span>Score</span><b id="operationalWorstScore">24</b></div>
-          <div class="metric"><span>Intensidade</span><b id="operationalWorstIntensity">Muito baixa</b></div>
-          <div class="metric"><span>Persistência</span><b id="operationalWorstPersistence">31%</b></div>
-          <div class="metric"><span>Média estimada</span><b id="operationalWorstAverage">0,4</b></div>
-        </div>
-      </article>
-    </div>
-
-    <div class="card radar-session-summary" style="margin-top:18px">
-      <div>
-        <div class="small">LEITURA DA HORA</div>
-        <h2 id="operationalState">HORA FAVORÁVEL</h2>
-        <p id="operationalStateText">O Radar comparou todas as janelas móveis de 10 minutos desta hora.</p>
-      </div>
-      <div class="radar-session-badge"><span id="operationalPulse">◉</span><strong>2 FAIXAS MAPEADAS</strong><small>melhor oportunidade + período a evitar</small></div>
-    </div>
-
-    <div class="card radar-method-note" style="margin-top:18px">
-      <div class="small">COMO O RADAR DECIDE</div>
-      <p>O sistema percorre todas as 51 janelas móveis possíveis dentro da hora — de minuto em minuto — e apresenta somente a mais forte e a mais fraca. As expectativas representam comportamento histórico da Base 2.1.0 e não garantia de resultado.</p>
-    </div>
-  </div>
 </div>
-
-<div id="sigmaColor" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Sigma Color IA</h2><p>12 sinais de cor selecionados para a sessão escolhida.</p></div>
-      <span id="colorDataStatus" class="status-pill">BASE 2.1.0 • CARREGADA</span>
-    </div>
-
-    <div class="card">
-      <div class="color-toolbar">
-        <div>
-          <div class="small">SELECIONE A HORA DA SESSÃO</div>
-          <div style="color:var(--muted);font-size:13px;margin-top:6px">O Sigma consulta cada minuto dessa hora e mantém somente os 12 sinais mais consistentes.</div>
-        </div>
-        <button id="copyColorBtn" class="action-btn" onclick="copyColorSignals()">⧉ Copiar lista</button>
-      </div>
-      <div id="colorHourSelector" class="color-hour-grid"></div>
-    </div>
-
-    <div class="grid two" style="margin-top:18px">
-      <div class="card">
-        <div class="small">SESSÃO SELECIONADA</div>
-        <div id="colorSessionTitle" class="big-time" style="font-size:58px">14h</div>
-        <span id="colorSessionLevel" class="level">SIGMA PRO</span>
-        <p id="colorSessionText" style="color:var(--muted);line-height:1.55">Sinais ordenados cronologicamente para facilitar a operação.</p>
-      </div>
-      <div class="card">
-        <div class="small">RESUMO DA SESSÃO</div>
-        <div class="color-summary">
-          <div class="metric"><span>Vermelhos</span><b id="colorRedCount">—</b></div>
-          <div class="metric"><span>Pretos</span><b id="colorBlackCount">—</b></div>
-          <div class="metric"><span>Score médio</span><b id="colorAvgScore">—</b></div>
-          <div class="metric"><span>Até G1 médio</span><b id="colorAvgG1">—</b></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:18px">
-      <div class="small">TOP 12 SINAIS DA SESSÃO</div>
-      <div id="colorSignalGrid" class="color-signal-grid"></div>
-      <div style="margin-top:16px;color:var(--muted);font-size:11px;line-height:1.5">
+</div>
+<div class="screen" id="centralOperacoes">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group">
+<h2>Analista SIGMA</h2>
+<p>Sinais manuais publicados pelo Analista SIGMA.</p>
+</div>
+<span class="status-pill" id="analystConnectionStatus">CONECTANDO</span>
+</div>
+<div class="analyst-rule">
+<span>⚪</span>
+<div>
+<strong>Regra oficial dos sinais</strong>
+<p>Todo sinal possui janela operacional de <b>±1 minuto</b>: minuto anterior, minuto central e minuto seguinte.</p>
+</div>
+</div>
+<div class="analyst-stats">
+<div class="analyst-stat">
+<span>Sinais ativos</span>
+<strong id="analystActiveCount">0</strong>
+</div>
+<div class="analyst-stat analyst-win-stat">
+<span>Pagos hoje</span>
+<strong id="analystPaidToday">0</strong>
+</div>
+<div class="analyst-stat analyst-loss-stat">
+<span>Falharam hoje</span>
+<strong id="analystFailedToday">0</strong>
+</div>
+<div class="analyst-stat">
+<span>Assertividade hoje</span>
+<strong id="analystAccuracyToday">—</strong>
+</div>
+</div>
+<div class="player-section-title">
+<h3>Sinais ativos</h3>
+<span>Até três operações simultâneas</span>
+</div>
+<div class="analyst-active-grid" id="analystActiveSignals">
+<div class="analyst-empty">Buscando sinais do analista...</div>
+</div>
+<div class="player-section-title analyst-history-title">
+<h3>Últimos 10 sinais</h3>
+<span>Histórico encerrado pelo analista</span>
+</div>
+<div class="card analyst-history-card">
+<div class="analyst-history-list" id="analystHistory">
+<div class="analyst-empty">Carregando histórico...</div>
+</div>
+</div>
+</div>
+</div>
+<div class="screen" id="operacional">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group"><h2>Radar Operacional</h2><p>Selecione uma hora para localizar a melhor janela móvel de 10 minutos e o período mais fraco para evitar.</p></div>
+<span class="status-pill">SIGMA ONLINE</span>
+</div>
+<div class="card" style="margin-bottom:18px">
+<div class="small">ESCOLHA A HORA DA SESSÃO</div>
+<div id="hourSelector" style="display:grid;grid-template-columns:repeat(12,1fr);gap:8px;margin-top:14px"></div>
+</div>
+<div class="radar-decision-grid">
+<article class="card radar-window-card radar-window-best">
+<div class="radar-window-head">
+<div><div class="small">MELHOR JANELA DE 10 MINUTOS</div><div class="big-time" id="operationalBestTime">15:39 → 15:48</div></div>
+<span class="level" id="operationalLevel">SIGMA ELITE</span>
+</div>
+<div class="radar-expectation">
+<span>EXPECTATIVA ESTATÍSTICA</span>
+<strong id="operationalWhiteExpectation">Pode esperar de 2 a 3 brancos</strong>
+<p id="operationalExpectationText">Faixa estimada pela concentração histórica registrada nesta janela.</p>
+</div>
+<div class="metrics radar-metrics">
+<div class="metric"><span>Score</span><b id="operationalScore">97</b></div>
+<div class="metric"><span>Intensidade</span><b id="operationalIntensity">Muito alta</b></div>
+<div class="metric"><span>Persistência</span><b id="operationalPersistence">93%</b></div>
+<div class="metric"><span>Média estimada</span><b id="operationalWhiteAverage">2,4</b></div>
+</div>
+</article>
+<article class="card radar-window-card radar-window-avoid">
+<div class="radar-window-head">
+<div><div class="small">JANELA A EVITAR</div><div class="big-time" id="operationalWorstTime">15:04 → 15:13</div></div>
+<span class="level radar-danger-level">EVITAR</span>
+</div>
+<div class="radar-expectation radar-expectation-danger">
+<span>LEITURA HISTÓRICA</span>
+<strong id="operationalAvoidMessage">Baixa concentração de brancos</strong>
+<p id="operationalAvoidText">Período estatisticamente mais fraco dentro da hora selecionada.</p>
+</div>
+<div class="metrics radar-metrics">
+<div class="metric"><span>Score</span><b id="operationalWorstScore">24</b></div>
+<div class="metric"><span>Intensidade</span><b id="operationalWorstIntensity">Muito baixa</b></div>
+<div class="metric"><span>Persistência</span><b id="operationalWorstPersistence">31%</b></div>
+<div class="metric"><span>Média estimada</span><b id="operationalWorstAverage">0,4</b></div>
+</div>
+</article>
+</div>
+<div class="card radar-session-summary" style="margin-top:18px">
+<div>
+<div class="small">LEITURA DA HORA</div>
+<h2 id="operationalState">HORA FAVORÁVEL</h2>
+<p id="operationalStateText">O Radar comparou todas as janelas móveis de 10 minutos desta hora.</p>
+</div>
+<div class="radar-session-badge"><span id="operationalPulse">◉</span><strong>2 FAIXAS MAPEADAS</strong><small>melhor oportunidade + período a evitar</small></div>
+</div>
+<div class="card radar-method-note" style="margin-top:18px">
+<div class="small">COMO O RADAR DECIDE</div>
+<p>O sistema percorre todas as 51 janelas móveis possíveis dentro da hora — de minuto em minuto — e apresenta somente a mais forte e a mais fraca. As expectativas representam comportamento histórico da Base 2.1.0 e não garantia de resultado.</p>
+</div>
+</div>
+</div>
+<div class="screen" id="sigmaColor">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group"><h2>Listas de Cores</h2><p>12 sinais de cor selecionados para a sessão escolhida.</p></div>
+<span class="status-pill" id="colorDataStatus">BASE 2.1.0 • CARREGADA</span>
+</div>
+<div class="card">
+<div class="color-toolbar">
+<div>
+<div class="small">SELECIONE A HORA DA SESSÃO</div>
+<div style="color:var(--muted);font-size:13px;margin-top:6px">O Sigma consulta cada minuto dessa hora e mantém somente os 12 sinais mais consistentes.</div>
+</div>
+<button class="action-btn" id="copyColorBtn" onclick="copyColorSignals()">⧉ Copiar lista</button>
+</div>
+<div class="color-hour-grid" id="colorHourSelector"></div>
+</div>
+<div class="grid two" style="margin-top:18px">
+<div class="card">
+<div class="small">SESSÃO SELECIONADA</div>
+<div class="big-time" id="colorSessionTitle" style="font-size:58px">14h</div>
+<span class="level" id="colorSessionLevel">SIGMA PRO</span>
+<p id="colorSessionText" style="color:var(--muted);line-height:1.55">Sinais ordenados cronologicamente para facilitar a operação.</p>
+</div>
+<div class="card">
+<div class="small">RESUMO DA SESSÃO</div>
+<div class="color-summary">
+<div class="metric"><span>Vermelhos</span><b id="colorRedCount">—</b></div>
+<div class="metric"><span>Pretos</span><b id="colorBlackCount">—</b></div>
+<div class="metric"><span>Score médio</span><b id="colorAvgScore">—</b></div>
+<div class="metric"><span>Até G1 médio</span><b id="colorAvgG1">—</b></div>
+</div>
+</div>
+</div>
+<div class="card" style="margin-top:18px">
+<div class="small">TOP 12 SINAIS DA SESSÃO</div>
+<div class="color-signal-grid" id="colorSignalGrid"></div>
+<div style="margin-top:16px;color:var(--muted);font-size:11px;line-height:1.5">
         O branco é considerado cobertura estatística. Os percentuais representam comportamento histórico da base e não garantem resultados futuros.
       </div>
-    </div>
-  </div>
 </div>
-
-<div id="temporal" class="screen">
-  <div class="shell">
-    <div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Radar Temporal</h2><p>Mapa de temperatura minuto a minuto.</p></div><span class="status-pill">MODO TÉRMICO</span></div>
-    <div class="card">
-      <div class="heat-shell">
-        <div class="heat-grid" id="heatGrid"></div>
-      </div>
-      <div class="legend heat-filter-legend" aria-label="Filtro do mapa térmico">
-        <button type="button" class="heat-filter active" onclick="filterHeatMap('all',this)">TODOS</button>
-        <button type="button" class="heat-filter heat-filter-color t1" onclick="filterHeatMap('1,2',this)" title="Muito frio"></button>
-        <button type="button" class="heat-filter heat-filter-color t3" onclick="filterHeatMap('3,4',this)" title="Frio"></button>
-        <button type="button" class="heat-filter heat-filter-color t5" onclick="filterHeatMap('5,6',this)" title="Morno"></button>
-        <button type="button" class="heat-filter heat-filter-color t7" onclick="filterHeatMap('7,8',this)" title="Quente"></button>
-        <button type="button" class="heat-filter heat-filter-color t9" onclick="filterHeatMap('9',this)" title="Muito quente"></button>
-        <span class="heat-filter-caption">FRIO → QUENTE</span>
-      </div>
-    </div>
-  </div>
 </div>
-
-
-<div id="gestor" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group">
-        <h2>Gestor de Banca</h2>
-        <p>Progressão calculada para manter o mesmo lucro líquido em qualquer entrada vencedora.</p>
-      </div>
-      <span class="status-pill beta">GESTÃO SIGMA</span>
-    </div>
-
-    <div class="bank-grid">
-      <div class="card bank-config-card">
-        <span class="small">CONFIGURAÇÃO</span>
-
-        <label class="bank-field">
-          <span>Valor da banca</span>
-          <div class="bank-money-input">
-            <b>R$</b>
-            <input id="bankrollValue" type="number" min="1" step="0.01" value="1000" oninput="calculateBankManager()">
-          </div>
-        </label>
-
-        <div class="bank-field">
-          <span>Quantidade de entradas</span>
-          <div class="bank-options" id="bankEntryOptions">
-            <button type="button" data-entries="18" onclick="selectBankEntries(18,this)">18</button>
-            <button type="button" data-entries="24" class="active" onclick="selectBankEntries(24,this)">24</button>
-            <button type="button" data-entries="30" onclick="selectBankEntries(30,this)">30</button>
-          </div>
-        </div>
-
-        <div class="bank-field">
-          <span>Utilização máxima da banca</span>
-          <div class="bank-options" id="bankUsageOptions">
-            <button type="button" data-usage="60" onclick="selectBankUsage(60,this)">60%</button>
-            <button type="button" data-usage="75" onclick="selectBankUsage(75,this)">75%</button>
-            <button type="button" data-usage="95" class="active" onclick="selectBankUsage(95,this)">95%</button>
-          </div>
-        </div>
-
-        <label class="bank-field">
-          <span>Payout</span>
-          <select id="bankPayout" onchange="calculateBankManager()">
-            <option value="14" selected>Branco — 14x</option>
-            <option value="20">Crash — 20x</option>
-            <option value="50">Crash — 50x</option>
-            <option value="100">Crash — 100x</option>
-          </select>
-        </label>
-
-        <button class="action-btn bank-recalculate" onclick="calculateBankManager()">↻ Recalcular plano</button>
-      </div>
-
-      <div class="card bank-summary-card">
-        <span class="small">RESUMO DO PLANO</span>
-        <div class="bank-summary-grid">
-          <div>
-            <span>Banca utilizada</span>
-            <strong id="bankUsed">R$ 0,00</strong>
-          </div>
-          <div>
-            <span>Reserva</span>
-            <strong id="bankReserve">R$ 0,00</strong>
-          </div>
-          <div>
-            <span>Primeira entrada</span>
-            <strong id="bankFirstStake">R$ 0,00</strong>
-          </div>
-          <div class="bank-profit-box">
-            <span>Lucro fixo</span>
-            <strong id="bankFixedProfit">R$ 0,00</strong>
-          </div>
-        </div>
-
-        <div class="bank-risk-line">
-          <span>Perfil de risco</span>
-          <strong id="bankRiskBadge" class="bank-risk high">ALTO</strong>
-        </div>
-
-        <div class="bank-progress">
-          <div><span id="bankUsageLabel">95% da banca</span><span id="bankBudgetLabel">R$ 0,00</span></div>
-          <i><b id="bankUsageBar"></b></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="card bank-compare-card">
-      <div class="bank-section-head">
-        <div>
-          <span class="small">COMPARADOR</span>
-          <h3>18 × 24 × 30 entradas</h3>
-        </div>
-      </div>
-      <div id="bankComparison" class="bank-comparison"></div>
-    </div>
-
-    <div class="card bank-table-card">
-      <div class="bank-section-head">
-        <div>
-          <span class="small">PROGRESSÃO COMPLETA</span>
-          <h3 id="bankPlanTitle">Plano de 24 entradas</h3>
-        </div>
-        <button id="copyBankPlanBtn" class="action-btn secondary-action" onclick="copyBankPlan()">⧉ Copiar sequência</button>
-      </div>
-
-      <div class="bank-table-wrap">
-        <table class="bank-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Entrada</th>
-              <th>Total investido</th>
-              <th>Retorno no acerto</th>
-              <th>Lucro líquido</th>
-            </tr>
-          </thead>
-          <tbody id="bankPlanBody"></tbody>
-        </table>
-      </div>
-
-      <p class="bank-warning">
+</div>
+<div class="screen" id="temporal">
+<div class="shell">
+<div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Mapa de Calor</h2><p>Mapa de temperatura minuto a minuto.</p></div><span class="status-pill">MODO TÉRMICO</span></div>
+<div class="card">
+<div class="heat-shell">
+<div class="heat-grid" id="heatGrid"></div>
+</div>
+<div aria-label="Filtro do mapa térmico" class="legend heat-filter-legend">
+<button class="heat-filter active" onclick="filterHeatMap('all',this)" type="button">TODOS</button>
+<button class="heat-filter heat-filter-color t1" onclick="filterHeatMap('1,2',this)" title="Muito frio" type="button"></button>
+<button class="heat-filter heat-filter-color t3" onclick="filterHeatMap('3,4',this)" title="Frio" type="button"></button>
+<button class="heat-filter heat-filter-color t5" onclick="filterHeatMap('5,6',this)" title="Morno" type="button"></button>
+<button class="heat-filter heat-filter-color t7" onclick="filterHeatMap('7,8',this)" title="Quente" type="button"></button>
+<button class="heat-filter heat-filter-color t9" onclick="filterHeatMap('9',this)" title="Muito quente" type="button"></button>
+<span class="heat-filter-caption">FRIO → QUENTE</span>
+</div>
+</div>
+</div>
+</div>
+<div class="screen" id="gestor">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group">
+<h2>Gestão</h2>
+<p>Progressão calculada para manter o mesmo lucro líquido em qualquer entrada vencedora.</p>
+</div>
+<span class="status-pill beta">GESTÃO SIGMA</span>
+</div>
+<div class="bank-grid">
+<div class="card bank-config-card">
+<span class="small">CONFIGURAÇÃO</span>
+<label class="bank-field">
+<span>Valor da banca</span>
+<div class="bank-money-input">
+<b>R$</b>
+<input id="bankrollValue" min="1" oninput="calculateBankManager()" step="0.01" type="number" value="1000"/>
+</div>
+</label>
+<div class="bank-field">
+<span>Quantidade de entradas</span>
+<div class="bank-options" id="bankEntryOptions">
+<button data-entries="18" onclick="selectBankEntries(18,this)" type="button">18</button>
+<button class="active" data-entries="24" onclick="selectBankEntries(24,this)" type="button">24</button>
+<button data-entries="30" onclick="selectBankEntries(30,this)" type="button">30</button>
+</div>
+</div>
+<div class="bank-field">
+<span>Utilização máxima da banca</span>
+<div class="bank-options" id="bankUsageOptions">
+<button data-usage="60" onclick="selectBankUsage(60,this)" type="button">60%</button>
+<button data-usage="75" onclick="selectBankUsage(75,this)" type="button">75%</button>
+<button class="active" data-usage="95" onclick="selectBankUsage(95,this)" type="button">95%</button>
+</div>
+</div>
+<label class="bank-field">
+<span>Payout</span>
+<select id="bankPayout" onchange="calculateBankManager()">
+<option selected="" value="14">Branco — 14x</option>
+<option value="20">Crash — 20x</option>
+<option value="50">Crash — 50x</option>
+<option value="100">Crash — 100x</option>
+</select>
+</label>
+<button class="action-btn bank-recalculate" onclick="calculateBankManager()">↻ Recalcular plano</button>
+</div>
+<div class="card bank-summary-card">
+<span class="small">RESUMO DO PLANO</span>
+<div class="bank-summary-grid">
+<div>
+<span>Banca utilizada</span>
+<strong id="bankUsed">R$ 0,00</strong>
+</div>
+<div>
+<span>Reserva</span>
+<strong id="bankReserve">R$ 0,00</strong>
+</div>
+<div>
+<span>Primeira entrada</span>
+<strong id="bankFirstStake">R$ 0,00</strong>
+</div>
+<div class="bank-profit-box">
+<span>Lucro fixo</span>
+<strong id="bankFixedProfit">R$ 0,00</strong>
+</div>
+</div>
+<div class="bank-risk-line">
+<span>Perfil de risco</span>
+<strong class="bank-risk high" id="bankRiskBadge">ALTO</strong>
+</div>
+<div class="bank-progress">
+<div><span id="bankUsageLabel">95% da banca</span><span id="bankBudgetLabel">R$ 0,00</span></div>
+<i><b id="bankUsageBar"></b></i>
+</div>
+</div>
+</div>
+<div class="card bank-compare-card">
+<div class="bank-section-head">
+<div>
+<span class="small">COMPARADOR</span>
+<h3>18 × 24 × 30 entradas</h3>
+</div>
+</div>
+<div class="bank-comparison" id="bankComparison"></div>
+</div>
+<div class="card bank-table-card">
+<div class="bank-section-head">
+<div>
+<span class="small">PROGRESSÃO COMPLETA</span>
+<h3 id="bankPlanTitle">Plano de 24 entradas</h3>
+</div>
+<button class="action-btn secondary-action" id="copyBankPlanBtn" onclick="copyBankPlan()">⧉ Copiar sequência</button>
+</div>
+<div class="bank-table-wrap">
+<table class="bank-table">
+<thead>
+<tr>
+<th>#</th>
+<th>Entrada</th>
+<th>Total investido</th>
+<th>Retorno no acerto</th>
+<th>Lucro líquido</th>
+</tr>
+</thead>
+<tbody id="bankPlanBody"></tbody>
+</table>
+</div>
+<p class="bank-warning">
         A progressão mantém o mesmo lucro nominal se houver acerto, mas pode consumir todo o valor destinado ao plano caso nenhuma entrada vença. Use apenas valores que não comprometam sua renda.
       </p>
-    </div>
-  </div>
 </div>
-
-<div id="ranking" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Ranking IA</h2><p>Top 30 horários históricos mais fortes.</p></div>
-      <span class="status-pill">TOP 30</span>
-    </div>
-
-    <div class="card">
-      <table>
-        <thead><tr><th>#</th><th>Horário</th><th>Nível</th><th>Persistência</th><th>Score</th></tr></thead>
-        <tbody id="rankTable"></tbody>
-      </table>
-    </div>
-  </div>
 </div>
-
-
-<div id="padroes" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Ranking de Padrões IA</h2><p>Top 10 padrões de quatro casas para entrada em cor até G1.</p></div>
-      <span class="status-pill">TOP 10 • 4 CASAS</span>
-    </div>
-
-    <div class="grid two">
-      <div class="card">
-        <div class="small">METODOLOGIA DO MÓDULO</div>
-        <h3 style="margin:10px 0 8px">Padrão → sinal + cobertura no branco</h3>
-        <p style="color:var(--muted);line-height:1.6;margin:0">Após quatro casas consecutivas de vermelho/preto, o Sigma mede a entrada seguinte e o G1, considerando o branco como cobertura. O ranking combina assertividade, volume e estabilidade entre os dias.</p>
-      </div>
-      <div class="card center">
-        <div class="small">BASE PROCESSADA</div>
-        <div class="pulse" style="width:118px;height:118px;font-size:24px">4×</div>
-        <h3 style="margin:0">SEQUÊNCIAS DE 4 CASAS</h3>
-        <p id="patternBaseInfo" style="color:var(--muted)">Base Histórica 1.3</p>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:18px">
-      <div class="small">RANKING SIGMA</div>
-      <div id="patternList" class="pattern-list"></div>
-      <div id="patternDetail" class="pattern-detail"></div>
-    </div>
-  </div>
 </div>
-
-<div id="tendencias" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group">
-        <h2>Agenda Inteligente</h2>
-        <p>Possíveis melhores janelas para os próximos ciclos da semana.</p>
-      </div>
-      <span class="status-pill">PROJEÇÃO SEMANAL</span>
-    </div>
-
-    <div class="card agenda-summary">
-      <div>
-        <div class="small">LEITURA DA BASE 2.1.0</div>
-        <h3>Agenda de janelas promissoras</h3>
-        <p>O Sigma cruza força histórica, persistência e recorrência horária para destacar os períodos mais interessantes dos próximos dias.</p>
-      </div>
-      <div class="agenda-summary-score">
-        <span class="small">JANELAS MAPEADAS</span>
-        <strong id="agendaWindowCount">—</strong>
-      </div>
-    </div>
-
-    <div class="agenda-toolbar">
-      <div>
-        <span class="small">PERÍODO ANALISADO</span>
-        <strong id="agendaPeriod">Próximos 7 dias</strong>
-      </div>
-      <button class="primary-btn" type="button" onclick="renderTrendAgenda()">↻ Atualizar agenda</button>
-    </div>
-
-    <div id="trendAgenda" class="trend-agenda"></div>
-
-    <div class="card agenda-note">
-      <span class="small">COMO INTERPRETAR</span>
-      <p>As janelas são projeções estatísticas baseadas na recorrência da Base 2.1.0. Elas indicam períodos historicamente mais promissores, não resultados garantidos.</p>
-    </div>
-  </div>
+<div class="screen" id="ranking">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group"><h2>Mais Pagos</h2><p>Top 30 horários históricos mais fortes.</p></div>
+<span class="status-pill">TOP 30</span>
 </div>
-
-
-<div id="catalogador" class="screen">
-  <div class="shell">
-    <div class="inner-header catalog-clean-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group"><h2>Catalogador ao Vivo</h2></div>
-      <span id="catalogStatus" class="status-pill sigma-live-pill offline">● STATUS: DESCONECTADO</span>
-    </div>
-
-    <div class="catalog-summary-grid">
-      <div class="catalog-last-card">
-        <span class="catalog-card-label">ÚLTIMA RODADA</span>
-        <div id="catalogLastStone" class="catalog-last-stone empty">—</div>
-        <small id="catalogLastTime">—</small>
-      </div>
-
-      <div class="catalog-hour-card">
-        <span class="catalog-card-label">DISTRIBUIÇÃO — ÚLTIMA HORA</span>
-        <div class="catalog-percent-grid">
-          <div><i class="catalog-color-dot red"></i><span>Vermelho</span><strong id="catalogRedHour">0%</strong></div>
-          <div><i class="catalog-color-dot black"></i><span>Preto</span><strong id="catalogBlackHour">0%</strong></div>
-          <div><i class="catalog-color-dot white"></i><span>Branco</span><strong id="catalogWhiteHour">0%</strong></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="catalogAlert" class="sigma-live-message offline catalog-alert-hidden" aria-live="polite">Conectando ao SIGMA LIVE SERVER…</div>
-    <div id="catalogHours" class="sigma-catalog-board"></div>
-    <div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O ORION preserva as 500 rodadas mais recentes neste navegador.</div>
-  </div>
+<div class="card">
+<table>
+<thead><tr><th>#</th><th>Horário</th><th>Nível</th><th>Persistência</th><th>Score</th></tr></thead>
+<tbody id="rankTable"></tbody>
+</table>
 </div>
-
-<div id="simulador" class="screen">
-  <div class="shell">
-    <div class="inner-header">
-      <button class="back" onclick="goHome()">← Voltar para Home</button>
-      <div class="title-group">
-        <h2>Simulador ao Vivo</h2>
-        <p>Informe os quatro últimos brancos e a pedra imediatamente anterior a cada um.</p>
-      </div>
-      <span class="status-pill">CÁLCULO EM TEMPO REAL</span>
-    </div>
-
-    <div class="grid simulator-input-only">
-      <div class="card">
-        <div class="small">ÚLTIMOS QUATRO BRANCOS</div>
-        <p style="color:var(--muted);line-height:1.55;margin:8px 0 18px">
+</div>
+</div>
+<div class="screen" id="padroes">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group"><h2>Ranking de Padrões IA</h2><p>Top 10 padrões de quatro casas para entrada em cor até G1.</p></div>
+<span class="status-pill">TOP 10 • 4 CASAS</span>
+</div>
+<div class="grid two">
+<div class="card">
+<div class="small">METODOLOGIA DO MÓDULO</div>
+<h3 style="margin:10px 0 8px">Padrão → sinal + cobertura no branco</h3>
+<p style="color:var(--muted);line-height:1.6;margin:0">Após quatro casas consecutivas de vermelho/preto, o Sigma mede a entrada seguinte e o G1, considerando o branco como cobertura. O ranking combina assertividade, volume e estabilidade entre os dias.</p>
+</div>
+<div class="card center">
+<div class="small">BASE PROCESSADA</div>
+<div class="pulse" style="width:118px;height:118px;font-size:24px">4×</div>
+<h3 style="margin:0">SEQUÊNCIAS DE 4 CASAS</h3>
+<p id="patternBaseInfo" style="color:var(--muted)">Base Histórica 1.3</p>
+</div>
+</div>
+<div class="card" style="margin-top:18px">
+<div class="small">RANKING SIGMA</div>
+<div class="pattern-list" id="patternList"></div>
+<div class="pattern-detail" id="patternDetail"></div>
+</div>
+</div>
+</div>
+<div class="screen" id="tendencias">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group">
+<h2>Agenda</h2>
+<p>Possíveis melhores janelas para os próximos ciclos da semana.</p>
+</div>
+<span class="status-pill">PROJEÇÃO SEMANAL</span>
+</div>
+<div class="card agenda-summary">
+<div>
+<div class="small">LEITURA DA BASE 2.1.0</div>
+<h3>Agenda de janelas promissoras</h3>
+<p>O Sigma cruza força histórica, persistência e recorrência horária para destacar os períodos mais interessantes dos próximos dias.</p>
+</div>
+<div class="agenda-summary-score">
+<span class="small">JANELAS MAPEADAS</span>
+<strong id="agendaWindowCount">—</strong>
+</div>
+</div>
+<div class="agenda-toolbar">
+<div>
+<span class="small">PERÍODO ANALISADO</span>
+<strong id="agendaPeriod">Próximos 7 dias</strong>
+</div>
+<button class="primary-btn" onclick="renderTrendAgenda()" type="button">↻ Atualizar agenda</button>
+</div>
+<div class="trend-agenda" id="trendAgenda"></div>
+<div class="card agenda-note">
+<span class="small">COMO INTERPRETAR</span>
+<p>As janelas são projeções estatísticas baseadas na recorrência da Base 2.1.0. Elas indicam períodos historicamente mais promissores, não resultados garantidos.</p>
+</div>
+</div>
+</div>
+<div class="screen" id="catalogador">
+<div class="shell">
+<div class="inner-header catalog-clean-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group"><h2>Catalogador ao Vivo</h2></div>
+<span class="status-pill sigma-live-pill offline" id="catalogStatus">● STATUS: DESCONECTADO</span>
+</div>
+<div class="catalog-summary-grid">
+<div class="catalog-last-card">
+<span class="catalog-card-label">ÚLTIMA RODADA</span>
+<div class="catalog-last-stone empty" id="catalogLastStone">—</div>
+<small id="catalogLastTime">—</small>
+</div>
+<div class="catalog-hour-card">
+<span class="catalog-card-label">DISTRIBUIÇÃO — ÚLTIMA HORA</span>
+<div class="catalog-percent-grid">
+<div><i class="catalog-color-dot red"></i><span>Vermelho</span><strong id="catalogRedHour">0%</strong></div>
+<div><i class="catalog-color-dot black"></i><span>Preto</span><strong id="catalogBlackHour">0%</strong></div>
+<div><i class="catalog-color-dot white"></i><span>Branco</span><strong id="catalogWhiteHour">0%</strong></div>
+</div>
+</div>
+</div>
+<div aria-live="polite" class="sigma-live-message offline catalog-alert-hidden" id="catalogAlert">Conectando ao SIGMA LIVE SERVER…</div>
+<div class="sigma-catalog-board" id="catalogHours"></div>
+<div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O ORION preserva as 500 rodadas mais recentes neste navegador.</div>
+</div>
+</div>
+<div class="screen" id="simulador">
+<div class="shell">
+<div class="inner-header">
+<button class="back" onclick="goHome()">← Voltar para Home</button>
+<div class="title-group">
+<h2>Simulador ao Vivo</h2>
+<p>Informe os quatro últimos brancos e a pedra imediatamente anterior a cada um.</p>
+</div>
+<span class="status-pill">CÁLCULO EM TEMPO REAL</span>
+</div>
+<div class="grid simulator-input-only">
+<div class="card">
+<div class="small">ÚLTIMOS QUATRO BRANCOS</div>
+<p style="color:var(--muted);line-height:1.55;margin:8px 0 18px">
           Digite na ordem em que aconteceram. Horários iguais são aceitos quando dois brancos pagarem no mesmo minuto.
         </p>
-
-        <div class="live-time-grid simulator-pair-grid">
-          <label class="live-time-field">
-            <span>Branco 1</span>
-            <input id="whiteTime1" type="time" value="14:08" step="60">
-            <small>Pedra anterior</small>
-            <input id="previousStone1" class="stone-input" type="number" value="5" min="0" max="14" step="1" inputmode="numeric">
-          </label>
-          <label class="live-time-field">
-            <span>Branco 2</span>
-            <input id="whiteTime2" type="time" value="14:21" step="60">
-            <small>Pedra anterior</small>
-            <input id="previousStone2" class="stone-input" type="number" value="9" min="0" max="14" step="1" inputmode="numeric">
-          </label>
-          <label class="live-time-field">
-            <span>Branco 3</span>
-            <input id="whiteTime3" type="time" value="14:37" step="60">
-            <small>Pedra anterior</small>
-            <input id="previousStone3" class="stone-input" type="number" value="3" min="0" max="14" step="1" inputmode="numeric">
-          </label>
-          <label class="live-time-field">
-            <span>Branco 4</span>
-            <input id="whiteTime4" type="time" value="14:50" step="60">
-            <small>Pedra anterior</small>
-            <input id="previousStone4" class="stone-input" type="number" value="8" min="0" max="14" step="1" inputmode="numeric">
-          </label>
-        </div>
-
-        <div class="sim-actions">
-          <button class="action-btn" onclick="calculateLiveSimulator()">⌁ Calcular projeções</button>
-          <button id="copySimulatorBtn" class="action-btn secondary-action" onclick="copySimulatorSignals()">⧉ Copiar lista</button>
-        </div>
-        <div id="simulatorError" class="sim-error"></div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:18px">
-      <h3 class="simulation-title">Quatro pontos da sessão</h3>
-      <div id="simulatorResults" class="simulation-results simulator-four-results">
-        <div class="projection-card">
-          <span class="projection-label">PONTO 1</span>
-          <strong class="projection-time" id="point1Signal">15:04</strong>
-        </div>
-        <div class="projection-card">
-          <span class="projection-label">PONTO 2</span>
-          <strong class="projection-time" id="point2Signal">15:07</strong>
-        </div>
-        <div class="projection-card sigma-projection">
-          <span class="projection-label">PONTO 3</span>
-          <strong class="projection-time" id="point3Signal">15:10</strong>
-        </div>
-        <div class="projection-card">
-          <span class="projection-label">PONTO 4</span>
-          <strong class="projection-time" id="point4Signal">14:56</strong>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="live-time-grid simulator-pair-grid">
+<label class="live-time-field">
+<span>Branco 1</span>
+<input id="whiteTime1" step="60" type="time" value="14:08"/>
+<small>Pedra anterior</small>
+<input class="stone-input" id="previousStone1" inputmode="numeric" max="14" min="0" step="1" type="number" value="5"/>
+</label>
+<label class="live-time-field">
+<span>Branco 2</span>
+<input id="whiteTime2" step="60" type="time" value="14:21"/>
+<small>Pedra anterior</small>
+<input class="stone-input" id="previousStone2" inputmode="numeric" max="14" min="0" step="1" type="number" value="9"/>
+</label>
+<label class="live-time-field">
+<span>Branco 3</span>
+<input id="whiteTime3" step="60" type="time" value="14:37"/>
+<small>Pedra anterior</small>
+<input class="stone-input" id="previousStone3" inputmode="numeric" max="14" min="0" step="1" type="number" value="3"/>
+</label>
+<label class="live-time-field">
+<span>Branco 4</span>
+<input id="whiteTime4" step="60" type="time" value="14:50"/>
+<small>Pedra anterior</small>
+<input class="stone-input" id="previousStone4" inputmode="numeric" max="14" min="0" step="1" type="number" value="8"/>
+</label>
 </div>
-
-<div id="tooltip" class="tooltip"></div>
-
+<div class="sim-actions">
+<button class="action-btn" onclick="calculateLiveSimulator()">⌁ Calcular projeções</button>
+<button class="action-btn secondary-action" id="copySimulatorBtn" onclick="copySimulatorSignals()">⧉ Copiar lista</button>
+</div>
+<div class="sim-error" id="simulatorError"></div>
+</div>
+</div>
+<div class="card" style="margin-top:18px">
+<h3 class="simulation-title">Quatro pontos da sessão</h3>
+<div class="simulation-results simulator-four-results" id="simulatorResults">
+<div class="projection-card">
+<span class="projection-label">PONTO 1</span>
+<strong class="projection-time" id="point1Signal">15:04</strong>
+</div>
+<div class="projection-card">
+<span class="projection-label">PONTO 2</span>
+<strong class="projection-time" id="point2Signal">15:07</strong>
+</div>
+<div class="projection-card sigma-projection">
+<span class="projection-label">PONTO 3</span>
+<strong class="projection-time" id="point3Signal">15:10</strong>
+</div>
+<div class="projection-card">
+<span class="projection-label">PONTO 4</span>
+<strong class="projection-time" id="point4Signal">14:56</strong>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tooltip" id="tooltip"></div>
 <script src="/js/sigma-access.js"></script>
 <script src="/data/sigma-base-2.1.0.js"></script>
 <script src="/js/core.js"></script>
@@ -624,9 +544,6 @@
 <script src="/js/gestor-banca.js"></script>
 <script src="/js/padroes.js"></script>
 <script src="/js/central-operacoes.js"></script>
-
-
-
-<a class="telegram-support" href="https://t.me/suportesigmaradar" target="_blank" rel="noopener noreferrer" aria-label="Suporte no Telegram"><span class="telegram-support-icon">✈</span><span class="telegram-support-text">Suporte no Telegram</span></a>
+<a aria-label="Suporte no Telegram" class="telegram-support" href="https://t.me/suportesigmaradar" rel="noopener noreferrer" target="_blank"><span class="telegram-support-icon">✈</span><span class="telegram-support-text">Suporte no Telegram</span></a>
 </body>
 </html>

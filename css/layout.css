@@ -195,3 +195,10 @@ body:before{opacity:.09;background-size:46px 46px}
   .modules{grid-template-columns:1fr 1fr}
   .module{min-height:135px}
 }
+
+
+/* ORION 3.5 — identidade visual SIGMA ACCESS */
+.side-icon{font-family:Inter,Arial,sans-serif;font-size:17px;font-weight:900;border-radius:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}
+.side-link.active .side-icon{box-shadow:0 0 22px rgba(241,44,76,.28)}
+.sigma-home-symbol{width:250px;height:250px;border-radius:50%;display:grid;place-items:center;font-size:148px;font-weight:1000;line-height:1;color:#f12c4c;background:radial-gradient(circle at 35% 30%,rgba(241,44,76,.18),rgba(241,44,76,.045) 52%,rgba(0,0,0,.18));border:2px solid rgba(241,44,76,.38);box-shadow:0 0 0 16px rgba(241,44,76,.035),0 0 70px rgba(241,44,76,.22),inset 0 0 45px rgba(241,44,76,.08);text-shadow:0 0 30px rgba(241,44,76,.4)}
+@media(max-width:720px){.sigma-home-symbol{width:190px;height:190px;font-size:112px}}

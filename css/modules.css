@@ -942,3 +942,7 @@
   }
   #sigma-white-particles { display:none !important; }
 }
+
+/* Marca SIGMA no centro das pedras brancas */
+.sigma-white-mark{font-family:Inter,Arial,sans-serif!important;font-weight:1000!important;color:#f12c4c!important;font-size:22px!important;line-height:1!important;text-shadow:0 1px 0 rgba(255,255,255,.7),0 0 8px rgba(241,44,76,.18)}
+.catalog-last-stone.white{font-family:Inter,Arial,sans-serif;font-weight:1000;color:#f12c4c}

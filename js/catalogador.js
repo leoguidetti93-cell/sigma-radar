@@ -176,7 +176,7 @@
     const newest = isNewest ? ' sigma-stone-new' : '';
     const fx = white && isNewest ? ' sigma-white-hit' : '';
     const value = white
-      ? '<span class="sigma-white-mark">◇</span>'
+      ? '<span class="sigma-white-mark">Σ</span>'
       : `<span>${round.roll}</span>`;
 
     return `<div class="sigma-stone sigma-stone-${round.color}${newest}${fx}" data-round-id="${round.id}" title="${formatTime(round.createdAt,true)} • ID ${round.id}">${value}<small>${formatTime(round.createdAt)}</small></div>`;
@@ -240,7 +240,7 @@
     if (lastStone) {
       if (latest) {
         lastStone.className = `catalog-last-stone ${latest.color || 'unknown'}`;
-        lastStone.textContent = latest.roll === 0 ? '□' : String(latest.roll);
+        lastStone.textContent = latest.roll === 0 ? 'Σ' : String(latest.roll);
       } else {
         lastStone.className = 'catalog-last-stone empty';
         lastStone.textContent = '—';

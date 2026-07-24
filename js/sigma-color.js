@@ -1,5 +1,5 @@
 /* ===== SIGMA COLOR IA ===== */
-const sigmaBase=window.SIGMA_BASE_20||{meta:{},colorByHour:{},patterns:[]};
+function getSigmaBase(){return window.SIGMA_HYBRID_BASE||window.SIGMA_BASE_20||{meta:{},colorByHour:{},patterns:[]};}
 
 function sigmaLevel(score){
   if(score>=88)return 'SIGMA ELITE';
@@ -14,6 +14,7 @@ function renderColorHourSelector(){
 function selectColorHour(hour,btn){
   document.querySelectorAll('#colorHourSelector .hour-btn').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
+  const sigmaBase=getSigmaBase();
   const signals=(sigmaBase.colorByHour&&sigmaBase.colorByHour[String(hour)])||[];
   const avg=signals.length?signals.reduce((s,x)=>s+Number(x.score||0),0)/signals.length:0;
   const avgG1=signals.length?signals.reduce((s,x)=>s+Number(x.g1||0),0)/signals.length:0;
@@ -53,3 +54,5 @@ function copyColorSignals(){
     }
   });
 }
+
+window.addEventListener('sigma:hybrid-update',()=>{const h=window.currentColorSignals?.hour??14;const btn=document.querySelectorAll('#colorHourSelector .hour-btn')[h];selectColorHour(h,btn);});

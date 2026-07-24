@@ -61,7 +61,7 @@ function renderHourSelector(){
 }
 
 function radarBase(){
-  return window.SIGMA_BASE_20||{hourlyData,heatValues:[]};
+  return window.SIGMA_HYBRID_BASE||window.SIGMA_BASE_20||{hourlyData,heatValues:[]};
 }
 function radarIntensityLabel(score){
   if(score>=90)return 'Muito alta';
@@ -157,7 +157,8 @@ function renderPeriodSelector(){
 function selectPeriod(start,btn){
   document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  const rows=hourlyData.slice(start,start+6).map(x=>{
+  const activeHourly=(window.SIGMA_HYBRID_BASE?.hourlyData||window.SIGMA_BASE_20?.hourlyData||hourlyData);
+  const rows=activeHourly.slice(start,start+6).map(x=>{
     const b=x.windows[0];
     return `<tr><td><strong>${String(x.hour).padStart(2,'0')}h</strong></td><td>${b.time}</td><td>${b.level}</td><td class="score">${b.score}</td></tr>`;
   }).join('');
@@ -167,7 +168,9 @@ function selectPeriod(start,btn){
 
 const rankingTimes=[{"time":"17:41","score":82,"persistence":40,"level":"SIGMA PRO"},{"time":"01:06","score":80,"persistence":35,"level":"SIGMA PRO"},{"time":"02:40","score":80,"persistence":35,"level":"SIGMA PRO"},{"time":"04:30","score":80,"persistence":35,"level":"SIGMA PRO"},{"time":"07:25","score":80,"persistence":35,"level":"SIGMA PRO"},{"time":"13:07","score":80,"persistence":35,"level":"SIGMA PRO"},{"time":"21:54","score":80,"persistence":35,"level":"SIGMA PRO"},{"time":"01:26","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"02:45","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"03:34","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"03:35","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"06:22","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"07:07","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"08:48","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"10:41","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"12:49","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"19:05","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"22:20","score":79,"persistence":30,"level":"SIGMA CORE"},{"time":"04:25","score":78,"persistence":25,"level":"SIGMA CORE"},{"time":"05:32","score":78,"persistence":25,"level":"SIGMA CORE"},{"time":"08:24","score":78,"persistence":25,"level":"SIGMA CORE"},{"time":"16:17","score":76,"persistence":35,"level":"SIGMA CORE"},{"time":"05:31","score":72,"persistence":25,"level":"SIGMA CORE"},{"time":"06:06","score":72,"persistence":25,"level":"SIGMA CORE"},{"time":"07:31","score":72,"persistence":25,"level":"SIGMA CORE"},{"time":"07:53","score":72,"persistence":25,"level":"SIGMA CORE"},{"time":"10:56","score":72,"persistence":25,"level":"SIGMA CORE"},{"time":"11:30","score":72,"persistence":25,"level":"SIGMA CORE"},{"time":"11:51","score":72,"persistence":25,"level":"SIGMA CORE"},{"time":"12:38","score":72,"persistence":25,"level":"SIGMA CORE"}];
 
-document.getElementById('rankTable').innerHTML=rankingTimes.map((c,i)=>`
+function renderHybridRanking(){
+  const data=window.SIGMA_HYBRID_BASE?.rankingTimes||window.SIGMA_BASE_20?.rankingTimes||rankingTimes;
+  document.getElementById('rankTable').innerHTML=data.map((c,i)=>`
 <tr>
   <td class="rank">${String(i+1).padStart(2,'0')}</td>
   <td><strong>${c.time}</strong></td>
@@ -175,6 +178,8 @@ document.getElementById('rankTable').innerHTML=rankingTimes.map((c,i)=>`
   <td>${c.persistence}%</td>
   <td class="score">${c.score}</td>
 </tr>`).join('');
+}
+renderHybridRanking();
 
 function pad2(value){return String(value).padStart(2,'0')}
 function addDays(date,days){const copy=new Date(date);copy.setDate(copy.getDate()+days);return copy}
@@ -275,3 +280,12 @@ renderTrendAgenda();
 
 renderHourSelector();
 selectOperationalHour(15,document.querySelectorAll('.hour-btn')[15]);
+
+window.addEventListener('sigma:hybrid-update',()=>{
+  try{renderHybridRanking();}catch(e){}
+  const activeHour=document.querySelector('#hourSelector .hour-btn.active');
+  if(activeHour){const h=Number(activeHour.textContent.replace(/\D/g,''));selectOperationalHour(h,activeHour);}
+  const activePeriod=document.querySelector('#periodSelector .hour-btn.active');
+  if(activePeriod){const start=Number(activePeriod.dataset.start||0);selectPeriod(start,activePeriod);}
+  try{renderTrendAgenda();}catch(e){}
+});

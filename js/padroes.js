@@ -4,6 +4,7 @@ function patternDots(raw){
 }
 function renderPatterns(){
   const list=document.getElementById('patternList');
+  const sigmaBase=window.SIGMA_HYBRID_BASE||window.SIGMA_BASE_20||{};
   const items=sigmaBase.patterns||[];
   list.innerHTML=items.map((p,i)=>`
     <div class="pattern-row" onclick="showPatternDetail(${i})">
@@ -18,6 +19,7 @@ function renderPatterns(){
   if(items.length)showPatternDetail(0);
 }
 function showPatternDetail(index){
+  const sigmaBase=window.SIGMA_HYBRID_BASE||window.SIGMA_BASE_20||{};
   const p=(sigmaBase.patterns||[])[index];if(!p)return;
   const detail=document.getElementById('patternDetail');
   detail.classList.add('show');
@@ -38,6 +40,7 @@ function showPatternDetail(index){
 }
 
 function initializeHistoricalModules(){
+  const sigmaBase=window.SIGMA_HYBRID_BASE||window.SIGMA_BASE_20||{};
   const hasColors = sigmaBase && sigmaBase.colorByHour &&
     Object.keys(sigmaBase.colorByHour).length === 24;
   const hasPatterns = sigmaBase && Array.isArray(sigmaBase.patterns) &&
@@ -75,16 +78,21 @@ function initializeHistoricalModules(){
 initializeHistoricalModules();
 
 
-const heat=document.getElementById('heatGrid');
-heat.innerHTML='<div></div>'+Array.from({length:60},(_,minute)=>`<div class="m-label">${String(minute).padStart(2,'0')}</div>`).join('');
-for(let hour=0;hour<24;hour++){
-  heat.innerHTML+=`<div class="h-label">${String(hour).padStart(2,'0')}h</div>`;
-  for(let minute=0;minute<60;minute++){
-    const value=sigmaBase.heatValues[hour][minute];
-    const score=Math.min(99,50+value*5);
-    heat.innerHTML+=`<div class="heat-cell t${value}" data-level="${value}" data-time="${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}" data-score="${score}"></div>`;
+function renderHybridHeatMap(){
+  const heat=document.getElementById('heatGrid');
+  if(!heat)return;
+  const sigmaBase=window.SIGMA_HYBRID_BASE||window.SIGMA_BASE_20||{};
+  heat.innerHTML='<div></div>'+Array.from({length:60},(_,minute)=>`<div class="m-label">${String(minute).padStart(2,'0')}</div>`).join('');
+  for(let hour=0;hour<24;hour++){
+    heat.innerHTML+=`<div class="h-label">${String(hour).padStart(2,'0')}h</div>`;
+    for(let minute=0;minute<60;minute++){
+      const value=Number(sigmaBase.heatValues?.[hour]?.[minute]||1);
+      const score=Math.min(99,50+value*5);
+      heat.innerHTML+=`<div class="heat-cell t${value}" data-level="${value}" data-time="${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}" data-score="${score}"></div>`;
+    }
   }
 }
+renderHybridHeatMap();
 
 function filterHeatMap(levels,button){
   const allowed=levels==='all'
@@ -103,3 +111,5 @@ function filterHeatMap(levels,button){
     cell.classList.toggle('heat-highlight',visible&&Boolean(allowed));
   });
 }
+
+window.addEventListener('sigma:hybrid-update',()=>{renderPatterns();renderHybridHeatMap();});

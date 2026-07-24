@@ -828,7 +828,7 @@
 /* Current row */
 .sigma-live-row.is-current {
   position: relative;
-  border-color: rgba(255,32,85,.9) !important;
+  border: 2px solid rgba(255,32,85,.9) !important;
   box-shadow:
     0 0 0 1px rgba(255,32,85,.18),
     0 0 26px rgba(255,23,79,.11),
@@ -836,7 +836,7 @@
 }
 .sigma-live-row.is-current::before{display:none !important;content:none !important;}
 .sigma-live-row.is-current .sigma-row-grid {
-  padding-left: 55px !important;
+  padding: 8px 9px !important;
 }
 
 /* Permanent white highlight */

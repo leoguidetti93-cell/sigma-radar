@@ -422,4 +422,164 @@
   }
 
   window.startLiveCatalog = startLiveCatalog;
+
+  function ensureWhiteCelebrationLayer(){
+    let canvas = document.getElementById("sigma-white-particles");
+    if(!canvas){
+      canvas = document.createElement("canvas");
+      canvas.id = "sigma-white-particles";
+      document.body.appendChild(canvas);
+    }
+    let flash = document.getElementById("sigma-white-flash");
+    if(!flash){
+      flash = document.createElement("div");
+      flash.id = "sigma-white-flash";
+      document.body.appendChild(flash);
+    }
+    return {canvas,flash};
+  }
+
+  function celebrateWhiteStone(stoneElement){
+    if(!stoneElement || window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
+
+    const {canvas,flash} = ensureWhiteCelebrationLayer();
+    const ctx = canvas.getContext("2d");
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    canvas.width = Math.floor(width*dpr);
+    canvas.height = Math.floor(height*dpr);
+    canvas.style.width = width+"px";
+    canvas.style.height = height+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    const rect = stoneElement.getBoundingClientRect();
+    const originX = rect.left + rect.width/2;
+    const originY = rect.top + rect.height/2;
+
+    flash.style.setProperty("--fx", `${(originX/width)*100}%`);
+    flash.style.setProperty("--fy", `${(originY/height)*100}%`);
+    flash.classList.remove("is-active");
+    void flash.offsetWidth;
+    flash.classList.add("is-active");
+
+    const row = stoneElement.closest(".sigma-live-row");
+    if(row){
+      row.classList.remove("white-row-flash");
+      void row.offsetWidth;
+      row.classList.add("white-row-flash");
+      setTimeout(()=>row.classList.remove("white-row-flash"),1300);
+    }
+
+    const palette = [
+      [255,255,255],
+      [255,225,145],
+      [255,190,50],
+      [255,245,214]
+    ];
+    const particles = Array.from({length:110},(_,index)=>{
+      const angle = Math.random()*Math.PI*2;
+      const speed = 150 + Math.random()*520;
+      const reachBoost = index < 30 ? 1.55 : 1;
+      return {
+        x:originX,
+        y:originY,
+        vx:Math.cos(angle)*speed*reachBoost,
+        vy:Math.sin(angle)*speed*reachBoost - (40+Math.random()*130),
+        gravity:70+Math.random()*120,
+        drag:.975+Math.random()*.012,
+        size:1.5+Math.random()*4.8,
+        life:1,
+        decay:.22+Math.random()*.2,
+        color:palette[Math.floor(Math.random()*palette.length)],
+        twinkle:Math.random()*Math.PI*2,
+        streak:Math.random()>.7
+      };
+    });
+
+    const started = performance.now();
+    const duration = 3000;
+
+    function frame(now){
+      const dt = Math.min((now-(frame.last||now))/1000,.032);
+      frame.last = now;
+      ctx.clearRect(0,0,width,height);
+      ctx.globalCompositeOperation = "lighter";
+
+      let alive = false;
+      for(const p of particles){
+        if(p.life<=0) continue;
+        alive = true;
+        p.vx*=Math.pow(p.drag,dt*60);
+        p.vy*=Math.pow(p.drag,dt*60);
+        p.vy+=p.gravity*dt;
+        p.x+=p.vx*dt;
+        p.y+=p.vy*dt;
+        p.life-=p.decay*dt;
+        p.twinkle+=dt*9;
+
+        const alpha=Math.max(0,p.life)*(.7+.3*Math.sin(p.twinkle));
+        const [r,g,b]=p.color;
+        ctx.strokeStyle=`rgba(${r},${g},${b},${alpha})`;
+        ctx.fillStyle=`rgba(${r},${g},${b},${alpha})`;
+        ctx.shadowColor=`rgba(${r},${g},${b},${alpha})`;
+        ctx.shadowBlur=10;
+
+        if(p.streak){
+          ctx.lineWidth=Math.max(1,p.size*.55);
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y);
+          ctx.lineTo(p.x-p.vx*.025,p.y-p.vy*.025);
+          ctx.stroke();
+        }else{
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,p.size*Math.max(.35,p.life),0,Math.PI*2);
+          ctx.fill();
+        }
+      }
+
+      if(now-started<duration && alive){
+        requestAnimationFrame(frame);
+      }else{
+        ctx.clearRect(0,0,width,height);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function triggerWhiteCelebrationById(roundId){
+    if(!roundId) return;
+    requestAnimationFrame(()=>{
+      const candidates=[...document.querySelectorAll('.sigma-stone.white-new, .sigma-stone.is-white.is-new, .sigma-stone[data-color="0"].stone-new, .sigma-stone[data-color="0"].is-new')];
+      const stone=candidates[0] || [...document.querySelectorAll('.sigma-stone[data-color="0"], .sigma-stone.is-white')][0];
+      if(stone) celebrateWhiteStone(stone);
+    });
+  }
+
+
+  function applyDistributionBars(){
+    const map=[
+      [".sigma-hour-item.is-red", "red"],
+      [".sigma-hour-item.is-black", "black"],
+      [".sigma-hour-item.is-white", "white"]
+    ];
+    for(const [selector] of map){
+      const item=document.querySelector(selector);
+      if(!item || item.querySelector(".sigma-hour-bar")) continue;
+      const text=item.textContent || "";
+      const match=text.match(/(\d+(?:[.,]\d+)?)\s*%/);
+      const pct=match ? Math.max(0,Math.min(100,Number(match[1].replace(",",".")))) : 0;
+      const bar=document.createElement("div");
+      bar.className="sigma-hour-bar";
+      bar.innerHTML=`<span style="--pct:${pct}%"></span>`;
+      item.appendChild(bar);
+    }
+  }
+  const sigmaVisualObserver=new MutationObserver(()=>applyDistributionBars());
+  document.addEventListener("DOMContentLoaded",()=>{
+    applyDistributionBars();
+    sigmaVisualObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+  });
+
 })();

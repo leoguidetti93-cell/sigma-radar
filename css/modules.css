@@ -746,3 +746,216 @@
   .sigma-global-head-wrap{overflow-x:auto;padding:0 7px}
   .sigma-global-heads{min-width:730px}
 }
+
+
+/* ORION 3.2 — Catalogador Experience */
+#catalogador-status-message,
+.sigma-live-message,
+.sigma-memory-message,
+.sigma-sync-message {
+  display: none !important;
+}
+
+/* Top summary */
+.sigma-clean-summary {
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 12px;
+}
+.sigma-last-round-card {
+  min-height: 126px;
+}
+.sigma-last-stone {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 13px !important;
+  font-size: 30px !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,.28);
+}
+.sigma-last-stone small {
+  font-size: 10px !important;
+}
+.sigma-hour-distribution {
+  padding: 10px 14px 14px;
+}
+.sigma-hour-item {
+  position: relative;
+}
+.sigma-hour-bar {
+  height: 7px;
+  margin-top: 9px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,.075);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.35);
+}
+.sigma-hour-bar > span {
+  display: block;
+  height: 100%;
+  width: var(--pct,0%);
+  border-radius: inherit;
+  transition: width .55s cubic-bezier(.2,.8,.2,1);
+}
+.sigma-hour-item.is-red .sigma-hour-bar > span {
+  background: linear-gradient(90deg,#ff315f,#ff174f);
+  box-shadow: 0 0 12px rgba(255,30,82,.32);
+}
+.sigma-hour-item.is-black .sigma-hour-bar > span {
+  background: linear-gradient(90deg,#f2f6fa,#7b8792);
+  box-shadow: 0 0 10px rgba(255,255,255,.12);
+}
+.sigma-hour-item.is-white .sigma-hour-bar > span {
+  background: linear-gradient(90deg,#fff,#dfe9f2);
+  box-shadow: 0 0 15px rgba(255,255,255,.32);
+}
+
+/* More compact rows */
+.sigma-live-row {
+  margin-top: 7px !important;
+}
+.sigma-live-row-clean .sigma-row-grid {
+  padding: 8px 9px !important;
+}
+.sigma-row-cells {
+  gap: 4px !important;
+}
+.sigma-minute-cell {
+  gap: 4px !important;
+}
+.sigma-stone {
+  height: 53px !important;
+}
+
+/* Current row */
+.sigma-live-row.is-current {
+  position: relative;
+  border-color: rgba(255,32,85,.9) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,32,85,.18),
+    0 0 26px rgba(255,23,79,.11),
+    inset 0 0 22px rgba(255,23,79,.035);
+}
+.sigma-live-row.is-current::before {
+  content: "AGORA";
+  position: absolute;
+  z-index: 4;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 7px;
+  border-radius: 6px;
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: .06em;
+  color: white;
+  background: linear-gradient(135deg,#ff315f,#d90042);
+  box-shadow: 0 0 16px rgba(255,29,81,.38);
+  pointer-events: none;
+}
+.sigma-live-row.is-current .sigma-row-grid {
+  padding-left: 55px !important;
+}
+
+/* Permanent white highlight */
+.sigma-stone.is-white,
+.sigma-stone.white,
+.sigma-stone[data-color="0"] {
+  position: relative;
+  color: #f62552 !important;
+  border-color: rgba(255,255,255,.96) !important;
+  background: linear-gradient(145deg,#fff,#eaf1f6) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.62),
+    0 0 16px rgba(255,255,255,.38),
+    0 8px 18px rgba(0,0,0,.28) !important;
+}
+.sigma-stone.is-white::after,
+.sigma-stone.white::after,
+.sigma-stone[data-color="0"]::after {
+  content: "✦";
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-size: 9px;
+  color: #ffbd3d;
+  text-shadow: 0 0 8px rgba(255,190,50,.85);
+}
+
+/* New white: strong 3 second animation */
+.sigma-stone.white-new,
+.sigma-stone.is-white.is-new,
+.sigma-stone[data-color="0"].is-new {
+  z-index: 8;
+  animation: sigmaWhiteJackpot 3s cubic-bezier(.22,.8,.25,1) both;
+}
+@keyframes sigmaWhiteJackpot {
+  0% {
+    transform: scale(.72) rotate(-3deg);
+    filter: brightness(2.2);
+    box-shadow:
+      0 0 0 0 rgba(255,255,255,.98),
+      0 0 18px 8px rgba(255,255,255,.95),
+      0 0 55px 18px rgba(255,196,53,.65);
+  }
+  12% { transform: scale(1.18) rotate(2deg); }
+  24% { transform: scale(.96) rotate(-1deg); }
+  37% {
+    transform: scale(1.12);
+    box-shadow:
+      0 0 0 18px rgba(255,255,255,0),
+      0 0 30px 13px rgba(255,255,255,.82),
+      0 0 85px 24px rgba(255,190,42,.5);
+  }
+  52% { transform: scale(1.02); }
+  70% { transform: scale(1.08); filter: brightness(1.45); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Brief row celebration */
+.sigma-live-row.white-row-flash {
+  animation: sigmaRowWhiteFlash 1.2s ease-out;
+}
+@keyframes sigmaRowWhiteFlash {
+  0% { box-shadow: inset 0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,205,80,0); }
+  22% { box-shadow: inset 0 0 35px rgba(255,255,255,.18), 0 0 35px rgba(255,205,80,.22); }
+  100% { box-shadow: inset 0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,205,80,0); }
+}
+
+/* Fullscreen celebration canvas */
+#sigma-white-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+#sigma-white-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(255,255,255,.34), transparent 28%),
+    radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(255,194,52,.17), transparent 58%);
+}
+#sigma-white-flash.is-active {
+  animation: sigmaScreenFlash 1.15s ease-out;
+}
+@keyframes sigmaScreenFlash {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigma-stone.white-new,
+  .sigma-stone.is-white.is-new,
+  .sigma-stone[data-color="0"].is-new,
+  .sigma-live-row.white-row-flash,
+  #sigma-white-flash.is-active {
+    animation: none !important;
+  }
+  #sigma-white-particles { display:none !important; }
+}

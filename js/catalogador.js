@@ -202,7 +202,6 @@
 
       const start = block.date.getMinutes();
       const current = index === 0;
-      const heads = Array.from({length:10},(_,i) => `<div class="sigma-minute-head">${pad(start+i)}</div>`).join('');
       const cells = Array.from({length:10},(_,i) => {
         const minute = start+i;
         const list = (byMinute.get(minute) || []).slice(0,2);
@@ -210,9 +209,18 @@
       }).join('');
 
       return `<section class="sigma-live-row sigma-live-row-clean${current?' is-current':''}${current && newestBlock!==lastRenderedBlock?' row-enter':''}">
-        <div class="sigma-row-grid"><div class="sigma-row-heads">${heads}</div><div class="sigma-row-cells">${cells}</div></div>
+        <div class="sigma-row-grid"><div class="sigma-row-cells">${cells}</div></div>
       </section>`;
     }).join('');
+
+    if (blocks.length) {
+      const globalHeads = Array.from(
+        {length:10},
+        (_,i) => `<div class="sigma-global-minute-head">${pad(i)}</div>`
+      ).join('');
+
+      root.innerHTML = `<div class="sigma-global-head-wrap"><div class="sigma-global-heads">${globalHeads}</div></div>${root.innerHTML}`;
+    }
 
     lastRenderedBlock = newestBlock;
     if ($('catalogCount')) $('catalogCount').textContent = `${rounds.length} / ${MAX_ROUNDS} rodadas`;

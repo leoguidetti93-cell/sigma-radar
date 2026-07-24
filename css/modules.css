@@ -695,3 +695,54 @@
 .sigma-live-row-clean{grid-template-columns:1fr}
 .sigma-live-row-clean .sigma-row-grid{padding:9px 10px}
 @media(max-width:760px){.catalog-summary-grid{grid-template-columns:1fr}.catalog-percent-grid>div{padding:11px 10px}.catalog-percent-grid strong{font-size:21px}}
+
+
+/* Catalogador 3.1.2 — leitura ampliada e cabeçalho único */
+.sigma-global-head-wrap{
+  padding:0 10px;
+  margin:0 0 -3px;
+}
+.sigma-global-heads{
+  display:grid;
+  grid-template-columns:repeat(10,minmax(70px,1fr));
+  gap:5px;
+  min-width:730px;
+  padding:0 0 2px;
+}
+.sigma-global-minute-head{
+  text-align:center;
+  font-size:12px;
+  line-height:1;
+  font-weight:950;
+  color:#a9bfd0;
+  letter-spacing:.03em;
+  text-shadow:0 0 12px rgba(119,202,255,.18);
+}
+.sigma-live-row-clean .sigma-row-grid{
+  padding:10px;
+}
+.sigma-stone{
+  height:56px;
+  border-radius:9px;
+  font-size:19px;
+  letter-spacing:-.01em;
+}
+.sigma-stone small{
+  font-size:9px;
+  margin-top:5px;
+  font-weight:850;
+  opacity:.86;
+}
+.sigma-white-mark{
+  font-size:23px;
+}
+.sigma-stone-empty span{
+  font-size:17px;
+}
+.sigma-stone-empty small{
+  font-size:8px;
+}
+@media(max-width:920px){
+  .sigma-global-head-wrap{overflow-x:auto;padding:0 7px}
+  .sigma-global-heads{min-width:730px}
+}

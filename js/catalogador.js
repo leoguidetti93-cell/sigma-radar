@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const MAX_ROUNDS = 500;
+  const MAX_ROUNDS = 1000;
   const STORAGE_KEY = 'sigma-live-rounds-v3';
   const LIVE_BASE = 'https://sigma-live-server.onrender.com';
   const MEMORY_URL = `${LIVE_BASE}/memory?limit=${MAX_ROUNDS}`;

@@ -1,6 +1,6 @@
 {
   "name": "SIGMA RADAR",
-  "version": "2.1.0",
+  "version": "3.6.0",
   "base": "1.3",
   "migration": "structural-only",
   "modules": [
@@ -16,5 +16,12 @@
     "simulador"
   ],
   "baseVersion": "2.1.0",
-  "records": 30000
+  "records": 1000,
+  "dataSource": "catalogador-live-only",
+  "retiredModules": [
+    "sigmaColor",
+    "temporal",
+    "ranking",
+    "tendencias"
+  ]
 }

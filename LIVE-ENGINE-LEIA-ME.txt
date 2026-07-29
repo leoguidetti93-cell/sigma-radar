@@ -4,6 +4,6 @@ SIGMA ORION 3.0 LIVE — CORREÇÃO AUTOMÁTICA
 - O popup de configuração foi removido.
 - O Catalogador inicia automaticamente ao abrir.
 - O coletor SIGMA consulta os resultados e atualiza a tela sozinho.
-- Memória ativa de 500 rodadas, sem duplicações.
+- Memória ativa de 1000 rodadas, sem duplicações.
 - Atualização automática a cada 5 segundos.
 - Caso a fonte esteja temporariamente indisponível, o sistema preserva o histórico local e tenta novamente.

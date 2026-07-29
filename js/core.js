@@ -39,7 +39,8 @@ const loaderMessages={
   ranking:'Classificando os horários históricos mais fortes.',
   tendencias:'Projetando as janelas mais promissoras para os próximos ciclos da semana.',
   simulador:'Calculando intervalos entre brancos e construindo três projeções ao vivo.',
-  catalogador:'Conectando à fonte de resultados e montando o histórico ao vivo.'
+  catalogador:'Conectando à fonte de resultados e montando o histórico ao vivo.',
+  sigmaLeitura:'Sincronizando as 1000 rodadas e calculando padrões, transições e intervalos.'
 };
 function openFeature(id,title){
   const target=document.getElementById(id);
@@ -48,7 +49,8 @@ function openFeature(id,title){
   target.classList.add('active');
   setActiveSideLink(id);
   if(id==='gestor' && typeof calculateBankManager==='function')calculateBankManager();
-  if(id==='catalogador' && typeof startLiveCatalog==='function')startLiveCatalog();
+  if((id==='catalogador' || id==='sigmaLeitura') && typeof startLiveCatalog==='function')startLiveCatalog();
+  if(id==='sigmaLeitura' && window.SIGMA_READING)window.SIGMA_READING.start();
   window.scrollTo(0,0);
 }
 

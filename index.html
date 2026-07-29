@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SIGMA RADAR — ORION UI 3.7.0</title>
+<title>SIGMA RADAR — ORION UI 3.8.0</title>
 <link href="/css/base.css" rel="stylesheet"/>
 <link href="/css/layout.css" rel="stylesheet"/>
 <link href="/css/modules.css" rel="stylesheet"/>
@@ -12,6 +12,7 @@
 <link href="/css/temporal-filter.css" rel="stylesheet"/>
 <link href="/css/central-operacoes.css" rel="stylesheet"/>
 <link href="/css/sigma-access.css" rel="stylesheet"/>
+<link href="/css/sigma-leitura.css" rel="stylesheet"/>
 </head>
 <body>
 <div aria-live="polite" class="sigma-access-gate" id="sigmaAccessGate">
@@ -44,8 +45,8 @@
 <span>INTELIGÊNCIA PARA O DOUBLE</span>
 </div>
 <div class="side-status"><i></i><span>CATALOGADOR • MEMÓRIA 1000</span></div>
-<nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="centralOperacoes" onclick="sideNavigate('centralOperacoes','Central de Sinais',this)"><span class="side-icon">Σ</span><span class="side-text">Central de Sinais</span><span class="analyst-menu-badge" hidden="" id="analystMenuBadge">0</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
-<div class="side-bottom"><b>ORION UI — 3.7.0</b><span>Experiência para jogadores</span></div>
+<nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="sigmaLeitura" onclick="sideNavigate('sigmaLeitura','SIGMA Leitura',this)"><span class="side-icon">◉</span><span class="side-text">SIGMA Leitura</span></button><button class="side-link" data-target="centralOperacoes" onclick="sideNavigate('centralOperacoes','Central de Sinais',this)"><span class="side-icon">Σ</span><span class="side-text">Central de Sinais</span><span class="analyst-menu-badge" hidden="" id="analystMenuBadge">0</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
+<div class="side-bottom"><b>ORION UI — 3.8.0</b><span>Experiência para jogadores</span></div>
 </aside>
 <div class="screen active" id="home">
 <div class="shell">
@@ -64,6 +65,68 @@
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="screen" id="sigmaLeitura">
+<div class="shell sigma-reading-shell">
+  <div class="inner-header">
+    <button class="back" onclick="goHome()">← Voltar para Home</button>
+    <div class="title-group"><h2>SIGMA Leitura</h2><p>Análise dinâmica abastecida exclusivamente pelas 1000 rodadas do Catalogador.</p></div>
+    <span class="status-pill sigma-reading-status connecting" id="readingStatus">SINCRONIZANDO</span>
+  </div>
+
+  <div class="reading-source-bar">
+    <div><span>FONTE</span><strong>CATALOGADOR AO VIVO</strong></div>
+    <div><span>AMOSTRA ATUAL</span><strong id="readingSampleCount">0 / 1000</strong></div>
+    <div><span>ÚLTIMA RODADA</span><strong id="readingLatestTime">—</strong></div>
+    <div><span>ATUALIZAÇÃO</span><strong id="readingUpdatedAt">—</strong></div>
+  </div>
+
+  <div class="reading-main-grid">
+    <article class="card reading-decision-card">
+      <div class="reading-card-head"><div><span class="small">LEITURA COLOR ATUAL</span><h3 id="readingDecision">AGUARDANDO DADOS</h3></div><span class="reading-grade neutral" id="readingGrade">NEUTRO</span></div>
+      <div class="reading-score-wrap"><div class="reading-score-ring" id="readingScoreRing"><strong id="readingScore">0</strong><span>SCORE</span></div><div class="reading-decision-copy"><span>ENTRADA ESTATÍSTICA</span><strong id="readingEntry">—</strong><small>Até G1 + cobertura no branco</small></div></div>
+      <div class="reading-reasons" id="readingReasons"><p>O módulo será atualizado assim que o Catalogador sincronizar as rodadas.</p></div>
+      <button class="action-btn reading-refresh" type="button" onclick="window.SIGMA_READING?.refresh(true)">↻ Atualizar leitura</button>
+    </article>
+
+    <article class="card reading-white-card">
+      <div class="reading-card-head"><div><span class="small">RADAR DO BRANCO</span><h3 id="readingWhiteState">SEM LEITURA</h3></div><span class="reading-white-dot">Σ</span></div>
+      <div class="reading-white-metrics">
+        <div><span>Rodadas sem branco</span><strong id="readingSinceWhite">—</strong></div>
+        <div><span>Média de intervalo</span><strong id="readingWhiteAverage">—</strong></div>
+        <div><span>Mediana</span><strong id="readingWhiteMedian">—</strong></div>
+        <div><span>Maior intervalo</span><strong id="readingWhiteMax">—</strong></div>
+      </div>
+      <div class="reading-progress"><span id="readingWhiteProgress"></span></div>
+      <p id="readingWhiteText">Aguardando intervalos suficientes para comparação.</p>
+    </article>
+  </div>
+
+  <div class="reading-window-grid">
+    <article class="card reading-window-card" data-window="20"><span>ÚLTIMAS 20</span><div class="reading-bars" id="readingBars20"></div><strong id="readingDominant20">—</strong></article>
+    <article class="card reading-window-card" data-window="50"><span>ÚLTIMAS 50</span><div class="reading-bars" id="readingBars50"></div><strong id="readingDominant50">—</strong></article>
+    <article class="card reading-window-card" data-window="100"><span>ÚLTIMAS 100</span><div class="reading-bars" id="readingBars100"></div><strong id="readingDominant100">—</strong></article>
+    <article class="card reading-window-card" data-window="1000"><span>AMOSTRA COMPLETA</span><div class="reading-bars" id="readingBars1000"></div><strong id="readingDominant1000">—</strong></article>
+  </div>
+
+  <div class="reading-detail-grid">
+    <article class="card">
+      <div class="reading-card-head"><div><span class="small">PADRÃO ATUAL</span><h3 id="readingPatternName">—</h3></div><span class="reading-occurrences" id="readingPatternOccurrences">0 casos</span></div>
+      <div class="reading-pattern-results">
+        <div><span>WIN direta</span><strong id="readingDirectWin">0%</strong></div>
+        <div><span>WIN G1</span><strong id="readingG1Win">0%</strong></div>
+        <div><span>WIN branco</span><strong id="readingWhiteWin">0%</strong></div>
+        <div><span>LOSS</span><strong id="readingLoss">0%</strong></div>
+      </div>
+      <p class="reading-note" id="readingPatternText">O sistema compara a sequência atual com ocorrências anteriores dentro da memória.</p>
+    </article>
+    <article class="card">
+      <div class="reading-card-head"><div><span class="small">SEQUÊNCIAS E TRANSIÇÕES</span><h3>Comportamento recente</h3></div></div>
+      <div class="reading-transition-list" id="readingTransitions"><div class="analyst-empty">Aguardando dados...</div></div>
+    </article>
+  </div>
+  <p class="reading-disclaimer">Leitura estatística da amostra atual. Não representa garantia de resultado.</p>
 </div>
 </div>
 <div class="screen" id="centralOperacoes">
@@ -385,6 +448,7 @@
 <script src="/js/core.js"></script>
 <script src="/js/live-engine-config.js"></script>
 <script src="/js/catalogador.js"></script>
+<script src="/js/sigma-leitura.js"></script>
 
 
 <script src="/js/simulador.js"></script>

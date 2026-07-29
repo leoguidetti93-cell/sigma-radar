@@ -13,7 +13,7 @@ function decorate(rows){return (rows||[]).map(row=>({...row,meta:parseMeta(row.o
 function brazilDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo'}).format(new Date())}
 function escapeTelegram(value){return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function shiftMinute(time,delta){const [h,m]=String(time).split(':').map(Number);const date=new Date(2000,0,1,h,m+delta);return `${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`}
-function telegramMessage(signal){const meta=signal.meta||parseMeta(signal.observacao);const note=meta.texto?`\n\n📝 ${escapeTelegram(meta.texto)}`:'';if(meta.tipo==='COLOR'){const color=meta.cor==='BLACK'?'⚫ PRETO':'🔴 VERMELHO';return `<b>🎯 SIGMA • COLOR</b>\n\n⏰ Entrada: <b>${escapeTelegram(signal.horario)}</b>\n🎨 Cor: <b>${color}</b>\n🛡 Proteção: <b>até G1</b>${note}`}
+function telegramMessage(signal){const meta=signal.meta||parseMeta(signal.observacao);const note=meta.texto?`\n\n📝 ${escapeTelegram(meta.texto)}`:'';if(meta.tipo==='COLOR'){const color=meta.cor==='BLACK'?'⚫ PRETO':'🔴 VERMELHO';return `<b>🎯 SIGMA • COLOR</b>\n\n⏰ Entrada: <b>${escapeTelegram(signal.horario)}</b>\n🎨 Cor: <b>${color}</b>\n🛡 Proteção: <b>até G1 + cobertura no branco</b>${note}`}
 return `<b>⚪ SIGMA • WHITE</b>\n\n⏰ Horário central: <b>${escapeTelegram(signal.horario)}</b>\n🕐 Margem de 1 minuto\n<b>${shiftMinute(signal.horario,-1)} • ${escapeTelegram(signal.horario)} • ${shiftMinute(signal.horario,1)}</b>${note}`}
 async function telegramSend(text,replyToMessageId=null){const token=String(process.env.TELEGRAM_BOT_TOKEN||'').trim();const chatId=String(process.env.TELEGRAM_CHAT_ID||'').trim();if(!token||!chatId)return {configured:false,ok:false};const payload={chat_id:chatId,text,parse_mode:'HTML',disable_web_page_preview:true};if(replyToMessageId)payload.reply_parameters={message_id:Number(replyToMessageId),allow_sending_without_reply:true};try{const response=await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.description||`Telegram ${response.status}`);return {configured:true,ok:true,message_id:data.result?.message_id||null}}catch(error){console.error('Telegram:',error);return {configured:true,ok:false,error:error.message}}}
 async function sendTelegramSignal(signal){return telegramSend(telegramMessage(signal))}
@@ -26,6 +26,10 @@ if(resultado==='G1')return `<b>✅ WIN G1 • COLOR</b>
 
 ⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
 🛡 Resultado confirmado no G1.`;
+if(resultado==='BRANCO')return `<b>⚪✅ WIN BRANCO • COLOR</b>
+
+⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
+🛡 Cobertura confirmada no branco.`;
 return `<b>❌ LOSS • COLOR</b>
 
 ⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>

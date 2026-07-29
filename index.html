@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SIGMA RADAR — ORION UI 3.6.0</title>
+<title>SIGMA RADAR — ORION UI 3.7.0</title>
 <link href="/css/base.css" rel="stylesheet"/>
 <link href="/css/layout.css" rel="stylesheet"/>
 <link href="/css/modules.css" rel="stylesheet"/>
@@ -45,7 +45,7 @@
 </div>
 <div class="side-status"><i></i><span>CATALOGADOR • MEMÓRIA 1000</span></div>
 <nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="centralOperacoes" onclick="sideNavigate('centralOperacoes','Central de Sinais',this)"><span class="side-icon">Σ</span><span class="side-text">Central de Sinais</span><span class="analyst-menu-badge" hidden="" id="analystMenuBadge">0</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
-<div class="side-bottom"><b>ORION UI — 3.6.0</b><span>Experiência para jogadores</span></div>
+<div class="side-bottom"><b>ORION UI — 3.7.0</b><span>Experiência para jogadores</span></div>
 </aside>
 <div class="screen active" id="home">
 <div class="shell">
@@ -68,57 +68,12 @@
 </div>
 <div class="screen" id="centralOperacoes">
 <div class="shell">
-<div class="inner-header">
-<button class="back" onclick="goHome()">← Voltar para Home</button>
-<div class="title-group">
-<h2>Central de Sinais</h2>
-<p>Sinais manuais publicados na Central de Sinais.</p>
-</div>
-<span class="status-pill" id="analystConnectionStatus">CONECTANDO</span>
-</div>
-<div class="analyst-rule">
-<span>⚪</span>
-<div>
-<strong>Regra oficial dos sinais</strong>
-<p>Todo sinal possui janela operacional de <b>±1 minuto</b>: minuto anterior, minuto central e minuto seguinte.</p>
-</div>
-</div>
-<div class="analyst-stats">
-<div class="analyst-stat">
-<span>Sinais ativos</span>
-<strong id="analystActiveCount">0</strong>
-</div>
-<div class="analyst-stat analyst-win-stat">
-<span>Pagos hoje</span>
-<strong id="analystPaidToday">0</strong>
-</div>
-<div class="analyst-stat analyst-loss-stat">
-<span>Falharam hoje</span>
-<strong id="analystFailedToday">0</strong>
-</div>
-<div class="analyst-stat">
-<span>Assertividade hoje</span>
-<strong id="analystAccuracyToday">—</strong>
-</div>
-</div>
-<div class="player-section-title">
-<h3>Sinais ativos</h3>
-<span>Até três operações simultâneas</span>
-</div>
-<div class="analyst-active-grid" id="analystActiveSignals">
-<div class="analyst-empty">Buscando sinais do analista...</div>
-</div>
-<div class="player-section-title analyst-history-title">
-<h3>Últimos 10 sinais</h3>
-<span>Histórico encerrado pelo analista</span>
-</div>
-<div class="card analyst-history-card">
-<div class="analyst-history-list" id="analystHistory">
-<div class="analyst-empty">Carregando histórico...</div>
-</div>
-</div>
-</div>
-</div>
+<div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Central de Sinais</h2><p>WHITE e COLOR publicados ao vivo pela Central do Analista.</p></div><span class="status-pill" id="analystConnectionStatus">CONECTANDO</span></div>
+<div class="analyst-stats"><div class="analyst-stat"><span>Sinais ativos</span><strong id="analystActiveCount">0</strong></div><div class="analyst-stat analyst-win-stat"><span>Wins hoje</span><strong id="analystPaidToday">0</strong></div><div class="analyst-stat analyst-loss-stat"><span>Losses hoje</span><strong id="analystFailedToday">0</strong></div><div class="analyst-stat"><span>Assertividade hoje</span><strong id="analystAccuracyToday">—</strong></div></div>
+<div class="signal-zone white-zone"><div class="player-section-title"><div><span class="signal-zone-tag white">WHITE</span><h3>Sinais de branco</h3></div><span>Margem oficial de 1 minuto</span></div><div class="analyst-rule white-rule"><span>⚪</span><div><strong>Janela operacional</strong><p>Minuto anterior, minuto central e minuto seguinte.</p></div></div><div class="analyst-active-grid" id="analystWhiteSignals"><div class="analyst-empty">Buscando sinais WHITE...</div></div></div>
+<div class="signal-zone color-zone"><div class="player-section-title"><div><span class="signal-zone-tag color">COLOR</span><h3>Sinais de cor</h3></div><span>Entrada protegida até G1</span></div><div class="analyst-rule color-rule"><span>◐</span><div><strong>Regra COLOR</strong><p>Entrada na cor indicada e uma proteção no G1.</p></div></div><div class="analyst-active-grid" id="analystColorSignals"><div class="analyst-empty">Buscando sinais COLOR...</div></div></div>
+<div class="player-section-title analyst-history-title"><h3>Últimos 10 sinais</h3><span>Histórico geral encerrado pelo analista</span></div><div class="card analyst-history-card"><div class="analyst-history-list" id="analystHistory"><div class="analyst-empty">Carregando histórico...</div></div></div>
+</div></div>
 <div class="screen" id="operacional">
 <div class="shell">
 <div class="inner-header">

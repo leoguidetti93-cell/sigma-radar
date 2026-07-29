@@ -1,19 +1,12 @@
 {
   "name": "SIGMA RADAR",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "base": "1.3",
   "migration": "structural-only",
   "modules": [
-    "central-operacoes",
-    "radar-operacional",
-    "sigma-color",
-    "padroes",
-    "radar-temporal",
-    "gestor-banca",
-    "ranking",
-    "tendencias",
     "catalogador",
-    "simulador"
+    "central-sinais",
+    "gestor-banca"
   ],
   "baseVersion": "2.1.0",
   "records": 1000,
@@ -23,5 +16,14 @@
     "temporal",
     "ranking",
     "tendencias"
-  ]
+  ],
+  "signals": {
+    "types": [
+      "WHITE",
+      "COLOR"
+    ],
+    "whiteMarginMinutes": 1,
+    "colorMaxGale": 1,
+    "telegram": true
+  }
 }

@@ -1,91 +1,19 @@
 const crypto=require('crypto');
-
-function env(name){
-  const value=process.env[name];
-  if(!value)throw new Error(`Variável ausente: ${name}`);
-  return String(value).trim();
-}
-
-function json(res,status,data){
-  res.status(status).setHeader('Content-Type','application/json; charset=utf-8');
-  res.setHeader('Cache-Control','no-store');
-  res.end(JSON.stringify(data));
-}
-
-function base64url(input){
-  return Buffer.from(input).toString('base64url');
-}
-
-function signToken(){
-  const payload=base64url(JSON.stringify({exp:Date.now()+8*60*60*1000,role:'analista'}));
-  const signature=crypto.createHmac('sha256',env('ANALISTA_PASSWORD')).update(payload).digest('base64url');
-  return `${payload}.${signature}`;
-}
-
-function verifyToken(req){
-  const auth=req.headers.authorization||'';
-  const token=auth.startsWith('Bearer ')?auth.slice(7):'';
-  const [payload,signature]=token.split('.');
-  if(!payload||!signature)return false;
-  const expected=crypto.createHmac('sha256',env('ANALISTA_PASSWORD')).update(payload).digest('base64url');
-  const a=Buffer.from(signature);const b=Buffer.from(expected);
-  if(a.length!==b.length||!crypto.timingSafeEqual(a,b))return false;
-  try{
-    const data=JSON.parse(Buffer.from(payload,'base64url').toString());
-    return data.role==='analista'&&data.exp>Date.now();
-  }catch{return false}
-}
-
-function secretHeaders(extra={}){
-  const key=env('SUPABASE_SECRET_KEY');
-  return {'apikey':key,'Authorization':`Bearer ${key}`,'Content-Type':'application/json',...extra};
-}
-
-function supabaseEndpoint(path){
-  const raw=env('SUPABASE_URL').replace(/\/+$/,'');
-  const base=raw.replace(/\/rest\/v1$/i,'');
-  const cleanPath=String(path||'').replace(/^\/+/, '');
-  return `${base}/rest/v1/${cleanPath}`;
-}
-
-async function supabase(path,options={}){
-  const url=supabaseEndpoint(path);
-  const response=await fetch(url,{
-    ...options,
-    headers:secretHeaders(options.headers||{})
-  });
-  if(!response.ok){
-    const text=await response.text();
-    throw new Error(`Supabase ${response.status}: ${text}`);
-  }
-  if(response.status===204)return null;
-  const text=await response.text();
-  return text?JSON.parse(text):null;
-}
-
-function parseMeta(value){
-  if(!value)return {texto:'',confianca:5,minuto_resultado:null};
-  try{
-    const parsed=JSON.parse(value);
-    if(parsed&&typeof parsed==='object')return parsed;
-  }catch{}
-  return {texto:String(value),confianca:5,minuto_resultado:null};
-}
-
-function encodeMeta(meta){
-  return JSON.stringify({
-    texto:String(meta.texto||'').slice(0,180),
-    confianca:Math.max(3,Math.min(5,Number(meta.confianca)||5)),
-    minuto_resultado:meta.minuto_resultado||null
-  });
-}
-
-function decorate(rows){
-  return (rows||[]).map(row=>({...row,meta:parseMeta(row.observacao)}));
-}
-
-function brazilDate(){
-  return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo'}).format(new Date());
-}
-
-module.exports={env,json,signToken,verifyToken,supabase,parseMeta,encodeMeta,decorate,brazilDate};
+function env(name){const value=process.env[name];if(!value)throw new Error(`Variável ausente: ${name}`);return String(value).trim()}
+function json(res,status,data){res.status(status).setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(JSON.stringify(data))}
+function base64url(input){return Buffer.from(input).toString('base64url')}
+function signToken(){const payload=base64url(JSON.stringify({exp:Date.now()+8*60*60*1000,role:'analista'}));const signature=crypto.createHmac('sha256',env('ANALISTA_PASSWORD')).update(payload).digest('base64url');return `${payload}.${signature}`}
+function verifyToken(req){const auth=req.headers.authorization||'';const token=auth.startsWith('Bearer ')?auth.slice(7):'';const [payload,signature]=token.split('.');if(!payload||!signature)return false;const expected=crypto.createHmac('sha256',env('ANALISTA_PASSWORD')).update(payload).digest('base64url');const a=Buffer.from(signature);const b=Buffer.from(expected);if(a.length!==b.length||!crypto.timingSafeEqual(a,b))return false;try{const data=JSON.parse(Buffer.from(payload,'base64url').toString());return data.role==='analista'&&data.exp>Date.now()}catch{return false}}
+function secretHeaders(extra={}){const key=env('SUPABASE_SECRET_KEY');return {'apikey':key,'Authorization':`Bearer ${key}`,'Content-Type':'application/json',...extra}}
+function supabaseEndpoint(path){const raw=env('SUPABASE_URL').replace(/\/+$/,'');const base=raw.replace(/\/rest\/v1$/i,'');const cleanPath=String(path||'').replace(/^\/+/, '');return `${base}/rest/v1/${cleanPath}`}
+async function supabase(path,options={}){const url=supabaseEndpoint(path);const response=await fetch(url,{...options,headers:secretHeaders(options.headers||{})});if(!response.ok){const text=await response.text();throw new Error(`Supabase ${response.status}: ${text}`)}if(response.status===204)return null;const text=await response.text();return text?JSON.parse(text):null}
+function parseMeta(value){if(!value)return {tipo:'WHITE',texto:'',confianca:5,margem:1,minuto_resultado:null,resultado:null};try{const parsed=JSON.parse(value);if(parsed&&typeof parsed==='object')return {tipo:'WHITE',margem:1,...parsed}}catch{}return {tipo:'WHITE',texto:String(value),confianca:5,margem:1,minuto_resultado:null,resultado:null}}
+function encodeMeta(meta){const tipo=String(meta.tipo||'WHITE').toUpperCase()==='COLOR'?'COLOR':'WHITE';return JSON.stringify({tipo,texto:String(meta.texto||'').slice(0,180),confianca:Math.max(3,Math.min(5,Number(meta.confianca)||5)),margem:tipo==='WHITE'?1:null,cor:tipo==='COLOR'&&(String(meta.cor).toUpperCase()==='BLACK')?'BLACK':tipo==='COLOR'?'RED':null,gale:tipo==='COLOR'?1:null,minuto_resultado:meta.minuto_resultado||null,resultado:meta.resultado||null,telegram:meta.telegram||null})}
+function decorate(rows){return (rows||[]).map(row=>({...row,meta:parseMeta(row.observacao)}))}
+function brazilDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo'}).format(new Date())}
+function escapeTelegram(value){return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function shiftMinute(time,delta){const [h,m]=String(time).split(':').map(Number);const date=new Date(2000,0,1,h,m+delta);return `${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`}
+function telegramMessage(signal){const meta=signal.meta||parseMeta(signal.observacao);const note=meta.texto?`\n\n📝 ${escapeTelegram(meta.texto)}`:'';if(meta.tipo==='COLOR'){const color=meta.cor==='BLACK'?'⚫ PRETO':'🔴 VERMELHO';return `<b>🎯 SIGMA • COLOR</b>\n\n⏰ Entrada: <b>${escapeTelegram(signal.horario)}</b>\n🎨 Cor: <b>${color}</b>\n🛡 Proteção: <b>até G1</b>${note}`}
+return `<b>⚪ SIGMA • WHITE</b>\n\n⏰ Horário central: <b>${escapeTelegram(signal.horario)}</b>\n🕐 Margem de 1 minuto\n<b>${shiftMinute(signal.horario,-1)} • ${escapeTelegram(signal.horario)} • ${shiftMinute(signal.horario,1)}</b>${note}`}
+async function sendTelegramSignal(signal){const token=String(process.env.TELEGRAM_BOT_TOKEN||'').trim();const chatId=String(process.env.TELEGRAM_CHAT_ID||'').trim();if(!token||!chatId)return {configured:false,ok:false};try{const response=await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatId,text:telegramMessage(signal),parse_mode:'HTML',disable_web_page_preview:true})});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.description||`Telegram ${response.status}`);return {configured:true,ok:true,message_id:data.result?.message_id||null}}catch(error){console.error('Telegram:',error);return {configured:true,ok:false,error:error.message}}}
+module.exports={env,json,signToken,verifyToken,supabase,parseMeta,encodeMeta,decorate,brazilDate,sendTelegramSignal};

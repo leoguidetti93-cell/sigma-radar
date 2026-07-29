@@ -8,12 +8,36 @@ function secretHeaders(extra={}){const key=env('SUPABASE_SECRET_KEY');return {'a
 function supabaseEndpoint(path){const raw=env('SUPABASE_URL').replace(/\/+$/,'');const base=raw.replace(/\/rest\/v1$/i,'');const cleanPath=String(path||'').replace(/^\/+/, '');return `${base}/rest/v1/${cleanPath}`}
 async function supabase(path,options={}){const url=supabaseEndpoint(path);const response=await fetch(url,{...options,headers:secretHeaders(options.headers||{})});if(!response.ok){const text=await response.text();throw new Error(`Supabase ${response.status}: ${text}`)}if(response.status===204)return null;const text=await response.text();return text?JSON.parse(text):null}
 function parseMeta(value){if(!value)return {tipo:'WHITE',texto:'',confianca:5,margem:1,minuto_resultado:null,resultado:null};try{const parsed=JSON.parse(value);if(parsed&&typeof parsed==='object')return {tipo:'WHITE',margem:1,...parsed}}catch{}return {tipo:'WHITE',texto:String(value),confianca:5,margem:1,minuto_resultado:null,resultado:null}}
-function encodeMeta(meta){const tipo=String(meta.tipo||'WHITE').toUpperCase()==='COLOR'?'COLOR':'WHITE';return JSON.stringify({tipo,texto:String(meta.texto||'').slice(0,180),confianca:Math.max(3,Math.min(5,Number(meta.confianca)||5)),margem:tipo==='WHITE'?1:null,cor:tipo==='COLOR'&&(String(meta.cor).toUpperCase()==='BLACK')?'BLACK':tipo==='COLOR'?'RED':null,gale:tipo==='COLOR'?1:null,minuto_resultado:meta.minuto_resultado||null,resultado:meta.resultado||null,telegram:meta.telegram||null})}
+function encodeMeta(meta){const tipo=String(meta.tipo||'WHITE').toUpperCase()==='COLOR'?'COLOR':'WHITE';return JSON.stringify({tipo,texto:String(meta.texto||'').slice(0,180),confianca:Math.max(3,Math.min(5,Number(meta.confianca)||5)),margem:tipo==='WHITE'?1:null,cor:tipo==='COLOR'&&(String(meta.cor).toUpperCase()==='BLACK')?'BLACK':tipo==='COLOR'?'RED':null,gale:tipo==='COLOR'?1:null,minuto_resultado:meta.minuto_resultado||null,resultado:meta.resultado||null,telegram:meta.telegram||null,telegram_message_id:meta.telegram_message_id||null})}
 function decorate(rows){return (rows||[]).map(row=>({...row,meta:parseMeta(row.observacao)}))}
 function brazilDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo'}).format(new Date())}
 function escapeTelegram(value){return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function shiftMinute(time,delta){const [h,m]=String(time).split(':').map(Number);const date=new Date(2000,0,1,h,m+delta);return `${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`}
 function telegramMessage(signal){const meta=signal.meta||parseMeta(signal.observacao);const note=meta.texto?`\n\n📝 ${escapeTelegram(meta.texto)}`:'';if(meta.tipo==='COLOR'){const color=meta.cor==='BLACK'?'⚫ PRETO':'🔴 VERMELHO';return `<b>🎯 SIGMA • COLOR</b>\n\n⏰ Entrada: <b>${escapeTelegram(signal.horario)}</b>\n🎨 Cor: <b>${color}</b>\n🛡 Proteção: <b>até G1</b>${note}`}
 return `<b>⚪ SIGMA • WHITE</b>\n\n⏰ Horário central: <b>${escapeTelegram(signal.horario)}</b>\n🕐 Margem de 1 minuto\n<b>${shiftMinute(signal.horario,-1)} • ${escapeTelegram(signal.horario)} • ${shiftMinute(signal.horario,1)}</b>${note}`}
-async function sendTelegramSignal(signal){const token=String(process.env.TELEGRAM_BOT_TOKEN||'').trim();const chatId=String(process.env.TELEGRAM_CHAT_ID||'').trim();if(!token||!chatId)return {configured:false,ok:false};try{const response=await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chatId,text:telegramMessage(signal),parse_mode:'HTML',disable_web_page_preview:true})});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.description||`Telegram ${response.status}`);return {configured:true,ok:true,message_id:data.result?.message_id||null}}catch(error){console.error('Telegram:',error);return {configured:true,ok:false,error:error.message}}}
-module.exports={env,json,signToken,verifyToken,supabase,parseMeta,encodeMeta,decorate,brazilDate,sendTelegramSignal};
+async function telegramSend(text,replyToMessageId=null){const token=String(process.env.TELEGRAM_BOT_TOKEN||'').trim();const chatId=String(process.env.TELEGRAM_CHAT_ID||'').trim();if(!token||!chatId)return {configured:false,ok:false};const payload={chat_id:chatId,text,parse_mode:'HTML',disable_web_page_preview:true};if(replyToMessageId)payload.reply_parameters={message_id:Number(replyToMessageId),allow_sending_without_reply:true};try{const response=await fetch(`https://api.telegram.org/bot${token}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.description||`Telegram ${response.status}`);return {configured:true,ok:true,message_id:data.result?.message_id||null}}catch(error){console.error('Telegram:',error);return {configured:true,ok:false,error:error.message}}}
+async function sendTelegramSignal(signal){return telegramSend(telegramMessage(signal))}
+function telegramResultMessage(signal,meta){const tipo=String(meta.tipo||'WHITE').toUpperCase();const resultado=String(meta.resultado||'').toUpperCase();if(tipo==='COLOR'){
+if(resultado==='DIRETA')return `<b>✅ WIN DIRETA • COLOR</b>
+
+⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
+🎯 Resultado confirmado na entrada.`;
+if(resultado==='G1')return `<b>✅ WIN G1 • COLOR</b>
+
+⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
+🛡 Resultado confirmado no G1.`;
+return `<b>❌ LOSS • COLOR</b>
+
+⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
+📌 Operação encerrada.`;
+}
+if(resultado==='PAGO')return `<b>✅ WHITE PAGO</b>
+
+⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
+⚪ Branco confirmado às <b>${escapeTelegram(meta.minuto_resultado||signal.horario)}</b>.`;
+return `<b>❌ WHITE FALHOU</b>
+
+⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
+📌 Janela encerrada sem branco.`}
+async function sendTelegramResult(signal,meta){return telegramSend(telegramResultMessage(signal,meta),meta.telegram_message_id)}
+module.exports={env,json,signToken,verifyToken,supabase,parseMeta,encodeMeta,decorate,brazilDate,sendTelegramSignal,sendTelegramResult};

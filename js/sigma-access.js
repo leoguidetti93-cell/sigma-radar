@@ -90,5 +90,10 @@
   form.addEventListener("submit", event => { event.preventDefault(); const key = normalizeKey(input.value); input.value = key; if (key.length !== 6) return setMessage("Digite os seis caracteres da licença."); activate(key); });
   input.addEventListener("input", () => { input.value = normalizeKey(input.value); setMessage(""); });
   forget.addEventListener("click", () => { localStorage.removeItem(STORAGE.key); localStorage.removeItem(STORAGE.session); input.value = ""; showForm(); });
-  validateSaved();
+  if (DEV_MODE) {
+    gate.classList.add("unlocked");
+    document.documentElement.classList.remove("sigma-access-locked");
+  } else {
+    validateSaved();
+  }
 })();

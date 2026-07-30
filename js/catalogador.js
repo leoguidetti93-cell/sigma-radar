@@ -2,7 +2,8 @@
 (() => {
   'use strict';
 
-  const MAX_ROUNDS = 1000;
+  const MAX_ROUNDS = 3000;
+  let displayLimit = Number(localStorage.getItem("sigma-catalog-display-limit") || 500);
   const STORAGE_KEY = 'sigma-live-rounds-v3';
   const LIVE_BASE = 'https://sigma-live-server.onrender.com';
   const MEMORY_URL = `${LIVE_BASE}/memory?limit=${MAX_ROUNDS}`;
@@ -133,10 +134,12 @@
   function blockStart(minute){ return Math.floor(minute / 10) * 10; }
   function blockKey(d){ return `${dateKey(d)}-${pad(d.getHours())}-${pad(blockStart(d.getMinutes()))}`; }
 
+  function visibleRounds(){ return rounds.slice(-Math.min(displayLimit, rounds.length)); }
+
   function groupBlocks(){
     const map = new Map();
 
-    rounds.forEach(round => {
+    visibleRounds().forEach(round => {
       const d = new Date(round.createdAt);
       const start = blockStart(d.getMinutes());
       const key = blockKey(d);
@@ -164,7 +167,7 @@
       });
     }
 
-    return [...map.values()].sort((a,b) => b.date - a.date).slice(0, 28);
+    return [...map.values()].sort((a,b) => b.date - a.date);
   }
 
   function stoneHtml(round, isNewest){
@@ -223,7 +226,8 @@
     }
 
     lastRenderedBlock = newestBlock;
-    if ($('catalogCount')) $('catalogCount').textContent = `${rounds.length} / ${MAX_ROUNDS} rodadas`;
+    if ($('catalogCount')) $('catalogCount').textContent = `${Math.min(displayLimit,rounds.length)} exibidas • ${rounds.length} / ${MAX_ROUNDS}`;
+    window.dispatchEvent(new CustomEvent('sigma:catalog-rendered')); 
   }
 
   function updateStats(){
@@ -410,7 +414,10 @@
         get latest(){ return rounds[rounds.length-1] || null; },
         hydrate: hydrateFromServer,
         reconnect: connectEventStream,
-        server: LIVE_BASE
+        server: LIVE_BASE,
+        get displayLimit(){ return displayLimit; },
+        setDisplayLimit(limit){ displayLimit=[300,500,1000,3000].includes(Number(limit))?Number(limit):500; localStorage.setItem('sigma-catalog-display-limit',String(displayLimit)); renderCatalog(false); return displayLimit; },
+        render(){ renderCatalog(false); }
       };
     }
 

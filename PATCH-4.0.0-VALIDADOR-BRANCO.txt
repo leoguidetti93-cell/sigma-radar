@@ -1,0 +1,13 @@
+SIGMA ORION 4.0.0 — CATALOGADOR + VALIDADOR DE BRANCO
+
+- Catalogador expandido para até 3000 rodadas.
+- Filtro visual e analítico: 300, 500, 1000 ou 3000.
+- Validador dentro do Catalogador.
+- Padrões mistos por cor genérica e números exatos (0 a 14).
+- Validação exclusiva para branco: Direta até G5.
+- Estatísticas de ocorrências, WINs por gale, LOSS e assertividade.
+- Destaque visual de cada ocorrência diretamente no histórico.
+- Navegação anterior/próxima e opção mostrar/ocultar marcações.
+- Servidor configurado para memória de 3000 rodadas.
+
+IMPORTANTE: para obter 3000 rodadas reais, publique também a pasta SERVER atualizada ou altere MEMORY_LIMIT no Render para 3000.

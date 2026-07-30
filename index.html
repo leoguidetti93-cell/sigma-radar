@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SIGMA RADAR — ORION UI 3.8.0</title>
+<title>SIGMA RADAR — ORION UI 4.0.0</title>
 <link href="/css/base.css" rel="stylesheet"/>
 <link href="/css/layout.css" rel="stylesheet"/>
 <link href="/css/modules.css" rel="stylesheet"/>
@@ -13,6 +13,7 @@
 <link href="/css/central-operacoes.css" rel="stylesheet"/>
 <link href="/css/sigma-access.css" rel="stylesheet"/>
 <link href="/css/sigma-leitura.css" rel="stylesheet"/>
+<link href="/css/catalog-validator.css" rel="stylesheet"/>
 </head>
 <body>
 <div aria-live="polite" class="sigma-access-gate" id="sigmaAccessGate">
@@ -44,9 +45,9 @@
 <strong>SIGMA <em>RADAR</em></strong>
 <span>INTELIGÊNCIA PARA O DOUBLE</span>
 </div>
-<div class="side-status"><i></i><span>CATALOGADOR • MEMÓRIA 1000</span></div>
+<div class="side-status"><i></i><span>CATALOGADOR • MEMÓRIA 3000</span></div>
 <nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="sigmaLeitura" onclick="sideNavigate('sigmaLeitura','SIGMA Leitura',this)"><span class="side-icon">◉</span><span class="side-text">SIGMA Leitura</span></button><button class="side-link" data-target="centralOperacoes" onclick="sideNavigate('centralOperacoes','Central de Sinais',this)"><span class="side-icon">Σ</span><span class="side-text">Central de Sinais</span><span class="analyst-menu-badge" hidden="" id="analystMenuBadge">0</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
-<div class="side-bottom"><b>ORION UI — 3.8.0</b><span>Experiência para jogadores</span></div>
+<div class="side-bottom"><b>ORION UI — 4.0.0</b><span>Experiência para jogadores</span></div>
 </aside>
 <div class="screen active" id="home">
 <div class="shell">
@@ -61,7 +62,7 @@
 </div>
 <div class="sigma-brand-status">
 <span><i></i> SISTEMA ONLINE</span>
-<span>BASE LIVE • 1000 RODADAS</span>
+<span>BASE LIVE • 3000 RODADAS</span>
 </div>
 </div>
 </div>
@@ -376,8 +377,26 @@
 </div>
 </div>
 <div aria-live="polite" class="sigma-live-message offline catalog-alert-hidden" id="catalogAlert">Conectando ao SIGMA LIVE SERVER…</div>
+<div class="catalog-toolbar">
+  <div class="catalog-tabs"><button class="catalog-tab active" data-catalog-tab="history">Histórico</button><button class="catalog-tab" data-catalog-tab="validator">Validador de Branco</button></div>
+  <div class="catalog-limit"><span>EXIBIR / ANALISAR</span><div id="catalogLimitButtons"><button data-limit="300">300</button><button data-limit="500" class="active">500</button><button data-limit="1000">1000</button><button data-limit="3000">3000</button></div><strong id="catalogCount">0 / 3000 rodadas</strong></div>
+</div>
+<section class="catalog-validator" id="catalogValidator" hidden>
+  <div class="validator-builder">
+    <div class="validator-head"><div><span>VALIDADOR DE PADRÃO</span><h3>Monte a sequência anterior ao branco</h3></div><button id="validatorClear" type="button">Limpar</button></div>
+    <div class="validator-pattern" id="validatorPattern"><div class="validator-empty">Selecione cores ou números abaixo.</div></div>
+    <div class="validator-palette">
+      <div><span>CORES GENÉRICAS</span><button class="pick red" data-token="red">Vermelho</button><button class="pick black" data-token="black">Preto</button><button class="pick white" data-token="white">Branco</button></div>
+      <div><span>NÚMEROS EXATOS</span><div class="number-picks" id="validatorNumbers"></div></div>
+    </div>
+    <div class="validator-actions"><label>Validar branco até <select id="validatorGale"><option value="0">Direta</option><option value="1">G1</option><option value="2">G2</option><option value="3">G3</option><option value="4">G4</option><option value="5" selected>G5</option></select></label><button class="validator-run" id="validatorRun" type="button">VALIDAR PADRÃO</button></div>
+  </div>
+  <div class="validator-summary" id="validatorSummary"><div class="validator-empty">Monte um padrão para pesquisar na base selecionada.</div></div>
+  <div class="validator-nav" id="validatorNav" hidden><button id="validatorPrev">← Anterior</button><strong id="validatorPosition">0 de 0</strong><button id="validatorNext">Próxima →</button><button id="validatorShowAll">Mostrar todas</button><button id="validatorHide">Ocultar marcações</button></div>
+  <div class="validator-occurrences" id="validatorOccurrences"></div>
+</section>
 <div class="sigma-catalog-board" id="catalogHours"></div>
-<div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O ORION preserva as 1000 rodadas mais recentes neste navegador.</div>
+<div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O ORION preserva até 3000 rodadas mais recentes neste navegador.</div>
 </div>
 </div>
 <div class="screen" id="simulador">
@@ -458,6 +477,7 @@
 <script src="/js/core.js"></script>
 <script src="/js/live-engine-config.js"></script>
 <script src="/js/catalogador.js"></script>
+<script src="/js/catalog-validator.js"></script>
 <script src="/js/sigma-leitura.js"></script>
 
 

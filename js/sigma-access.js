@@ -57,10 +57,12 @@
     button.disabled = true; button.textContent = "ATIVANDO..."; setMessage("Conferindo licença...");
     try {
       const payload = await call("/api/access/activate", { license_key: key, device_id: getDeviceId(), device_name: `${navigator.platform || "Web"} • ${navigator.userAgent.slice(0, 70)}` });
-      localStorage.setItem(STORAGE.key, key); localStorage.setItem(STORAGE.session, payload.session_id); unlock(payload.license);
+      localStorage.setItem(STORAGE.key, key); localStorage.setItem(STORAGE.session, payload.session_id);
+      if (payload.transferred) setMessage("Licença transferida para este navegador.", "success");
+      unlock(payload.license);
     } catch (error) {
       setMessage(error.message); button.disabled = false; button.textContent = "ATIVAR ORION";
-      if (error.code === "DEVICE_MISMATCH") forget.hidden = false;
+      forget.hidden = false;
     }
   }
 
@@ -72,7 +74,10 @@
       unlock(payload.license);
     } catch (error) {
       localStorage.removeItem(STORAGE.session);
-      showForm(error.code === "LICENSE_BLOCKED" || error.code === "LICENSE_EXPIRED" ? error.message : "Sua sessão precisa ser ativada novamente.");
+      const sessionText = error.code === "SESSION_REVOKED"
+        ? "Sua licença foi ativada em outro navegador ou dispositivo."
+        : "Sua sessão precisa ser ativada novamente.";
+      showForm(error.code === "LICENSE_BLOCKED" || error.code === "LICENSE_EXPIRED" ? error.message : sessionText);
       setMessage(error.message); input.value = key; forget.hidden = false;
     }
   }
@@ -83,8 +88,20 @@
       const key = normalizeKey(localStorage.getItem(STORAGE.key)); const sessionId = localStorage.getItem(STORAGE.session);
       if (!key || !sessionId) return;
       try { await call("/api/access/validate", { license_key: key, device_id: getDeviceId(), session_id: sessionId }); }
-      catch (error) { clearInterval(heartbeatTimer); gate.classList.remove("unlocked"); document.documentElement.classList.add("sigma-access-locked"); showForm(error.message); setMessage(error.message); }
-    }, 60000);
+      catch (error) {
+        clearInterval(heartbeatTimer);
+        localStorage.removeItem(STORAGE.session);
+        gate.classList.remove("unlocked");
+        document.documentElement.classList.add("sigma-access-locked");
+        const text = error.code === "SESSION_REVOKED"
+          ? "Sua licença foi ativada em outro navegador ou dispositivo."
+          : error.message;
+        showForm(text);
+        setMessage(text);
+        input.value = key;
+        forget.hidden = false;
+      }
+    }, 15000);
   }
 
   form.addEventListener("submit", event => { event.preventDefault(); const key = normalizeKey(input.value); input.value = key; if (key.length !== 6) return setMessage("Digite os seis caracteres da licença."); activate(key); });

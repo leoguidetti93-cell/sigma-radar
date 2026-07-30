@@ -1,4 +1,4 @@
-/* SIGMA LEITURA 1.1 — leitura + histórico automático das últimas 20 sugestões */
+/* SIGMA LEITURA 1.2 — uma operação por vez + histórico automático das últimas 20 sugestões */
 (() => {
   'use strict';
   let started = false;
@@ -27,6 +27,20 @@
     if(!value)return '—';
     const d=new Date(value); return Number.isNaN(d.getTime())?'—':d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   }
+
+  function pendingStage(pending,rounds){
+    if(!pending)return {stage:'IDLE',after:[]};
+    let anchor=rounds.findIndex(r=>roundKey(r)===pending.anchorKey);
+    if(anchor<0){
+      const t=new Date(pending.anchorAt).getTime();
+      anchor=rounds.findIndex(r=>new Date(r.createdAt).getTime()>=t);
+    }
+    const after=anchor>=0?rounds.slice(anchor+1):[];
+    if(after.length===0)return {stage:'AGUARDANDO DIRETA',after};
+    if(after.length===1)return {stage:'AGUARDANDO G1',after};
+    return {stage:'FINALIZANDO',after};
+  }
+
   function classifySuggestionResult(pending,rounds){
     if(!pending)return null;
     let anchor=rounds.findIndex(r=>roundKey(r)===pending.anchorKey);
@@ -80,11 +94,13 @@
     saveTracker(state);
     return state;
   }
-  function renderSuggestionHistory(){
+  function renderSuggestionHistory(rounds=getRounds()){
     const state=loadTracker(), root=$('readingSuggestionHistory'), pending=$('readingPendingSuggestion');
     if(pending){
       if(state.pending){
-        pending.innerHTML=`<span class="reading-history-entry ${state.pending.target}">${colorName(state.pending.target)}</span><div><strong>Entrada em acompanhamento</strong><small>Gerada às ${formatRoundTime(state.pending.createdAt)} • score ${state.pending.score} • até G1 + branco</small></div><b>AGUARDANDO</b>`;
+        const progress=pendingStage(state.pending,rounds);
+        const stageText=progress.stage==='AGUARDANDO DIRETA'?'Aguardando a rodada da entrada':progress.stage==='AGUARDANDO G1'?'Direta não confirmou • aguardando G1':'Finalizando operação';
+        pending.innerHTML=`<span class="reading-history-entry ${state.pending.target}">${colorName(state.pending.target)}</span><div><strong>${stageText}</strong><small>Gerada às ${formatRoundTime(state.pending.createdAt)} • score ${state.pending.score} • nenhuma nova sugestão até o resultado</small></div><b>${progress.stage}</b>`;
         pending.hidden=false;
       }else pending.hidden=true;
     }
@@ -161,13 +177,13 @@
   }
   function render(force=false){
     const rounds=getRounds(); const latest=rounds.at(-1);
-    settlePending(rounds);
+    let tracker=settlePending(rounds);
     if($('readingSampleCount'))$('readingSampleCount').textContent=`${rounds.length} / 1000`;
     if($('readingLatestTime'))$('readingLatestTime').textContent=latest?new Date(latest.createdAt).toLocaleTimeString('pt-BR'):'—';
     if($('readingUpdatedAt'))$('readingUpdatedAt').textContent=new Date().toLocaleTimeString('pt-BR');
     const status=$('readingStatus'); if(status){status.textContent=rounds.length?'CONECTADO':'SINCRONIZANDO';status.className=`status-pill sigma-reading-status ${rounds.length?'online':'connecting'}`;}
     [20,50,100,1000].forEach(n=>renderDist(rounds,n,'readingBars'+n));
-    if(!rounds.length){renderSuggestionHistory();return;}
+    if(!rounds.length){renderSuggestionHistory(rounds);return;}
 
     const ws=whiteStats(rounds), streak=currentStreak(rounds), recent=dist(rounds,50), pattern=choosePattern(rounds);
     $('readingSinceWhite').textContent=ws.since; $('readingWhiteAverage').textContent=ws.avg?ws.avg.toFixed(1):'—'; $('readingWhiteMedian').textContent=ws.med||'—'; $('readingWhiteMax').textContent=ws.max||'—';
@@ -185,7 +201,16 @@
     if(pattern) score=Math.round(pattern.success*.65 + Math.min(100,pattern.cases*3)*.20 + Math.min(100,Math.abs(redP-blackP)*4)*.15);
     if(streak.count>=3)score=Math.min(96,score+5); if(ws.avg&&ratio>=.9)score=Math.min(96,score+3);
     let grade='NEUTRO',cls='neutral'; if(score>=78){grade='FORTE';cls='strong'}else if(score>=62){grade='ATENÇÃO';cls='attention'}else if(score<45){grade='EVITAR';cls='avoid'};
-    $('readingScore').textContent=score;$('readingScoreRing').style.setProperty('--score',score);$('readingEntry').textContent=entry?colorName(entry):'—';$('readingDecision').textContent=entry?`ENTRADA NO ${colorName(entry)}`:'SEM DIREÇÃO';$('readingGrade').textContent=grade;$('readingGrade').className=`reading-grade ${cls}`;
+    // Enquanto há uma operação ativa, a tela permanece travada na entrada original.
+    // A análise continua sendo calculada em segundo plano, mas não vira nova sugestão.
+    const activeEntry=tracker.pending?.target || entry;
+    const activeScore=tracker.pending?.score ?? score;
+    const activeGrade=tracker.pending?.grade || grade;
+    const activeCls=activeGrade==='FORTE'?'strong':activeGrade==='ATENÇÃO'?'attention':activeGrade==='EVITAR'?'avoid':'neutral';
+    const progress=tracker.pending?pendingStage(tracker.pending,rounds):null;
+    $('readingScore').textContent=activeScore;$('readingScoreRing').style.setProperty('--score',activeScore);$('readingEntry').textContent=activeEntry?colorName(activeEntry):'—';
+    $('readingDecision').textContent=tracker.pending?`${progress.stage} • ${colorName(activeEntry)}`:(entry?`ENTRADA NO ${colorName(entry)}`:'SEM DIREÇÃO');
+    $('readingGrade').textContent=activeGrade;$('readingGrade').className=`reading-grade ${activeCls}`;
     const reasons=[];
     if(streak.color)reasons.push(`Sequência atual: ${streak.count} ${colorName(streak.color).toLowerCase()}${streak.count>1?'s':''}.`);
     reasons.push(`Últimas 50: vermelho ${redP}%, preto ${blackP}% e branco ${pct(recent.white,recent.total)}%.`);
@@ -199,8 +224,10 @@
       $('readingPatternText').textContent=`Teste interno na memória: entrada em ${colorName(pattern.target).toLowerCase()}, proteção G1 e cobertura no branco.`;
     } else {$('readingPatternName').textContent='AMOSTRA INSUFICIENTE';$('readingPatternOccurrences').textContent='0 casos';}
 
-    registerSuggestion(rounds,entry,score,grade,pattern);
-    renderSuggestionHistory();
+    // Registra somente quando não existe operação pendente.
+    // Depois disso, aguarda DIRETA e, se necessário, G1 antes de liberar outra sugestão.
+    if(!tracker.pending) tracker=registerSuggestion(rounds,entry,score,grade,pattern);
+    renderSuggestionHistory(rounds);
 
     const tr=transitions(rounds), root=$('readingTransitions');
     root.innerHTML=['red','black','white'].map(c=>{const d=tr[c]||{red:0,black:0,white:0,total:0};const next=[['red',d.red],['black',d.black],['white',d.white]].sort((a,b)=>b[1]-a[1])[0];return `<div class="reading-transition"><span>Depois de ${colorName(c).toLowerCase()}</span><strong>${d.total?colorName(next[0])+' '+pct(next[1],d.total)+'%':'—'}</strong></div>`}).join('');

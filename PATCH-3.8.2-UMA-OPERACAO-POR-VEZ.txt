@@ -1,0 +1,9 @@
+SIGMA ORION 3.8.2 — UMA OPERAÇÃO POR VEZ
+
+- O SIGMA Leitura gera somente uma sugestão por vez.
+- Aguarda a rodada de entrada (WIN DIRETA ou WIN BRANCO).
+- Se não confirmar, aguarda o G1 (WIN G1, WIN BRANCO ou LOSS).
+- Somente depois do encerramento libera uma nova sugestão.
+- A tela permanece travada na entrada ativa, sem exibir novas entradas sobrepostas.
+- Histórico continua limitado aos últimos 20 resultados.
+- SIGMA Access, Telegram, Supabase e servidor não foram alterados.

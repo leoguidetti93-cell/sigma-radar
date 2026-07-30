@@ -126,7 +126,7 @@
     a.forEach(r=>d[r.color]=(d[r.color]||0)+1); return d;
   }
   function renderDist(rounds,n,id){
-    const d=dist(rounds,n), root=$(id), label=$('readingDominant'+(n===1000?'1000':n)); if(!root)return;
+    const d=dist(rounds,n), root=$(id), label=$('readingDominant'+n); if(!root)return;
     const pr=pct(d.red,d.total),pb=pct(d.black,d.total),pw=pct(d.white,d.total);
     root.innerHTML=`<i class="red" style="width:${pr}%"></i><i class="black" style="width:${pb}%"></i><i class="white" style="width:${pw}%"></i>`+
       `</div><div class="reading-bar-labels"><span>V ${pr}%</span><span>P ${pb}%</span><span>B ${pw}%</span>`;
@@ -178,11 +178,11 @@
   function render(force=false){
     const rounds=getRounds(); const latest=rounds.at(-1);
     let tracker=settlePending(rounds);
-    if($('readingSampleCount'))$('readingSampleCount').textContent=`${rounds.length} / 1000`;
+    if($('readingSampleCount'))$('readingSampleCount').textContent=`${rounds.length} / 3000`;
     if($('readingLatestTime'))$('readingLatestTime').textContent=latest?new Date(latest.createdAt).toLocaleTimeString('pt-BR'):'—';
     if($('readingUpdatedAt'))$('readingUpdatedAt').textContent=new Date().toLocaleTimeString('pt-BR');
     const status=$('readingStatus'); if(status){status.textContent=rounds.length?'CONECTADO':'SINCRONIZANDO';status.className=`status-pill sigma-reading-status ${rounds.length?'online':'connecting'}`;}
-    [20,50,100,1000].forEach(n=>renderDist(rounds,n,'readingBars'+n));
+    [20,50,100,3000].forEach(n=>renderDist(rounds,n,'readingBars'+n));
     if(!rounds.length){renderSuggestionHistory(rounds);return;}
 
     const ws=whiteStats(rounds), streak=currentStreak(rounds), recent=dist(rounds,50), pattern=choosePattern(rounds);
@@ -233,7 +233,7 @@
     root.innerHTML=['red','black','white'].map(c=>{const d=tr[c]||{red:0,black:0,white:0,total:0};const next=[['red',d.red],['black',d.black],['white',d.white]].sort((a,b)=>b[1]-a[1])[0];return `<div class="reading-transition"><span>Depois de ${colorName(c).toLowerCase()}</span><strong>${d.total?colorName(next[0])+' '+pct(next[1],d.total)+'%':'—'}</strong></div>`}).join('');
   }
   function start(){
-    if(!started){started=true;window.addEventListener('sigma:live-round',()=>setTimeout(render,20));setInterval(()=>render(false),8000);}
+    if(!started){started=true;window.addEventListener('sigma:live-round',()=>setTimeout(render,20));window.addEventListener('sigma:catalog-snapshot',()=>setTimeout(()=>render(true),20));setInterval(()=>render(false),8000);}
     if(typeof window.startLiveCatalog==='function')window.startLiveCatalog(); setTimeout(()=>render(true),100);
   }
   window.SIGMA_READING={start,refresh:render,clearHistory(){const state=loadTracker();state.history=[];saveTracker(state);renderSuggestionHistory();}};

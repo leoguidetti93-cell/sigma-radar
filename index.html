@@ -126,6 +126,16 @@
       <div class="reading-transition-list" id="readingTransitions"><div class="analyst-empty">Aguardando dados...</div></div>
     </article>
   </div>
+
+  <section class="card reading-history-card">
+    <div class="reading-card-head reading-history-head">
+      <div><span class="small">DESEMPENHO DAS SUGESTÕES</span><h3>Últimos 20 resultados</h3></div>
+      <div class="reading-history-summary"><span>REGISTROS <strong id="readingHistoryCount">0 / 20</strong></span><span>ASSERTIVIDADE <strong id="readingHistoryAccuracy">—</strong></span><button type="button" onclick="window.SIGMA_READING?.clearHistory()">Limpar</button></div>
+    </div>
+    <div class="reading-pending-suggestion" id="readingPendingSuggestion" hidden></div>
+    <div class="reading-history-list" id="readingSuggestionHistory"><div class="analyst-empty">Nenhuma entrada finalizada ainda.</div></div>
+    <p class="reading-note">Cada sugestão é acompanhada nas duas rodadas seguintes: WIN direta, WIN G1, WIN branco ou LOSS. Ao completar 20 resultados, o registro mais antigo sai automaticamente.</p>
+  </section>
   <p class="reading-disclaimer">Leitura estatística da amostra atual. Não representa garantia de resultado.</p>
 </div>
 </div>

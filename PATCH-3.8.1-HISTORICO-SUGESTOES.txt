@@ -1,0 +1,9 @@
+SIGMA ORION 3.8.1 — HISTÓRICO DAS SUGESTÕES
+
+- Registra automaticamente as entradas sugeridas pelo SIGMA Leitura.
+- Avalia as duas rodadas seguintes.
+- Resultados: WIN DIRETA, WIN G1, WIN BRANCO e LOSS.
+- Mantém somente os últimos 20 resultados; o 21º remove o mais antigo.
+- Histórico persistido no navegador via localStorage.
+- Exibe entrada em acompanhamento e assertividade dos 20 registros.
+- Não altera SIGMA Access, Telegram, Supabase ou servidor.

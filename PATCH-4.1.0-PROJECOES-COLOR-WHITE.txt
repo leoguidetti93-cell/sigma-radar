@@ -1,0 +1,17 @@
+SIGMA ORION 4.1.0 — PROJEÇÕES COLOR + WHITE AUTOMÁTICO
+
+ALTERAÇÕES
+- SIGMA Leitura atualizado para trabalhar visualmente com até 3000 rodadas.
+- Novo botão “Gerar lista” com 20 projeções COLOR.
+- Cada sinal contém horário, vermelho/preto, proteção no branco, G1 e score.
+- Botão “Copiar lista” gera texto pronto para compartilhamento.
+- Novo WHITE automático com uma operação por vez.
+- O sistema projeta o próximo horário de branco usando intervalos recentes.
+- Após o horário projetado, cada rodada vale uma casa, da Casa 1 à Casa 6.
+- Primeiro branco encerra a operação como WIN CASA 1–6.
+- Sem branco nas seis rodadas, registra LOSS.
+- Após encerrar, calcula automaticamente a próxima projeção.
+- Histórico rotativo das últimas 20 projeções WHITE e assertividade.
+
+OBSERVAÇÃO TÉCNICA
+Nesta versão, o estado da projeção WHITE e as listas geradas ficam armazenados no navegador para manter o acompanhamento durante recarregamentos. Para continuar processando operações com todos os navegadores fechados, será necessária a etapa de execução centralizada no servidor.

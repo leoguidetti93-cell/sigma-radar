@@ -118,35 +118,9 @@
 
   function broadcastRound(round){
     window.dispatchEvent(new CustomEvent('sigma:live-round', {detail: round}));
-  }
-
-  function replaceWithServerSnapshot(items, animateNewest = false){
-    const previousNewest = rounds.length ? rounds[rounds.length - 1].id : null;
-    const map = new Map();
-
-    for (const raw of items || []) {
-      const round = normalizeRound(raw);
-      if (!round) continue;
-      map.set(round.id, round);
-    }
-
-    rounds = [...map.values()]
-      .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt))
-      .slice(-MAX_ROUNDS);
-
-    latestRoundId = rounds.length ? rounds[rounds.length - 1].id : null;
-    saveState();
-
-    const isNew = Boolean(animateNewest && latestRoundId && latestRoundId !== previousNewest);
-    renderCatalog(isNew);
-    updateStats();
-
-    window.dispatchEvent(new CustomEvent('sigma:catalog-snapshot', {
-      detail: {rounds: rounds.slice(), count: rounds.length, authoritative: true}
-    }));
-
-    if (isNew) broadcastRound(rounds[rounds.length - 1]);
-    return isNew;
+    window.SIGMA_LIVE_ENGINE = window.SIGMA_LIVE_ENGINE || {};
+    window.SIGMA_LIVE_ENGINE.rounds = rounds.slice();
+    window.SIGMA_LIVE_ENGINE.latest = round;
   }
 
   function formatTime(iso, includeSeconds = false){
@@ -318,7 +292,7 @@
       const payload = await response.json();
       const list = Array.isArray(payload) ? payload : payload.rounds || [];
 
-      replaceWithServerSnapshot(list, animateNewest);
+      mergeRounds(list, animateNewest);
       lastMessageAt = Date.now();
       updateStats();
 
@@ -368,18 +342,6 @@
         lastMessageAt = Date.now();
         setConnection('online','Canal ao vivo conectado. Aguardando a próxima rodada completa.','SIGMA LIVE SERVER • /events');
       };
-
-      eventSource.addEventListener('snapshot', event => {
-        try {
-          const payload = JSON.parse(event.data);
-          const list = Array.isArray(payload) ? payload : payload.rounds || [];
-          lastMessageAt = Date.now();
-          replaceWithServerSnapshot(list, false);
-          setConnection('online','Base oficial do servidor sincronizada.','SIGMA LIVE SERVER • 3000 rodadas');
-        } catch (error) {
-          console.warn('SIGMA: fotografia de memória inválida.', error);
-        }
-      });
 
       eventSource.addEventListener('round', event => {
         try {

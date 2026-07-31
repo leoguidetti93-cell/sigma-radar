@@ -1,16 +1,15 @@
 {
   "name": "SIGMA RADAR",
-  "version": "4.1.0",
+  "version": "3.8.2",
   "base": "1.3",
   "migration": "structural-only",
   "modules": [
     "catalogador",
-    "sigma-leitura",
     "central-sinais",
     "gestor-banca"
   ],
   "baseVersion": "2.1.0",
-  "records": 3000,
+  "records": 1000,
   "dataSource": "catalogador-live-only",
   "retiredModules": [
     "sigmaColor",
@@ -27,5 +26,5 @@
     "colorMaxGale": 1,
     "telegram": true
   },
-  "build": "SERVER_CANONICAL_3000"
+  "build": "SIGMA_LEITURA_HISTORY_20"
 }

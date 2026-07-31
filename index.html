@@ -72,7 +72,7 @@
 <div class="shell sigma-reading-shell">
   <div class="inner-header">
     <button class="back" onclick="goHome()">← Voltar para Home</button>
-    <div class="title-group"><h2>SIGMA Leitura</h2><p>Análise dinâmica abastecida exclusivamente pelas 3.000 rodadas oficiais do servidor.</p></div>
+    <div class="title-group"><h2>SIGMA Leitura</h2><p>Análise dinâmica abastecida exclusivamente pelas 3000 rodadas do Catalogador.</p></div>
     <span class="status-pill sigma-reading-status connecting" id="readingStatus">SINCRONIZANDO</span>
   </div>
 
@@ -108,7 +108,7 @@
     <article class="card reading-window-card" data-window="20"><span>ÚLTIMAS 20</span><div class="reading-bars" id="readingBars20"></div><strong id="readingDominant20">—</strong></article>
     <article class="card reading-window-card" data-window="50"><span>ÚLTIMAS 50</span><div class="reading-bars" id="readingBars50"></div><strong id="readingDominant50">—</strong></article>
     <article class="card reading-window-card" data-window="100"><span>ÚLTIMAS 100</span><div class="reading-bars" id="readingBars100"></div><strong id="readingDominant100">—</strong></article>
-    <article class="card reading-window-card" data-window="3000"><span>AMOSTRA COMPLETA</span><div class="reading-bars" id="readingBars3000"></div><strong id="readingDominant3000">—</strong></article>
+    <article class="card reading-window-card" data-window="1000"><span>AMOSTRA COMPLETA</span><div class="reading-bars" id="readingBars1000"></div><strong id="readingDominant1000">—</strong></article>
   </div>
 
   <div class="reading-detail-grid">
@@ -127,6 +127,34 @@
       <div class="reading-transition-list" id="readingTransitions"><div class="analyst-empty">Aguardando dados...</div></div>
     </article>
   </div>
+
+
+  <section class="card reading-projection-card">
+    <div class="reading-card-head reading-projection-head">
+      <div><span class="small">PROJEÇÃO COLOR</span><h3>Próximos 20 sinais prováveis</h3></div>
+      <div class="reading-projection-actions"><button type="button" id="readingGenerateColorList">Gerar lista</button><button type="button" id="readingCopyColorList" disabled>Copiar lista</button></div>
+    </div>
+    <div class="reading-color-list-meta"><span id="readingColorListGenerated">Nenhuma lista gerada.</span><strong id="readingColorListSample">Base: —</strong></div>
+    <div class="reading-color-projection-list" id="readingColorProjectionList"><div class="analyst-empty">Clique em “Gerar lista” para projetar 20 entradas COLOR com proteção no branco e até G1.</div></div>
+    <p class="reading-note">A lista é gerada a partir da amostra atual e substitui a anterior. São projeções estatísticas, não garantia de resultado.</p>
+  </section>
+
+  <section class="card reading-white-auto-card">
+    <div class="reading-card-head">
+      <div><span class="small">WHITE AUTOMÁTICO</span><h3>Próxima projeção de branco</h3></div>
+      <span class="reading-grade neutral" id="readingWhiteAutoStatus">ANALISANDO</span>
+    </div>
+    <div class="reading-white-auto-grid">
+      <div class="reading-white-auto-main"><span>HORÁRIO PROJETADO</span><strong id="readingWhiteAutoTime">—</strong><small id="readingWhiteAutoDetail">Aguardando base suficiente.</small></div>
+      <div><span>SCORE</span><strong id="readingWhiteAutoScore">—</strong></div>
+      <div><span>MARGEM</span><strong>6 CASAS</strong></div>
+      <div><span>CASAS PROCESSADAS</span><strong id="readingWhiteAutoProgress">0 / 6</strong></div>
+    </div>
+    <div class="reading-white-auto-result" id="readingWhiteAutoResult" hidden></div>
+    <div class="reading-card-head reading-white-history-head"><div><span class="small">HISTÓRICO AUTOMÁTICO</span><h3>Últimas 20 projeções WHITE</h3></div><div class="reading-history-summary"><span>ASSERTIVIDADE <strong id="readingWhiteAutoAccuracy">—</strong></span><button type="button" id="readingClearWhiteAuto">Limpar</button></div></div>
+    <div class="reading-white-auto-history" id="readingWhiteAutoHistory"><div class="analyst-empty">Nenhuma projeção finalizada ainda.</div></div>
+    <p class="reading-note">Após o horário projetado, cada rodada vale uma casa. O sistema encerra no primeiro branco entre as casas 1 e 6; sem branco, registra LOSS e calcula a próxima projeção.</p>
+  </section>
 
   <section class="card reading-history-card">
     <div class="reading-card-head reading-history-head">
@@ -479,6 +507,7 @@
 <script src="/js/catalogador.js"></script>
 <script src="/js/catalog-validator.js"></script>
 <script src="/js/sigma-leitura.js"></script>
+<script src="/js/sigma-projections.js"></script>
 
 
 <script src="/js/simulador.js"></script>

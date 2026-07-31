@@ -11,6 +11,68 @@
   const colorName = c => c==='red'?'VERMELHO':c==='black'?'PRETO':'BRANCO';
   const colorShort = c => c==='red'?'V':c==='black'?'P':'B';
 
+  const TELEGRAM_API = '/api/sigma-leitura-telegram';
+  function telegramCredentials(){
+    return {
+      license_key:String(localStorage.getItem('sigma_access_license')||''),
+      session_id:String(localStorage.getItem('sigma_access_session')||''),
+      device_id:String(localStorage.getItem('sigma_access_device')||'')
+    };
+  }
+  async function sendReadingTelegram(eventType,pending,extra={}){
+    if(!pending)return null;
+    const credentials=telegramCredentials();
+    if(!credentials.license_key||!credentials.session_id||!credentials.device_id)return null;
+    const response=await fetch(TELEGRAM_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        ...credentials,
+        event_id:`${pending.id}:${eventType}`,
+        event_type:eventType,
+        operation:{
+          id:pending.id,
+          target:pending.target,
+          score:pending.score,
+          grade:pending.grade,
+          pattern:pending.pattern,
+          created_at:pending.createdAt,
+          telegram_message_id:pending.telegramMessageId||null,
+          ...extra
+        }
+      })
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||data.ok===false)throw new Error(data.error||'Falha ao enviar ao Telegram.');
+    return data;
+  }
+  function queueTelegramEvent(eventType,pending,extra={}){
+    if(!pending)return;
+    const state=loadTracker();
+    if(!state.pending||state.pending.id!==pending.id)return;
+    state.pending.telegramEvents ||= {};
+    if(state.pending.telegramEvents[eventType])return;
+    state.pending.telegramEvents[eventType]='sending';
+    saveTracker(state);
+    sendReadingTelegram(eventType,state.pending,extra).then(data=>{
+      const latest=loadTracker();
+      if(latest.pending?.id===pending.id){
+        latest.pending.telegramEvents ||= {};
+        latest.pending.telegramEvents[eventType]='sent';
+        if(data?.message_id)latest.pending.telegramMessageId=data.message_id;
+        saveTracker(latest);
+      }
+    }).catch(error=>{
+      console.warn('[SIGMA LEITURA] Telegram:',error);
+      const latest=loadTracker();
+      if(latest.pending?.id===pending.id){
+        latest.pending.telegramEvents ||= {};
+        delete latest.pending.telegramEvents[eventType];
+        saveTracker(latest);
+      }
+    });
+  }
+
 
   const roundKey = r => String(r?.id ?? r?._id ?? r?.createdAt ?? r?.timestamp ?? '');
   function loadTracker(){
@@ -62,15 +124,27 @@
   }
   function settlePending(rounds){
     const state=loadTracker();
+    if(!state.pending)return state;
+    const progress=pendingStage(state.pending,rounds);
+    if(progress.after.length===1 && progress.after[0]?.color!==state.pending.target && progress.after[0]?.color!=='white'){
+      queueTelegramEvent('G1',state.pending,{first_color:progress.after[0]?.color});
+    }
     const settled=classifySuggestionResult(state.pending,rounds);
-    if(!settled)return state;
-    state.history.unshift({
+    if(!settled)return loadTracker();
+    const finished={
       ...state.pending,
       result:settled.result,
       resultClass:settled.resultClass,
       resolvedAt:settled.resolvedRound?.createdAt||new Date().toISOString(),
       resolvedColor:settled.resolvedRound?.color||null
-    });
+    };
+    // Dispara o resultado antes de remover a operação pendente.
+    sendReadingTelegram('RESULT',state.pending,{
+      result:finished.result,
+      resolved_at:finished.resolvedAt,
+      resolved_color:finished.resolvedColor
+    }).catch(error=>console.warn('[SIGMA LEITURA] Telegram resultado:',error));
+    state.history.unshift(finished);
     state.history=state.history.slice(0,HISTORY_LIMIT);
     state.pending=null;
     saveTracker(state);
@@ -81,8 +155,9 @@
     const state=loadTracker();
     if(state.pending)return state;
     const anchor=rounds.at(-1);
+    const stableAnchor=roundKey(anchor)||String(new Date(anchor?.createdAt||Date.now()).getTime());
     state.pending={
-      id:`reading-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,
+      id:`reading-${stableAnchor}-${entry}`,
       target:entry,
       score:Number(score)||0,
       grade:grade||'NEUTRO',
@@ -92,7 +167,8 @@
       createdAt:new Date().toISOString()
     };
     saveTracker(state);
-    return state;
+    queueTelegramEvent('SIGNAL',state.pending);
+    return loadTracker();
   }
   function renderSuggestionHistory(rounds=getRounds()){
     const state=loadTracker(), root=$('readingSuggestionHistory'), pending=$('readingPendingSuggestion');

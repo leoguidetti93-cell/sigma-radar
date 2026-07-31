@@ -1,6 +1,6 @@
 {
   "name": "SIGMA RADAR",
-  "version": "4.1.2",
+  "version": "4.1.3",
   "base": "1.3",
   "migration": "structural-only",
   "modules": [
@@ -24,7 +24,9 @@
     ],
     "whiteMarginMinutes": 1,
     "colorMaxGale": 1,
-    "telegram": true
+    "telegram": true,
+    "sigmaReadingColorTelegram": true,
+    "sigmaReadingWhiteTelegram": false
   },
-  "build": "WHITE_CONTINUOUS_SCANNER"
+  "build": "SIGMA_READING_COLOR_TELEGRAM_LIVE"
 }

@@ -44,4 +44,4 @@ return `<b>❌ WHITE FALHOU</b>
 ⏰ Sinal: <b>${escapeTelegram(signal.horario)}</b>
 📌 Janela encerrada sem branco.`}
 async function sendTelegramResult(signal,meta){return telegramSend(telegramResultMessage(signal,meta),meta.telegram_message_id)}
-module.exports={env,json,signToken,verifyToken,supabase,parseMeta,encodeMeta,decorate,brazilDate,sendTelegramSignal,sendTelegramResult};
+module.exports={env,json,signToken,verifyToken,supabase,parseMeta,encodeMeta,decorate,brazilDate,escapeTelegram,telegramSend,sendTelegramSignal,sendTelegramResult};

@@ -150,10 +150,11 @@
       <div><span>JANELA</span><strong>± 1 MIN</strong><small>6 casas por rodada</small></div>
       <div><span>CASAS PROCESSADAS</span><strong id="readingWhiteAutoProgress">0 / 6</strong></div>
     </div>
+    <div class="reading-white-auto-reasons" id="readingWhiteAutoReasons"><p>O scanner está procurando a melhor janela.</p></div>
     <div class="reading-white-auto-result" id="readingWhiteAutoResult" hidden></div>
     <div class="reading-card-head reading-white-history-head"><div><span class="small">HISTÓRICO AUTOMÁTICO</span><h3>Últimas 20 projeções WHITE</h3></div><div class="reading-history-summary"><span>ASSERTIVIDADE <strong id="readingWhiteAutoAccuracy">—</strong></span><button type="button" id="readingClearWhiteAuto">Limpar</button></div></div>
     <div class="reading-white-auto-history" id="readingWhiteAutoHistory"><div class="analyst-empty">Nenhuma projeção finalizada ainda.</div></div>
-    <p class="reading-note">A operação começa 1 minuto antes do horário projetado e termina 1 minuto depois: 2 rodadas no minuto anterior, 2 no minuto central e 2 no minuto seguinte. Cada rodada vale uma casa. Só há projeção com score mínimo 72.</p>
+    <p class="reading-note">A operação começa 1 minuto antes do horário projetado e termina 1 minuto depois: 2 rodadas no minuto anterior, 2 no minuto central e 2 no minuto seguinte. Cada rodada vale uma casa. O sistema prioriza score 72 ou mais. Quando não houver, mantém a melhor janela disponível em modo observação e continua recalculando até o início da operação.</p>
   </section>
 
   <section class="card reading-history-card">

@@ -1,10 +1,12 @@
-/* SIGMA ORION 4.1 — projeção COLOR 20 sinais + WHITE automático em 6 casas */
+/* SIGMA ORION 4.1.2 — projeção COLOR + WHITE contínuo com scanner de janela */
 (() => {
   'use strict';
   const COLOR_LIST_KEY = 'sigma_reading_color_projection_v1';
   const WHITE_KEY = 'sigma_reading_white_auto_v1';
   const HISTORY_LIMIT = 20;
   const WHITE_MIN_SCORE = 72;
+  const WHITE_OBSERVATION_MIN = 60;
+  const WHITE_SCAN_MINUTES = 240;
   const $ = id => document.getElementById(id);
   const roundKey = r => String(r?.id ?? r?._id ?? r?.createdAt ?? r?.created_at ?? r?.timestamp ?? '');
   const createdAt = r => r?.createdAt ?? r?.created_at ?? r?.timestamp;
@@ -116,23 +118,55 @@
     const gaps=[]; for(let i=1;i<idx.length;i++)gaps.push(idx[i]-idx[i-1]);
     return {idx,gaps,since:idx.length?rounds.length-1-idx.at(-1):rounds.length};
   }
+  function minuteWhiteModel(rounds){
+    const model=Array.from({length:60},()=>({white:0,total:0}));
+    rounds.forEach(r=>{
+      const d=new Date(r.createdAt); if(Number.isNaN(d.getTime()))return;
+      const m=d.getMinutes(); model[m].total++; if(r.color==='white')model[m].white++;
+    });
+    return model;
+  }
   function projectNextWhite(rounds){
     const {gaps,since}=whiteGaps(rounds);
     if(gaps.length<5)return null;
-    const recent=gaps.slice(-30);
+    const recent=gaps.slice(-40);
     const weighted=recent.reduce((sum,g,i)=>sum+g*(i+1),0)/recent.reduce((sum,_,i)=>sum+i+1,0);
     const med=median(recent);
     const expected=Math.round(weighted*.65+med*.35);
-    const roundsUntil=clamp(expected-since,2,40);
-    const minutesUntil=Math.max(1,Math.ceil(roundsUntil/2));
-    const target=new Date(); target.setSeconds(0,0); target.setMinutes(target.getMinutes()+minutesUntil);
     const mean=recent.reduce((a,b)=>a+b,0)/recent.length;
     const variance=recent.reduce((a,b)=>a+(b-mean)**2,0)/recent.length;
-    const score=clamp(Math.round(88-Math.sqrt(variance)*2-Math.abs(weighted-med)),55,91);
-    if(score < WHITE_MIN_SCORE) return null;
-    const windowStart=new Date(target.getTime()-60000);
-    const windowEnd=new Date(target.getTime()+120000);
-    return {id:`white-${Date.now()}`,targetAt:target.toISOString(),windowStartAt:windowStart.toISOString(),windowEndAt:windowEnd.toISOString(),createdAt:new Date().toISOString(),score,expectedGap:expected,sinceAtProjection:since,status:'WAITING',anchorKey:roundKey(rounds.at(-1))};
+    const spread=Math.sqrt(variance);
+    const minuteModel=minuteWhiteModel(rounds);
+    const recentWhites=rounds.slice(-120).filter(r=>r.color==='white').length;
+    const recentDensity=recentWhites/Math.max(1,Math.min(120,rounds.length));
+    const now=new Date(); now.setSeconds(0,0);
+    let best=null;
+    for(let minuteOffset=1; minuteOffset<=WHITE_SCAN_MINUTES; minuteOffset++){
+      const target=new Date(now.getTime()+minuteOffset*60000);
+      const projectedGap=since + minuteOffset*2;
+      const gapDistance=Math.abs(projectedGap-expected);
+      const gapScore=clamp(92-gapDistance*3,45,92);
+      const minuteStat=minuteModel[target.getMinutes()];
+      const minuteRate=minuteStat.total?minuteStat.white/minuteStat.total:0;
+      const minuteScore=clamp(Math.round(55+minuteRate*220),50,92);
+      const densityScore=clamp(Math.round(70+(recentDensity-.07)*180),55,88);
+      const stabilityScore=clamp(Math.round(88-spread*2-Math.abs(weighted-med)),50,90);
+      const distancePenalty=Math.min(12,Math.floor(minuteOffset/35));
+      const score=clamp(Math.round(gapScore*.42+minuteScore*.28+stabilityScore*.20+densityScore*.10-distancePenalty),50,94);
+      const reasons=[
+        `Intervalo projetado ${projectedGap} rodadas; referência ${expected}.`,
+        minuteStat.total?`Minuto ${String(target.getMinutes()).padStart(2,'0')} teve ${Math.round(minuteRate*100)}% de brancos na amostra.`:'Minuto ainda com pouca recorrência histórica.',
+        `Dispersão recente dos intervalos: ${spread.toFixed(1)}.`,
+        `${recentWhites} brancos nas últimas ${Math.min(120,rounds.length)} rodadas.`
+      ];
+      const candidate={id:`white-${Date.now()}-${minuteOffset}`,targetAt:target.toISOString(),createdAt:new Date().toISOString(),score,expectedGap:expected,sinceAtProjection:since,status:'WAITING',classification:score>=WHITE_MIN_SCORE?'ACTIVE':'OBSERVATION',reasons};
+      const targetMs=target.getTime();
+      candidate.windowStartAt=new Date(targetMs-60000).toISOString();
+      candidate.windowEndAt=new Date(targetMs+120000).toISOString();
+      if(!best || candidate.score>best.score || (candidate.score===best.score && targetMs<new Date(best.targetAt).getTime())) best=candidate;
+    }
+    if(best && best.score<WHITE_OBSERVATION_MIN)return null;
+    return best;
   }
   function loadWhite(){
     const st=safeLoad(WHITE_KEY,{active:null,history:[]});
@@ -161,10 +195,19 @@
   function ensureWhite(rounds){
     const state=loadWhite();
     settleAndRenew(state,rounds);
+    const candidate=projectNextWhite(rounds);
     if(!state.active){
-      const next=projectNextWhite(rounds);
-      if(next){state.active=next;state.waitingForScore=false;save(WHITE_KEY,state);}
+      if(candidate){state.active=candidate;state.waitingForScore=false;save(WHITE_KEY,state);}
       else {state.waitingForScore=true;save(WHITE_KEY,state);}
+      return state;
+    }
+    const windowStartMs=new Date(state.active.windowStartAt).getTime();
+    const frozen=Date.now()>=windowStartMs;
+    if(!frozen && candidate){
+      const activeStrong=state.active.score>=WHITE_MIN_SCORE;
+      const candidateStrong=candidate.score>=WHITE_MIN_SCORE;
+      const shouldReplace=(candidateStrong&&!activeStrong) || candidate.score>=state.active.score+3 || new Date(state.active.targetAt).getTime()<=Date.now();
+      if(shouldReplace){state.active=candidate;state.waitingForScore=false;save(WHITE_KEY,state);}
     }
     return state;
   }
@@ -179,16 +222,20 @@
       $('readingWhiteAutoTime').textContent=fmtTime(active.targetAt);
       $('readingWhiteAutoScore').textContent=active.score;
       $('readingWhiteAutoProgress').textContent=`${candidates.length} / 6`;
+      const strong=active.score>=WHITE_MIN_SCORE;
       $('readingWhiteAutoDetail').textContent=now<windowStartMs
         ? `Janela ${fmtTime(windowStartMs)} • ${fmtTime(active.targetAt)} • ${fmtTime(new Date(targetMs+60000))}`
         : `Operação ativa • ${candidates.length} casa(s) processada(s)`;
       const status=$('readingWhiteAutoStatus');
-      status.textContent=now<windowStartMs?'AGUARDANDO':'EM OPERAÇÃO';
-      status.className=`reading-grade ${now<windowStartMs?'attention':'strong'}`;
+      status.textContent=now<windowStartMs?(strong?'SINAL ATIVO':'EM OBSERVAÇÃO'):'EM OPERAÇÃO';
+      status.className=`reading-grade ${now<windowStartMs?(strong?'strong':'attention'):'strong'}`;
+      const reasons=$('readingWhiteAutoReasons');
+      if(reasons)reasons.innerHTML=(active.reasons||[]).map(x=>`<p>✓ ${x}</p>`).join('');
     }else{
-      $('readingWhiteAutoTime').textContent='—';$('readingWhiteAutoScore').textContent=state.waitingForScore?`< ${WHITE_MIN_SCORE}`:'—';$('readingWhiteAutoProgress').textContent='0 / 6';
-      $('readingWhiteAutoDetail').textContent=state.waitingForScore?`Nenhum cenário atingiu o score mínimo ${WHITE_MIN_SCORE}. O sistema continua analisando.`:'Aguardando base suficiente.';
-      const status=$('readingWhiteAutoStatus');status.textContent=state.waitingForScore?'SEM ENTRADA':'ANALISANDO';status.className='reading-grade neutral';
+      $('readingWhiteAutoTime').textContent='—';$('readingWhiteAutoScore').textContent='—';$('readingWhiteAutoProgress').textContent='0 / 6';
+      $('readingWhiteAutoDetail').textContent=state.waitingForScore?'Procurando a melhor janela nas próximas horas.':'Aguardando base suficiente.';
+      const status=$('readingWhiteAutoStatus');status.textContent='PROCURANDO';status.className='reading-grade neutral';
+      const reasons=$('readingWhiteAutoReasons');if(reasons)reasons.innerHTML='<p>O scanner continua avaliando as próximas 4 horas.</p>';
     }
     const root=$('readingWhiteAutoHistory');
     if(!state.history.length)root.innerHTML='<div class="analyst-empty">Nenhuma projeção finalizada ainda.</div>';

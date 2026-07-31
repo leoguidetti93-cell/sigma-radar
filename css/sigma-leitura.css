@@ -39,3 +39,11 @@
 .reading-white-auto-card .reading-note{position:relative;z-index:1;margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06)}
 @media(max-width:900px){.reading-white-auto-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.reading-white-auto-card:before{font-size:86px;right:4px}.reading-white-auto-grid{grid-template-columns:1fr}.reading-white-auto-grid>div{min-height:78px}}
+
+
+/* 4.1.2 — WHITE contínuo */
+.reading-white-auto-reasons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 16px}
+.reading-white-auto-reasons p{margin:0;padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.025);font-size:12px;color:var(--muted)}
+.reading-white-auto-card .reading-grade.strong{box-shadow:0 0 0 1px rgba(55,214,122,.15) inset}
+.reading-white-auto-card .reading-grade.attention{box-shadow:0 0 0 1px rgba(255,190,70,.15) inset}
+@media(max-width:700px){.reading-white-auto-reasons{grid-template-columns:1fr}}

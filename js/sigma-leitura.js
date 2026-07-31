@@ -1,4 +1,4 @@
-/* SIGMA LEITURA 1.2 — uma operação por vez + histórico automático das últimas 20 sugestões */
+/* SIGMA LEITURA 1.3 — máquina de estados + fila Telegram ordenada */
 (() => {
   'use strict';
   let started = false;
@@ -203,26 +203,46 @@
     }
     const settled=classifySuggestionResult(state.pending,rounds);
     if(!settled)return loadTracker();
+
+    // Máquina de estados: enquanto o RESULTADO não for confirmado pelo endpoint,
+    // a operação permanece bloqueada e nenhuma nova sugestão pode ser registrada.
+    if(state.pending.phase==='SETTLING')return state;
+    const operationId=state.pending.id;
     const finished={
       ...state.pending,
+      phase:'SETTLING',
       result:settled.result,
       resultClass:settled.resultClass,
       resolvedAt:settled.resolvedRound?.createdAt||new Date().toISOString(),
       resolvedColor:settled.resolvedRound?.color||null
     };
-    // Dispara o resultado antes de remover a operação pendente.
-    sendReadingTelegram('RESULT',state.pending,{
-      result:finished.result,
-      resolved_at:finished.resolvedAt,
-      resolved_color:finished.resolvedColor
-    }).catch(error=>console.warn('[SIGMA LEITURA] Telegram resultado:',error));
-    recordSettledStats(finished);
-    state.history.unshift(finished);
-    state.history=state.history.slice(0,HISTORY_LIMIT);
-    state.pending=null;
-    state.nextSignalAfter=Date.now()+NEXT_SIGNAL_DELAY_MS;
+    state.pending=finished;
     saveTracker(state);
-    setTimeout(()=>render(true),NEXT_SIGNAL_DELAY_MS+60);
+
+    (async()=>{
+      try{
+        // Ordem obrigatória: RESULTADO -> confirmação do Telegram -> espera 1s -> novo sinal.
+        await sendReadingTelegram('RESULT',finished,{
+          result:finished.result,
+          resolved_at:finished.resolvedAt,
+          resolved_color:finished.resolvedColor
+        });
+      }catch(error){
+        console.warn('[SIGMA LEITURA] Telegram resultado:',error);
+      }
+
+      const latest=loadTracker();
+      if(latest.pending?.id!==operationId)return;
+      recordSettledStats(finished);
+      latest.history.unshift(finished);
+      latest.history=latest.history.slice(0,HISTORY_LIMIT);
+      latest.pending=null;
+      latest.nextSignalAfter=Date.now()+NEXT_SIGNAL_DELAY_MS;
+      saveTracker(latest);
+
+      setTimeout(()=>render(true),NEXT_SIGNAL_DELAY_MS+30);
+    })();
+
     return state;
   }
   function registerSuggestion(rounds,entry,score,grade,pattern){
@@ -250,8 +270,8 @@
     if(pending){
       if(state.pending){
         const progress=pendingStage(state.pending,rounds);
-        const stageText=progress.stage==='AGUARDANDO DIRETA'?'Aguardando a rodada da entrada':progress.stage==='AGUARDANDO G1'?'Direta não confirmou • aguardando G1':'Finalizando operação';
-        pending.innerHTML=`<span class="reading-history-entry ${state.pending.target}">${colorName(state.pending.target)}</span><div><strong>${stageText}</strong><small>Gerada às ${formatRoundTime(state.pending.createdAt)} • score ${state.pending.score} • nenhuma nova sugestão até o resultado</small></div><b>${progress.stage}</b>`;
+        const stageText=state.pending.phase==='SETTLING'?'Enviando resultado • próxima entrada bloqueada':progress.stage==='AGUARDANDO DIRETA'?'Aguardando a rodada da entrada':progress.stage==='AGUARDANDO G1'?'Direta não confirmou • aguardando G1':'Finalizando operação';
+        pending.innerHTML=`<span class="reading-history-entry ${state.pending.target}">${colorName(state.pending.target)}</span><div><strong>${stageText}</strong><small>Gerada às ${formatRoundTime(state.pending.createdAt)} • score ${state.pending.score} • nenhuma nova sugestão até o resultado e o intervalo de 1 segundo</small></div><b>${state.pending.phase==='SETTLING'?'PROCESSANDO':progress.stage}</b>`;
         pending.hidden=false;
       }else pending.hidden=true;
     }

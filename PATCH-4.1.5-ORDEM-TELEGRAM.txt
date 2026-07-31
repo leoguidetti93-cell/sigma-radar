@@ -1,0 +1,8 @@
+SIGMA ORION 4.1.5 — ORDEM DO TELEGRAM
+
+- COLOR ao vivo convertido para máquina de estados.
+- A operação permanece bloqueada em SETTLING até o endpoint confirmar o envio do resultado.
+- Somente depois da confirmação começa a espera de 1 segundo.
+- Após 1 segundo o próximo sinal pode ser calculado e enviado.
+- Impede novo sinal antes de WIN DIRETA, WIN G1, WIN BRANCO ou LOSS da operação anterior.
+- Mantidos os resumos de 30 minutos e o fechamento diário das 23:59.

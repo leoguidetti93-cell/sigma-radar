@@ -4,6 +4,7 @@
   const COLOR_LIST_KEY = 'sigma_reading_color_projection_v1';
   const WHITE_KEY = 'sigma_reading_white_auto_v1';
   const HISTORY_LIMIT = 20;
+  const WHITE_MIN_SCORE = 72;
   const $ = id => document.getElementById(id);
   const roundKey = r => String(r?.id ?? r?._id ?? r?.createdAt ?? r?.created_at ?? r?.timestamp ?? '');
   const createdAt = r => r?.createdAt ?? r?.created_at ?? r?.timestamp;
@@ -128,7 +129,10 @@
     const mean=recent.reduce((a,b)=>a+b,0)/recent.length;
     const variance=recent.reduce((a,b)=>a+(b-mean)**2,0)/recent.length;
     const score=clamp(Math.round(88-Math.sqrt(variance)*2-Math.abs(weighted-med)),55,91);
-    return {id:`white-${Date.now()}`,targetAt:target.toISOString(),createdAt:new Date().toISOString(),score,expectedGap:expected,sinceAtProjection:since,status:'WAITING',anchorKey:roundKey(rounds.at(-1))};
+    if(score < WHITE_MIN_SCORE) return null;
+    const windowStart=new Date(target.getTime()-60000);
+    const windowEnd=new Date(target.getTime()+120000);
+    return {id:`white-${Date.now()}`,targetAt:target.toISOString(),windowStartAt:windowStart.toISOString(),windowEndAt:windowEnd.toISOString(),createdAt:new Date().toISOString(),score,expectedGap:expected,sinceAtProjection:since,status:'WAITING',anchorKey:roundKey(rounds.at(-1))};
   }
   function loadWhite(){
     const st=safeLoad(WHITE_KEY,{active:null,history:[]});
@@ -137,8 +141,11 @@
   }
   function settleAndRenew(state,rounds){
     const active=state.active; if(!active)return false;
-    const targetMs=new Date(active.targetAt).getTime(); if(Date.now()<targetMs)return false;
-    const candidates=rounds.filter(r=>new Date(r.createdAt).getTime()>=targetMs).slice(0,6);
+    const targetMs=new Date(active.targetAt).getTime();
+    const windowStartMs=new Date(active.windowStartAt||new Date(targetMs-60000)).getTime();
+    const windowEndMs=new Date(active.windowEndAt||new Date(targetMs+120000)).getTime();
+    if(Date.now()<windowStartMs)return false;
+    const candidates=rounds.filter(r=>{const ms=new Date(r.createdAt).getTime();return ms>=windowStartMs&&ms<windowEndMs;}).slice(0,6);
     const winIndex=candidates.findIndex(r=>r.color==='white');
     if(winIndex>=0){
       state.history.unshift({...active,status:'WIN',result:`WIN CASA ${winIndex+1}`,house:winIndex+1,resolvedAt:candidates[winIndex].createdAt});
@@ -154,21 +161,34 @@
   function ensureWhite(rounds){
     const state=loadWhite();
     settleAndRenew(state,rounds);
-    if(!state.active){ const next=projectNextWhite(rounds); if(next){state.active=next;save(WHITE_KEY,state);} }
+    if(!state.active){
+      const next=projectNextWhite(rounds);
+      if(next){state.active=next;state.waitingForScore=false;save(WHITE_KEY,state);}
+      else {state.waitingForScore=true;save(WHITE_KEY,state);}
+    }
     return state;
   }
   function renderWhite(){
     const rounds=getRounds(), state=ensureWhite(rounds), active=state.active;
     if(active){
       const targetMs=new Date(active.targetAt).getTime();
-      const candidates=Date.now()>=targetMs?rounds.filter(r=>new Date(r.createdAt).getTime()>=targetMs).slice(0,6):[];
+      const windowStartMs=new Date(active.windowStartAt||new Date(targetMs-60000)).getTime();
+      const windowEndMs=new Date(active.windowEndAt||new Date(targetMs+120000)).getTime();
+      const now=Date.now();
+      const candidates=now>=windowStartMs?rounds.filter(r=>{const ms=new Date(r.createdAt).getTime();return ms>=windowStartMs&&ms<windowEndMs;}).slice(0,6):[];
       $('readingWhiteAutoTime').textContent=fmtTime(active.targetAt);
       $('readingWhiteAutoScore').textContent=active.score;
       $('readingWhiteAutoProgress').textContent=`${candidates.length} / 6`;
-      $('readingWhiteAutoDetail').textContent=Date.now()<targetMs?`Aguardando o horário • intervalo estimado ${active.expectedGap} rodadas`:`Operação ativa • procurando o primeiro branco`;
-      const status=$('readingWhiteAutoStatus'); status.textContent=Date.now()<targetMs?'AGUARDANDO':'EM OPERAÇÃO';status.className=`reading-grade ${Date.now()<targetMs?'attention':'strong'}`;
+      $('readingWhiteAutoDetail').textContent=now<windowStartMs
+        ? `Janela ${fmtTime(windowStartMs)} • ${fmtTime(active.targetAt)} • ${fmtTime(new Date(targetMs+60000))}`
+        : `Operação ativa • ${candidates.length} casa(s) processada(s)`;
+      const status=$('readingWhiteAutoStatus');
+      status.textContent=now<windowStartMs?'AGUARDANDO':'EM OPERAÇÃO';
+      status.className=`reading-grade ${now<windowStartMs?'attention':'strong'}`;
     }else{
-      $('readingWhiteAutoTime').textContent='—';$('readingWhiteAutoScore').textContent='—';$('readingWhiteAutoProgress').textContent='0 / 6';
+      $('readingWhiteAutoTime').textContent='—';$('readingWhiteAutoScore').textContent=state.waitingForScore?`< ${WHITE_MIN_SCORE}`:'—';$('readingWhiteAutoProgress').textContent='0 / 6';
+      $('readingWhiteAutoDetail').textContent=state.waitingForScore?`Nenhum cenário atingiu o score mínimo ${WHITE_MIN_SCORE}. O sistema continua analisando.`:'Aguardando base suficiente.';
+      const status=$('readingWhiteAutoStatus');status.textContent=state.waitingForScore?'SEM ENTRADA':'ANALISANDO';status.className='reading-grade neutral';
     }
     const root=$('readingWhiteAutoHistory');
     if(!state.history.length)root.innerHTML='<div class="analyst-empty">Nenhuma projeção finalizada ainda.</div>';

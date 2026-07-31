@@ -9,7 +9,19 @@ async function validateAccess(body){
   return response.ok&&data.ok;
 }
 function colorLabel(value){return String(value).toLowerCase()==='black'?'⚫ PRETO':'🔴 VERMELHO'}
-function message(type,op){
+function message(type,op,summary={}){
+  if(type==='SESSION_SUMMARY'||type==='DAILY_SUMMARY'){
+    const title=type==='DAILY_SUMMARY'?'📅 RESULTADO GERAL DO DIA':'⏱ RESULTADO DA SESSÃO • 30 MIN';
+    return `<b>Σ SIGMA LEITURA • COLOR</b>
+
+<b>${title}</b>
+
+📡 Sinais: <b>${Number(summary.signals)||0}</b>
+✅ Wins: <b>${Number(summary.wins)||0}</b>
+⚪ Brancos: <b>${Number(summary.whites)||0}</b>
+❌ Loss: <b>${Number(summary.losses)||0}</b>
+📊 Assertividade: <b>${Number(summary.accuracy)||0}%</b>`;
+  }
   const color=colorLabel(op.target);
   const score=Math.max(0,Math.min(100,Number(op.score)||0));
   if(type==='SIGNAL')return `<b>Σ SIGMA LEITURA • COLOR</b>\n\n🎯 Entrada: <b>${color}</b>\n⚪ Proteção no branco\n🛡 Cobertura até G1\n📊 Score: <b>${score}</b>`;
@@ -27,11 +39,12 @@ module.exports=async function handler(req,res){
     const eventId=String(req.body?.event_id||'').slice(0,180);
     const eventType=String(req.body?.event_type||'').toUpperCase();
     const op=req.body?.operation||{};
-    if(!eventId||!['SIGNAL','G1','RESULT'].includes(eventType))return json(res,400,{ok:false,error:'Evento inválido.'});
+    const summary=req.body?.summary||{};
+    if(!eventId||!['SIGNAL','G1','RESULT','SESSION_SUMMARY','DAILY_SUMMARY'].includes(eventType))return json(res,400,{ok:false,error:'Evento inválido.'});
     cleanEvents();
     if(recentEvents.has(eventId))return json(res,200,{ok:true,deduplicated:true});
-    const replyId=eventType==='SIGNAL'?null:Number(op.telegram_message_id)||null;
-    const sent=await telegramSend(message(eventType,op),replyId);
+    const replyId=['SIGNAL','SESSION_SUMMARY','DAILY_SUMMARY'].includes(eventType)?null:Number(op.telegram_message_id)||null;
+    const sent=await telegramSend(message(eventType,op,summary),replyId);
     if(!sent.ok)return json(res,502,{ok:false,error:sent.error||'Telegram indisponível.',configured:sent.configured});
     recentEvents.set(eventId,Date.now());
     return json(res,200,{ok:true,message_id:sent.message_id||null});

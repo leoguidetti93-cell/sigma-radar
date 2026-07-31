@@ -1,6 +1,6 @@
 {
   "name": "SIGMA RADAR",
-  "version": "4.1.3",
+  "version": "4.1.4",
   "base": "1.3",
   "migration": "structural-only",
   "modules": [
@@ -26,7 +26,10 @@
     "colorMaxGale": 1,
     "telegram": true,
     "sigmaReadingColorTelegram": true,
-    "sigmaReadingWhiteTelegram": false
+    "sigmaReadingWhiteTelegram": false,
+    "telegramDelayMs": 1000,
+    "sessionSummaryMinutes": 30,
+    "dailySummaryAt": "23:59"
   },
-  "build": "SIGMA_READING_COLOR_TELEGRAM_LIVE"
+  "build": "SIGMA_READING_COLOR_TELEGRAM_QUEUE_SUMMARIES"
 }

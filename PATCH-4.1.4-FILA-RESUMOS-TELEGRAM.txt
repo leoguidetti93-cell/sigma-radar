@@ -1,0 +1,8 @@
+SIGMA ORION 4.1.4
+
+- Aguarda 1 segundo entre o resultado/G1 da operação anterior e o próximo sinal COLOR.
+- Mantém fila lógica para evitar inversão visual no Telegram.
+- Envia resumo COLOR a cada 30 minutos com sinais, wins, brancos, loss e assertividade.
+- Envia resumo geral do dia às 23:59 com os mesmos indicadores.
+- Assertividade = (wins de cor + wins no branco) / quantidade de sinais.
+- Resumos são disparados pelo navegador enquanto o ORION estiver aberto.

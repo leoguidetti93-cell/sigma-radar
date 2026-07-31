@@ -4,6 +4,9 @@
   let started = false;
   const HISTORY_KEY = 'sigma_reading_suggestions_v1';
   const HISTORY_LIMIT = 20;
+  const STATS_KEY = 'sigma_reading_color_stats_v1';
+  const SUMMARY_KEY = 'sigma_reading_color_summary_v1';
+  const NEXT_SIGNAL_DELAY_MS = 1000;
   let lastRenderedRoundKey = null;
   const $ = id => document.getElementById(id);
   const pct = (n,d) => d ? Math.round(n/d*100) : 0;
@@ -78,8 +81,8 @@
   function loadTracker(){
     try{
       const parsed=JSON.parse(localStorage.getItem(HISTORY_KEY)||'{}');
-      return {pending:parsed.pending||null,history:Array.isArray(parsed.history)?parsed.history.slice(0,HISTORY_LIMIT):[]};
-    }catch(_){ return {pending:null,history:[]}; }
+      return {pending:parsed.pending||null,history:Array.isArray(parsed.history)?parsed.history.slice(0,HISTORY_LIMIT):[],nextSignalAfter:Number(parsed.nextSignalAfter)||0};
+    }catch(_){ return {pending:null,history:[],nextSignalAfter:0}; }
   }
   function saveTracker(state){
     state.history=(state.history||[]).slice(0,HISTORY_LIMIT);
@@ -88,6 +91,75 @@
   function formatRoundTime(value){
     if(!value)return '—';
     const d=new Date(value); return Number.isNaN(d.getTime())?'—':d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }
+
+  const dayKey = value => {
+    const d=value instanceof Date?value:new Date(value||Date.now());
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  };
+  const halfHourKey = value => {
+    const d=value instanceof Date?value:new Date(value||Date.now());
+    const minute=d.getMinutes()<30?'00':'30';
+    return `${dayKey(d)}T${String(d.getHours()).padStart(2,'0')}:${minute}`;
+  };
+  function emptyStats(){return {signals:0,wins:0,losses:0,whites:0,direct:0,g1:0,processedIds:[]};}
+  function loadStats(){
+    try{return JSON.parse(localStorage.getItem(STATS_KEY)||'{"days":{},"sessions":{}}')}catch(_){return {days:{},sessions:{}}}
+  }
+  function saveStats(stats){
+    const cutoff=new Date(); cutoff.setDate(cutoff.getDate()-3);
+    for(const key of Object.keys(stats.days||{}))if(key<dayKey(cutoff))delete stats.days[key];
+    const sessionKeys=Object.keys(stats.sessions||{}).sort().slice(-160);
+    stats.sessions=Object.fromEntries(sessionKeys.map(k=>[k,stats.sessions[k]]));
+    localStorage.setItem(STATS_KEY,JSON.stringify(stats));
+  }
+  function recordSettledStats(item){
+    const stats=loadStats(); stats.days ||= {}; stats.sessions ||= {};
+    const dKey=dayKey(item.resolvedAt||Date.now()), sKey=halfHourKey(item.resolvedAt||Date.now());
+    for(const bucket of [stats.days[dKey] ||= emptyStats(),stats.sessions[sKey] ||= emptyStats()]){
+      bucket.processedIds ||= [];
+      if(bucket.processedIds.includes(item.id))continue;
+      bucket.processedIds.push(item.id); bucket.processedIds=bucket.processedIds.slice(-500);
+      bucket.signals++;
+      if(item.result==='LOSS')bucket.losses++;
+      else if(item.result==='WIN BRANCO')bucket.whites++;
+      else {bucket.wins++; if(item.result==='WIN DIRETA')bucket.direct++; if(item.result==='WIN G1')bucket.g1++;}
+    }
+    saveStats(stats);
+  }
+  const accuracy = stats => stats?.signals ? Math.round(((Number(stats.wins)||0)+(Number(stats.whites)||0))/stats.signals*100) : 0;
+  function loadSummaryState(){try{return JSON.parse(localStorage.getItem(SUMMARY_KEY)||'{}')}catch(_){return {}}}
+  function saveSummaryState(state){localStorage.setItem(SUMMARY_KEY,JSON.stringify(state));}
+  async function sendSummaryTelegram(eventType,summary,eventId){
+    const credentials=telegramCredentials();
+    if(!credentials.license_key||!credentials.session_id||!credentials.device_id)return null;
+    const response=await fetch(TELEGRAM_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...credentials,event_id:eventId,event_type:eventType,summary})});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||data.ok===false)throw new Error(data.error||'Falha ao enviar resumo ao Telegram.');
+    return data;
+  }
+  function previousHalfHourSlot(now=new Date()){
+    const d=new Date(now); d.setSeconds(0,0);
+    if(d.getMinutes()<30){d.setHours(d.getHours()-1,30,0,0)}else d.setMinutes(0,0,0);
+    return halfHourKey(d);
+  }
+  function maybeSendSummaries(){
+    const now=new Date(), state=loadSummaryState(), stats=loadStats();
+    const currentSlot=halfHourKey(now), previousSlot=previousHalfHourSlot(now);
+    if(state.currentSlot && state.currentSlot!==currentSlot && state.lastSessionSent!==previousSlot){
+      const bucket=stats.sessions?.[previousSlot]||emptyStats();
+      const summary={period:previousSlot,signals:bucket.signals||0,wins:bucket.wins||0,losses:bucket.losses||0,whites:bucket.whites||0,direct:bucket.direct||0,g1:bucket.g1||0,accuracy:accuracy(bucket)};
+      state.lastSessionSent=previousSlot; saveSummaryState(state);
+      sendSummaryTelegram('SESSION_SUMMARY',summary,`session:${previousSlot}`).catch(e=>{console.warn('[SIGMA LEITURA] Resumo 30min:',e);const s=loadSummaryState();if(s.lastSessionSent===previousSlot)delete s.lastSessionSent;saveSummaryState(s)});
+    }
+    state.currentSlot=currentSlot;
+    const today=dayKey(now);
+    if(now.getHours()===23 && now.getMinutes()===59 && state.lastDailySent!==today){
+      const bucket=stats.days?.[today]||emptyStats();
+      const summary={period:today,signals:bucket.signals||0,wins:bucket.wins||0,losses:bucket.losses||0,whites:bucket.whites||0,direct:bucket.direct||0,g1:bucket.g1||0,accuracy:accuracy(bucket)};
+      state.lastDailySent=today; saveSummaryState(state);
+      sendSummaryTelegram('DAILY_SUMMARY',summary,`daily:${today}`).catch(e=>{console.warn('[SIGMA LEITURA] Resumo diário:',e);const s=loadSummaryState();if(s.lastDailySent===today)delete s.lastDailySent;saveSummaryState(s)});
+    }else saveSummaryState(state);
   }
 
   function pendingStage(pending,rounds){
@@ -144,16 +216,19 @@
       resolved_at:finished.resolvedAt,
       resolved_color:finished.resolvedColor
     }).catch(error=>console.warn('[SIGMA LEITURA] Telegram resultado:',error));
+    recordSettledStats(finished);
     state.history.unshift(finished);
     state.history=state.history.slice(0,HISTORY_LIMIT);
     state.pending=null;
+    state.nextSignalAfter=Date.now()+NEXT_SIGNAL_DELAY_MS;
     saveTracker(state);
+    setTimeout(()=>render(true),NEXT_SIGNAL_DELAY_MS+60);
     return state;
   }
   function registerSuggestion(rounds,entry,score,grade,pattern){
     if(!entry||!rounds.length)return loadTracker();
     const state=loadTracker();
-    if(state.pending)return state;
+    if(state.pending||Date.now()<(state.nextSignalAfter||0))return state;
     const anchor=rounds.at(-1);
     const stableAnchor=roundKey(anchor)||String(new Date(anchor?.createdAt||Date.now()).getTime());
     state.pending={
@@ -254,6 +329,7 @@
   function render(force=false){
     const rounds=getRounds(); const latest=rounds.at(-1);
     let tracker=settlePending(rounds);
+    maybeSendSummaries();
     if($('readingSampleCount'))$('readingSampleCount').textContent=`${rounds.length} / 3000`;
     if($('readingLatestTime'))$('readingLatestTime').textContent=latest?new Date(latest.createdAt).toLocaleTimeString('pt-BR'):'—';
     if($('readingUpdatedAt'))$('readingUpdatedAt').textContent=new Date().toLocaleTimeString('pt-BR');

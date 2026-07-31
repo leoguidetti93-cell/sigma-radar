@@ -1,4 +1,4 @@
-/* SIGMA LEITURA 1.3 — máquina de estados + fila Telegram ordenada */
+/* SIGMA LEITURA 1.5 — fluxo por rodada + recuperação de trava */
 (() => {
   'use strict';
   let started = false;
@@ -8,6 +8,7 @@
   const SUMMARY_KEY = 'sigma_reading_color_summary_v1';
   const NEXT_SIGNAL_DELAY_MS = 1000;
   let lastRenderedRoundKey = null;
+  let renderInProgress = false;
   const $ = id => document.getElementById(id);
   const pct = (n,d) => d ? Math.round(n/d*100) : 0;
   const median = values => { if(!values.length)return 0; const a=[...values].sort((x,y)=>x-y),m=Math.floor(a.length/2); return a.length%2?a[m]:(a[m-1]+a[m])/2; };
@@ -81,8 +82,8 @@
   function loadTracker(){
     try{
       const parsed=JSON.parse(localStorage.getItem(HISTORY_KEY)||'{}');
-      return {pending:parsed.pending||null,history:Array.isArray(parsed.history)?parsed.history.slice(0,HISTORY_LIMIT):[],nextSignalAfter:Number(parsed.nextSignalAfter)||0};
-    }catch(_){ return {pending:null,history:[],nextSignalAfter:0}; }
+      return {pending:parsed.pending||null,history:Array.isArray(parsed.history)?parsed.history.slice(0,HISTORY_LIMIT):[],nextSignalAfter:Number(parsed.nextSignalAfter)||0,lastSignalAnchorKey:String(parsed.lastSignalAnchorKey||'')};
+    }catch(_){ return {pending:null,history:[],nextSignalAfter:0,lastSignalAnchorKey:''}; }
   }
   function saveTracker(state){
     state.history=(state.history||[]).slice(0,HISTORY_LIMIT);
@@ -162,14 +163,23 @@
     }else saveSummaryState(state);
   }
 
+  function roundsAfterPending(pending,rounds){
+    if(!pending)return [];
+    const exactIndex=rounds.findIndex(r=>roundKey(r)===pending.anchorKey);
+    if(exactIndex>=0)return rounds.slice(exactIndex+1);
+    const anchorTime=new Date(pending.anchorAt||pending.createdAt||0).getTime();
+    if(!Number.isFinite(anchorTime))return [];
+    // Quando o ID da rodada não está mais na memória, usa apenas rodadas realmente posteriores.
+    // Nunca transforma a primeira rodada futura em nova âncora, pois isso fazia a operação travar.
+    return rounds.filter(r=>{
+      const time=new Date(r.createdAt||r.timestamp||0).getTime();
+      return Number.isFinite(time)&&time>anchorTime;
+    });
+  }
+
   function pendingStage(pending,rounds){
     if(!pending)return {stage:'IDLE',after:[]};
-    let anchor=rounds.findIndex(r=>roundKey(r)===pending.anchorKey);
-    if(anchor<0){
-      const t=new Date(pending.anchorAt).getTime();
-      anchor=rounds.findIndex(r=>new Date(r.createdAt).getTime()>=t);
-    }
-    const after=anchor>=0?rounds.slice(anchor+1):[];
+    const after=roundsAfterPending(pending,rounds);
     if(after.length===0)return {stage:'AGUARDANDO DIRETA',after};
     if(after.length===1)return {stage:'AGUARDANDO G1',after};
     return {stage:'FINALIZANDO',after};
@@ -177,13 +187,7 @@
 
   function classifySuggestionResult(pending,rounds){
     if(!pending)return null;
-    let anchor=rounds.findIndex(r=>roundKey(r)===pending.anchorKey);
-    if(anchor<0){
-      const t=new Date(pending.anchorAt).getTime();
-      anchor=rounds.findIndex(r=>new Date(r.createdAt).getTime()>=t);
-    }
-    if(anchor<0)return null;
-    const after=rounds.slice(anchor+1);
+    const after=roundsAfterPending(pending,rounds);
     if(!after.length)return null;
     const first=after[0]?.color;
     if(first===pending.target)return {result:'WIN DIRETA',resultClass:'direct',resolvedRound:after[0]};
@@ -197,10 +201,39 @@
   function settlePending(rounds){
     const state=loadTracker();
     if(!state.pending)return state;
-    const progress=pendingStage(state.pending,rounds);
-    if(progress.after.length===1 && progress.after[0]?.color!==state.pending.target && progress.after[0]?.color!=='white'){
-      queueTelegramEvent('G1',state.pending,{first_color:progress.after[0]?.color});
+
+    // Recuperação automática: uma falha de rede ou atualização da página não pode deixar
+    // a operação presa para sempre em PROCESSANDO.
+    if(state.pending.phase==='SETTLING'){
+      const settlingAt=new Date(state.pending.settlingAt||state.pending.resolvedAt||0).getTime();
+      if(Number.isFinite(settlingAt)&&Date.now()-settlingAt>5000){
+        const recovered={...state.pending};
+        recordSettledStats(recovered);
+        state.history.unshift(recovered);
+        state.history=state.history.slice(0,HISTORY_LIMIT);
+        state.pending=null;
+        state.nextSignalAfter=Date.now()+NEXT_SIGNAL_DELAY_MS;
+        saveTracker(state);
+        return state;
+      }
+      return state;
     }
+    const progress=pendingStage(state.pending,rounds);
+
+    // A passagem para G1 NÃO encerra a operação e NÃO libera uma nova sugestão.
+    // Primeiro gravamos a fase G1 no estado persistente; somente depois enviamos o aviso.
+    if(progress.after.length===1 && progress.after[0]?.color!==state.pending.target && progress.after[0]?.color!=='white'){
+      const firstRoundKey=roundKey(progress.after[0]);
+      if(state.pending.phase!=='G1' || state.pending.g1RoundKey!==firstRoundKey){
+        state.pending.phase='G1';
+        state.pending.g1RoundKey=firstRoundKey;
+        state.pending.g1StartedAt=progress.after[0]?.createdAt||new Date().toISOString();
+        saveTracker(state);
+      }
+      queueTelegramEvent('G1',state.pending,{first_color:progress.after[0]?.color});
+      return loadTracker();
+    }
+
     const settled=classifySuggestionResult(state.pending,rounds);
     if(!settled)return loadTracker();
 
@@ -214,7 +247,8 @@
       result:settled.result,
       resultClass:settled.resultClass,
       resolvedAt:settled.resolvedRound?.createdAt||new Date().toISOString(),
-      resolvedColor:settled.resolvedRound?.color||null
+      resolvedColor:settled.resolvedRound?.color||null,
+      settlingAt:new Date().toISOString()
     };
     state.pending=finished;
     saveTracker(state);
@@ -250,6 +284,8 @@
     const state=loadTracker();
     if(state.pending||Date.now()<(state.nextSignalAfter||0))return state;
     const anchor=rounds.at(-1);
+    const currentRoundKey=roundKey(anchor);
+    if(state.lastSignalAnchorKey&&state.lastSignalAnchorKey===currentRoundKey)return state;
     const stableAnchor=roundKey(anchor)||String(new Date(anchor?.createdAt||Date.now()).getTime());
     state.pending={
       id:`reading-${stableAnchor}-${entry}`,
@@ -259,8 +295,10 @@
       pattern:pattern?pattern.pattern.map(colorShort).join(' • '):'LEITURA DINÂMICA',
       anchorKey:roundKey(anchor),
       anchorAt:anchor.createdAt||new Date().toISOString(),
-      createdAt:new Date().toISOString()
+      createdAt:new Date().toISOString(),
+      phase:'DIRECT'
     };
+    state.lastSignalAnchorKey=currentRoundKey;
     saveTracker(state);
     queueTelegramEvent('SIGNAL',state.pending);
     return loadTracker();
@@ -270,7 +308,7 @@
     if(pending){
       if(state.pending){
         const progress=pendingStage(state.pending,rounds);
-        const stageText=state.pending.phase==='SETTLING'?'Enviando resultado • próxima entrada bloqueada':progress.stage==='AGUARDANDO DIRETA'?'Aguardando a rodada da entrada':progress.stage==='AGUARDANDO G1'?'Direta não confirmou • aguardando G1':'Finalizando operação';
+        const stageText=state.pending.phase==='SETTLING'?'Enviando resultado • próxima entrada bloqueada':state.pending.phase==='G1'?'G1 liberado • operação original permanece ativa':progress.stage==='AGUARDANDO DIRETA'?'Aguardando a rodada da entrada':progress.stage==='AGUARDANDO G1'?'Direta não confirmou • aguardando G1':'Finalizando operação';
         pending.innerHTML=`<span class="reading-history-entry ${state.pending.target}">${colorName(state.pending.target)}</span><div><strong>${stageText}</strong><small>Gerada às ${formatRoundTime(state.pending.createdAt)} • score ${state.pending.score} • nenhuma nova sugestão até o resultado e o intervalo de 1 segundo</small></div><b>${state.pending.phase==='SETTLING'?'PROCESSANDO':progress.stage}</b>`;
         pending.hidden=false;
       }else pending.hidden=true;
@@ -347,6 +385,9 @@
     return pairs;
   }
   function render(force=false){
+    if(renderInProgress)return;
+    renderInProgress=true;
+    try{
     const rounds=getRounds(); const latest=rounds.at(-1);
     let tracker=settlePending(rounds);
     maybeSendSummaries();
@@ -403,6 +444,7 @@
 
     const tr=transitions(rounds), root=$('readingTransitions');
     root.innerHTML=['red','black','white'].map(c=>{const d=tr[c]||{red:0,black:0,white:0,total:0};const next=[['red',d.red],['black',d.black],['white',d.white]].sort((a,b)=>b[1]-a[1])[0];return `<div class="reading-transition"><span>Depois de ${colorName(c).toLowerCase()}</span><strong>${d.total?colorName(next[0])+' '+pct(next[1],d.total)+'%':'—'}</strong></div>`}).join('');
+    }finally{renderInProgress=false;}
   }
   function start(){
     if(!started){started=true;window.addEventListener('sigma:live-round',()=>setTimeout(render,20));setInterval(()=>render(false),8000);}

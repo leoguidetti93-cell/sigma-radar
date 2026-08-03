@@ -18,7 +18,7 @@
   const SERVER_COLOR_MODE = true;
   const LOCAL_COLOR_ENGINE_ENABLED = false; // trava definitiva: navegador nunca gera nem envia COLOR
   const SERVER_STATE_URL = 'https://sigma-live-server.onrender.com/api/sigma-reading/state';
-  const TELEGRAM_API = '/api/sigma-leitura-telegram';
+  const TELEGRAM_API = null; // endpoint local desativado; COLOR é exclusivo do servidor
   function telegramCredentials(){
     return {
       license_key:String(localStorage.getItem('sigma_access_license')||''),
@@ -27,6 +27,8 @@
     };
   }
   async function sendReadingTelegram(eventType,pending,extra={}){
+    return null; // trava absoluta: navegador nunca envia COLOR
+    /* istanbul ignore next */
     if(SERVER_COLOR_MODE)return null;
     if(!pending)return null;
     const credentials=telegramCredentials();
@@ -138,6 +140,8 @@
   function loadSummaryState(){try{return JSON.parse(localStorage.getItem(SUMMARY_KEY)||'{}')}catch(_){return {}}}
   function saveSummaryState(state){localStorage.setItem(SUMMARY_KEY,JSON.stringify(state));}
   async function sendSummaryTelegram(eventType,summary,eventId){
+    return null; // resumos também são exclusivos do servidor
+    /* istanbul ignore next */
     const credentials=telegramCredentials();
     if(!credentials.license_key||!credentials.session_id||!credentials.device_id)return null;
     const response=await fetch(TELEGRAM_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...credentials,event_id:eventId,event_type:eventType,summary})});

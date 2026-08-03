@@ -1,4 +1,4 @@
-/* SIGMA LEITURA 1.5 — fluxo por rodada + recuperação de trava */
+/* SIGMA LEITURA 1.8 — CLIENTE VISUAL. COLOR executa exclusivamente no servidor 24h. */
 (() => {
   'use strict';
   let started = false;
@@ -15,6 +15,9 @@
   const colorName = c => c==='red'?'VERMELHO':c==='black'?'PRETO':'BRANCO';
   const colorShort = c => c==='red'?'V':c==='black'?'P':'B';
 
+  const SERVER_COLOR_MODE = true;
+  const LOCAL_COLOR_ENGINE_ENABLED = false; // trava definitiva: navegador nunca gera nem envia COLOR
+  const SERVER_STATE_URL = 'https://sigma-live-server.onrender.com/api/sigma-reading/state';
   const TELEGRAM_API = '/api/sigma-leitura-telegram';
   function telegramCredentials(){
     return {
@@ -24,6 +27,7 @@
     };
   }
   async function sendReadingTelegram(eventType,pending,extra={}){
+    if(SERVER_COLOR_MODE)return null;
     if(!pending)return null;
     const credentials=telegramCredentials();
     if(!credentials.license_key||!credentials.session_id||!credentials.device_id)return null;
@@ -51,6 +55,7 @@
     return data;
   }
   function queueTelegramEvent(eventType,pending,extra={}){
+    if(SERVER_COLOR_MODE)return;
     if(!pending)return;
     const state=loadTracker();
     if(!state.pending||state.pending.id!==pending.id)return;
@@ -79,6 +84,7 @@
 
 
   const roundKey = r => String(r?.id ?? r?._id ?? r?.createdAt ?? r?.timestamp ?? '');
+  const roundTime = r => { const t=new Date(r?.createdAt||r?.timestamp||0).getTime(); return Number.isFinite(t)?t:0; };
   function loadTracker(){
     try{
       const parsed=JSON.parse(localStorage.getItem(HISTORY_KEY)||'{}');
@@ -145,6 +151,7 @@
     return halfHourKey(d);
   }
   function maybeSendSummaries(){
+    if(SERVER_COLOR_MODE)return;
     const now=new Date(), state=loadSummaryState(), stats=loadStats();
     const currentSlot=halfHourKey(now), previousSlot=previousHalfHourSlot(now);
     if(state.currentSlot && state.currentSlot!==currentSlot && state.lastSessionSent!==previousSlot){
@@ -172,8 +179,8 @@
     // Quando o ID da rodada não está mais na memória, usa apenas rodadas realmente posteriores.
     // Nunca transforma a primeira rodada futura em nova âncora, pois isso fazia a operação travar.
     return rounds.filter(r=>{
-      const time=new Date(r.createdAt||r.timestamp||0).getTime();
-      return Number.isFinite(time)&&time>anchorTime;
+      const time=roundTime(r);
+      return time>anchorTime;
     });
   }
 
@@ -198,8 +205,70 @@
     if(second==='white')return {result:'WIN BRANCO',resultClass:'white',resolvedRound:after[1]};
     return {result:'LOSS',resultClass:'loss',resolvedRound:after[1]};
   }
+
+  function beginSettlement(state,settled){
+    if(!state?.pending||state.pending.phase==='SETTLING'||!settled)return false;
+    const operationId=state.pending.id;
+    const finished={
+      ...state.pending,
+      phase:'SETTLING',
+      result:settled.result,
+      resultClass:settled.resultClass,
+      resolvedAt:settled.resolvedRound?.createdAt||settled.resolvedRound?.timestamp||new Date().toISOString(),
+      resolvedColor:settled.resolvedRound?.color||null,
+      settlingAt:new Date().toISOString()
+    };
+    state.pending=finished;
+    saveTracker(state);
+    (async()=>{
+      try{
+        await sendReadingTelegram('RESULT',finished,{result:finished.result,resolved_at:finished.resolvedAt,resolved_color:finished.resolvedColor});
+      }catch(error){console.warn('[SIGMA LEITURA] Telegram resultado:',error);}
+      const latest=loadTracker();
+      if(latest.pending?.id!==operationId)return;
+      recordSettledStats(finished);
+      latest.history.unshift(finished);
+      latest.history=latest.history.slice(0,HISTORY_LIMIT);
+      latest.pending=null;
+      latest.nextSignalAfter=Date.now()+NEXT_SIGNAL_DELAY_MS;
+      saveTracker(latest);
+      setTimeout(()=>render(true),NEXT_SIGNAL_DELAY_MS+30);
+    })();
+    return true;
+  }
+
+  function processLiveRound(round){
+    if(SERVER_COLOR_MODE)return;
+    if(!round)return;
+    const state=loadTracker();
+    const pending=state.pending;
+    if(!pending||pending.phase==='SETTLING')return;
+    const key=roundKey(round);
+    if(!key||key===pending.anchorKey||key===pending.lastProcessedRoundKey)return;
+    // A rodada do evento é a única fonte para avançar a operação. Isso evita que
+    // re-renderizações, timers ou listas em ordem diferente processem a mesma rodada duas vezes.
+    pending.lastProcessedRoundKey=key;
+    if(pending.phase==='G1'){
+      if(key===pending.g1RoundKey){saveTracker(state);return;}
+      const result=round.color===pending.target
+        ? {result:'WIN G1',resultClass:'g1',resolvedRound:round}
+        : round.color==='white'
+          ? {result:'WIN BRANCO',resultClass:'white',resolvedRound:round}
+          : {result:'LOSS',resultClass:'loss',resolvedRound:round};
+      beginSettlement(state,result);
+      return;
+    }
+    if(round.color===pending.target){beginSettlement(state,{result:'WIN DIRETA',resultClass:'direct',resolvedRound:round});return;}
+    if(round.color==='white'){beginSettlement(state,{result:'WIN BRANCO',resultClass:'white',resolvedRound:round});return;}
+    pending.phase='G1';
+    pending.g1RoundKey=key;
+    pending.g1StartedAt=round.createdAt||round.timestamp||new Date().toISOString();
+    saveTracker(state);
+    queueTelegramEvent('G1',pending,{first_color:round.color});
+  }
   function settlePending(rounds){
     const state=loadTracker();
+    if(SERVER_COLOR_MODE)return state;
     if(!state.pending)return state;
 
     // Recuperação automática: uma falha de rede ou atualização da página não pode deixar
@@ -237,49 +306,11 @@
     const settled=classifySuggestionResult(state.pending,rounds);
     if(!settled)return loadTracker();
 
-    // Máquina de estados: enquanto o RESULTADO não for confirmado pelo endpoint,
-    // a operação permanece bloqueada e nenhuma nova sugestão pode ser registrada.
-    if(state.pending.phase==='SETTLING')return state;
-    const operationId=state.pending.id;
-    const finished={
-      ...state.pending,
-      phase:'SETTLING',
-      result:settled.result,
-      resultClass:settled.resultClass,
-      resolvedAt:settled.resolvedRound?.createdAt||new Date().toISOString(),
-      resolvedColor:settled.resolvedRound?.color||null,
-      settlingAt:new Date().toISOString()
-    };
-    state.pending=finished;
-    saveTracker(state);
-
-    (async()=>{
-      try{
-        // Ordem obrigatória: RESULTADO -> confirmação do Telegram -> espera 1s -> novo sinal.
-        await sendReadingTelegram('RESULT',finished,{
-          result:finished.result,
-          resolved_at:finished.resolvedAt,
-          resolved_color:finished.resolvedColor
-        });
-      }catch(error){
-        console.warn('[SIGMA LEITURA] Telegram resultado:',error);
-      }
-
-      const latest=loadTracker();
-      if(latest.pending?.id!==operationId)return;
-      recordSettledStats(finished);
-      latest.history.unshift(finished);
-      latest.history=latest.history.slice(0,HISTORY_LIMIT);
-      latest.pending=null;
-      latest.nextSignalAfter=Date.now()+NEXT_SIGNAL_DELAY_MS;
-      saveTracker(latest);
-
-      setTimeout(()=>render(true),NEXT_SIGNAL_DELAY_MS+30);
-    })();
-
-    return state;
+    beginSettlement(state,settled);
+    return loadTracker();
   }
   function registerSuggestion(rounds,entry,score,grade,pattern){
+    if(SERVER_COLOR_MODE)return loadTracker();
     if(!entry||!rounds.length)return loadTracker();
     const state=loadTracker();
     if(state.pending||Date.now()<(state.nextSignalAfter||0))return state;
@@ -303,6 +334,30 @@
     queueTelegramEvent('SIGNAL',state.pending);
     return loadTracker();
   }
+  async function syncServerColorState(){
+    try{
+      const response=await fetch(SERVER_STATE_URL,{cache:'no-store'});
+      const data=await response.json();
+      if(!response.ok||data.ok===false)return;
+      const state=loadTracker();
+      state.pending=data.operation?{
+        ...data.operation,
+        createdAt:data.operation.createdAt||data.operation.created_at,
+        anchorAt:data.operation.anchorAt||data.operation.anchor_at,
+        phase:data.operation.phase||'DIRECT'
+      }:null;
+      state.history=(Array.isArray(data.history)?data.history:[]).map(item=>({
+        ...item,
+        createdAt:item.createdAt||item.created_at,
+        resolvedAt:item.resolvedAt||item.resolved_at,
+        resultClass:item.result==='LOSS'?'loss':item.result==='WIN BRANCO'?'white':item.result==='WIN G1'?'g1':'direct'
+      })).slice(0,HISTORY_LIMIT);
+      state.nextSignalAfter=Number(data.nextSignalAllowedAt)||0;
+      saveTracker(state);
+      render(true);
+    }catch(error){console.warn('[SIGMA LEITURA] Estado 24h indisponível:',error);}
+  }
+
   function renderSuggestionHistory(rounds=getRounds()){
     const state=loadTracker(), root=$('readingSuggestionHistory'), pending=$('readingPendingSuggestion');
     if(pending){
@@ -328,7 +383,9 @@
 
   function getRounds(){
     const list = window.SIGMA_LIVE_ENGINE?.rounds;
-    return Array.isArray(list) ? list.slice().sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)) : [];
+    if(!Array.isArray(list))return [];
+    const seen=new Set();
+    return list.slice().filter(r=>{const k=roundKey(r);if(!k||seen.has(k))return false;seen.add(k);return true;}).sort((a,b)=>roundTime(a)-roundTime(b));
   }
   function dist(rounds,n){
     const a=rounds.slice(-Math.min(n,rounds.length)), d={red:0,black:0,white:0,total:a.length};
@@ -389,8 +446,9 @@
     renderInProgress=true;
     try{
     const rounds=getRounds(); const latest=rounds.at(-1);
-    let tracker=settlePending(rounds);
-    maybeSendSummaries();
+    // O navegador é somente interface: não resolve, não cria e não envia operações COLOR.
+    // Todo o estado oficial vem do motor 24h do servidor.
+    let tracker=loadTracker();
     if($('readingSampleCount'))$('readingSampleCount').textContent=`${rounds.length} / 3000`;
     if($('readingLatestTime'))$('readingLatestTime').textContent=latest?new Date(latest.createdAt).toLocaleTimeString('pt-BR'):'—';
     if($('readingUpdatedAt'))$('readingUpdatedAt').textContent=new Date().toLocaleTimeString('pt-BR');
@@ -437,9 +495,7 @@
       $('readingPatternText').textContent=`Teste interno na memória: entrada em ${colorName(pattern.target).toLowerCase()}, proteção G1 e cobertura no branco.`;
     } else {$('readingPatternName').textContent='AMOSTRA INSUFICIENTE';$('readingPatternOccurrences').textContent='0 casos';}
 
-    // Registra somente quando não existe operação pendente.
-    // Depois disso, aguarda DIRETA e, se necessário, G1 antes de liberar outra sugestão.
-    if(!tracker.pending) tracker=registerSuggestion(rounds,entry,score,grade,pattern);
+    // Não registrar sugestões locais. O servidor é a única fonte de operações COLOR.
     renderSuggestionHistory(rounds);
 
     const tr=transitions(rounds), root=$('readingTransitions');
@@ -447,8 +503,27 @@
     }finally{renderInProgress=false;}
   }
   function start(){
-    if(!started){started=true;window.addEventListener('sigma:live-round',()=>setTimeout(render,20));setInterval(()=>render(false),8000);}
-    if(typeof window.startLiveCatalog==='function')window.startLiveCatalog(); setTimeout(()=>render(true),100);
+    if(!started){
+      started=true;
+      // Migração definitiva: qualquer estado local antigo de operação é descartado.
+      // O histórico e a operação oficial serão repostos pela API do servidor.
+      try{
+        const state=loadTracker();
+        state.pending=null;
+        state.nextSignalAfter=0;
+        state.lastSignalAnchorKey='';
+        saveTracker(state);
+      }catch(_){}
+      window.addEventListener('sigma:live-round',()=>{
+        // A rodada apenas atualiza o visual analítico; nunca aciona motor ou Telegram local.
+        setTimeout(()=>render(true),30);
+      });
+      setInterval(()=>render(false),8000);
+      syncServerColorState();
+      setInterval(syncServerColorState,2500);
+    }
+    if(typeof window.startLiveCatalog==='function')window.startLiveCatalog();
+    setTimeout(()=>render(true),100);
   }
   window.SIGMA_READING={start,refresh:render,clearHistory(){const state=loadTracker();state.history=[];saveTracker(state);renderSuggestionHistory();}};
 })();

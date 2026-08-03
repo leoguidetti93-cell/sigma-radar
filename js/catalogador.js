@@ -90,18 +90,25 @@
 
   async function bootstrapServerFromLocal(){
     if (rounds.length < 20) return;
+    const payload = rounds.slice(-MAX_ROUNDS);
+    const chunkSize = 400;
+    let synced = 0;
     try {
-      const response = await fetch(BOOTSTRAP_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({rounds:rounds.slice(-MAX_ROUNDS)})
-      });
-      const data = await response.json().catch(()=>null);
-      if(response.ok && data?.ok){
-        console.log(`SIGMA: memória central sincronizada (${data.count} rodadas).`);
-      } else if(response.status !== 409){
-        console.warn('SIGMA: servidor não aceitou a memória local.', data);
+      for (let i = 0; i < payload.length; i += chunkSize) {
+        const chunk = payload.slice(i, i + chunkSize);
+        const response = await fetch(BOOTSTRAP_URL, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({rounds:chunk})
+        });
+        const data = await response.json().catch(()=>null);
+        if (!response.ok || !data?.ok) {
+          if (response.status !== 409) console.warn('SIGMA: servidor não aceitou parte da memória local.', data);
+          break;
+        }
+        synced = Number(data.count || synced);
       }
+      if (synced) console.log(`SIGMA: memória central sincronizada (${synced} rodadas).`);
     } catch(error){
       console.warn('SIGMA: não foi possível sincronizar a memória central.', error);
     }

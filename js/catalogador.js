@@ -90,25 +90,28 @@
 
   async function bootstrapServerFromLocal(){
     if (rounds.length < 20) return;
+
+    // A memória local está em ordem cronológica (antiga -> nova).
+    // Enviamos o histórico completo em uma única requisição para que o
+    // servidor consiga validar a sobreposição com as rodadas ao vivo.
+    // O envio antigo em blocos começava pelas rodadas mais velhas e era
+    // rejeitado como MEMORY_MISMATCH antes de chegar ao trecho recente.
     const payload = rounds.slice(-MAX_ROUNDS);
-    const chunkSize = 400;
-    let synced = 0;
+
     try {
-      for (let i = 0; i < payload.length; i += chunkSize) {
-        const chunk = payload.slice(i, i + chunkSize);
-        const response = await fetch(BOOTSTRAP_URL, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({rounds:chunk})
-        });
-        const data = await response.json().catch(()=>null);
-        if (!response.ok || !data?.ok) {
-          if (response.status !== 409) console.warn('SIGMA: servidor não aceitou parte da memória local.', data);
-          break;
-        }
-        synced = Number(data.count || synced);
+      const response = await fetch(BOOTSTRAP_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({rounds:payload, source:'orion-local-v4.3.6'})
+      });
+      const data = await response.json().catch(()=>null);
+
+      if (!response.ok || !data?.ok) {
+        console.warn('SIGMA: servidor não aceitou a memória local.', data || response.status);
+        return;
       }
-      if (synced) console.log(`SIGMA: memória central sincronizada (${synced} rodadas).`);
+
+      console.log(`SIGMA: memória central sincronizada (${Number(data.count || 0)} rodadas; ${Number(data.inserted || 0)} novas).`);
     } catch(error){
       console.warn('SIGMA: não foi possível sincronizar a memória central.', error);
     }

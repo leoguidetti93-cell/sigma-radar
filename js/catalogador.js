@@ -9,6 +9,7 @@
   const MEMORY_URL = `${LIVE_BASE}/memory?limit=${MAX_ROUNDS}`;
   const HEALTH_URL = `${LIVE_BASE}/health`;
   const EVENTS_URL = `${LIVE_BASE}/events`;
+  const BOOTSTRAP_URL = `${LIVE_BASE}/memory/bootstrap`;
   const POLL_MS = 10000;
 
   let rounds = [];
@@ -84,6 +85,25 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(rounds.slice(-MAX_ROUNDS)));
     } catch (error) {
       console.warn('SIGMA: não foi possível preservar a memória local.', error);
+    }
+  }
+
+  async function bootstrapServerFromLocal(){
+    if (rounds.length < 20) return;
+    try {
+      const response = await fetch(BOOTSTRAP_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({rounds:rounds.slice(-MAX_ROUNDS)})
+      });
+      const data = await response.json().catch(()=>null);
+      if(response.ok && data?.ok){
+        console.log(`SIGMA: memória central sincronizada (${data.count} rodadas).`);
+      } else if(response.status !== 409){
+        console.warn('SIGMA: servidor não aceitou a memória local.', data);
+      }
+    } catch(error){
+      console.warn('SIGMA: não foi possível sincronizar a memória central.', error);
     }
   }
 
@@ -405,6 +425,7 @@
   async function startLiveCatalog(){
     if (!started) {
       loadState();
+      await bootstrapServerFromLocal();
       renderCatalog(false);
       updateStats();
       started = true;

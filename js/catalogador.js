@@ -1,4 +1,4 @@
-/* SIGMA ORION — CATALOGADOR LIVE SERVER 3.1 */
+/* SIGMA ORION — CATALOGADOR LIVE SERVER 3.2 • GRADE CONTÍNUA */
 (() => {
   'use strict';
 
@@ -21,6 +21,8 @@
   let lastMessageAt = 0;
   let lastRenderedBlock = '';
   let reconnectAttempt = 0;
+  let lastBootstrapAttemptAt = 0;
+  let bootstrapInFlight = false;
 
   function $(id){ return document.getElementById(id); }
   function pad(value){ return String(value).padStart(2,'0'); }
@@ -88,8 +90,12 @@
     }
   }
 
-  async function bootstrapServerFromLocal(){
-    if (rounds.length < 20) return;
+  async function bootstrapServerFromLocal(force = false){
+    if (rounds.length < 20 || bootstrapInFlight) return false;
+    const now = Date.now();
+    if (!force && now - lastBootstrapAttemptAt < 30000) return false;
+    lastBootstrapAttemptAt = now;
+    bootstrapInFlight = true;
 
     // A memória local está em ordem cronológica (antiga -> nova).
     // Enviamos o histórico completo em uma única requisição para que o
@@ -112,8 +118,12 @@
       }
 
       console.log(`SIGMA: memória central sincronizada (${Number(data.count || 0)} rodadas; ${Number(data.inserted || 0)} novas).`);
+      return true;
     } catch(error){
       console.warn('SIGMA: não foi possível sincronizar a memória central.', error);
+      return false;
+    } finally {
+      bootstrapInFlight = false;
     }
   }
 
@@ -166,38 +176,93 @@
 
   function visibleRounds(){ return rounds.slice(-Math.min(displayLimit, rounds.length)); }
 
-  function groupBlocks(){
-    const map = new Map();
+  function hourKey(d){ return `${dateKey(d)}-${pad(d.getHours())}`; }
 
-    visibleRounds().forEach(round => {
+  function createTimelineBlocks(){
+    const visible = visibleRounds();
+    const now = new Date();
+    const currentBlockDate = new Date(
+      now.getFullYear(), now.getMonth(), now.getDate(),
+      now.getHours(), blockStart(now.getMinutes()), 0, 0
+    );
+
+    if (!visible.length) {
+      return [{
+        key: blockKey(currentBlockDate),
+        date: currentBlockDate,
+        slots: Array(20).fill(null),
+        isCurrent: true
+      }];
+    }
+
+    const firstRoundDate = new Date(visible[0].createdAt);
+    const firstBlockDate = new Date(
+      firstRoundDate.getFullYear(), firstRoundDate.getMonth(), firstRoundDate.getDate(),
+      firstRoundDate.getHours(), blockStart(firstRoundDate.getMinutes()), 0, 0
+    );
+
+    // Agrupa por hora. Em horas já encerradas, quando existem as 120 rodadas
+    // esperadas, reconstrói a grade de modo sequencial. Isso corrige timestamps
+    // irregulares da fonte sem criar buracos ou fazer uma linha inteira sumir.
+    const byHour = new Map();
+    for (const round of visible) {
       const d = new Date(round.createdAt);
-      const start = blockStart(d.getMinutes());
-      const key = blockKey(d);
+      const key = hourKey(d);
+      if (!byHour.has(key)) byHour.set(key, []);
+      byHour.get(key).push(round);
+    }
+    byHour.forEach(list => list.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)));
 
-      if (!map.has(key)) {
-        map.set(key, {
-          key,
-          date: new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),start),
-          rounds: []
-        });
+    const hourSlots = new Map();
+    for (const [key, list] of byHour.entries()) {
+      const d = new Date(list[0].createdAt);
+      const hourStart = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), 0, 0, 0);
+      const isPastHour = hourStart.getTime() + 60*60*1000 <= now.getTime();
+      const slots = Array(120).fill(null);
+
+      if (isPastHour && list.length >= 116) {
+        // Usa no máximo as 120 rodadas da hora e as distribui em sequência: 2 por minuto.
+        // Tolerância de 4 rodadas cobre pequenas oscilações de horário da Blaze.
+        const selected = list.slice(-120);
+        selected.forEach((round, index) => { if (index < 120) slots[index] = round; });
+      } else {
+        // Hora atual ou amostra parcial: respeita o minuto real e encaixa até 2 por minuto.
+        const minuteCounts = Array(60).fill(0);
+        for (const round of list) {
+          const rd = new Date(round.createdAt);
+          const minute = rd.getMinutes();
+          let position = minute * 2 + minuteCounts[minute];
+
+          // Se houver uma terceira rodada no mesmo minuto, ocupa o próximo espaço livre
+          // da sequência em vez de desaparecer com slice(0,2).
+          if (minuteCounts[minute] >= 2 || slots[position]) {
+            position = Math.max(0, minute * 2);
+            while (position < 120 && slots[position]) position += 1;
+          }
+
+          if (position < 120) slots[position] = round;
+          minuteCounts[minute] += 1;
+        }
       }
 
-      map.get(key).rounds.push(round);
-    });
+      hourSlots.set(key, slots);
+    }
 
-    const now = new Date();
-    const currentKey = blockKey(now);
-
-    if (!map.has(currentKey)) {
-      const start = blockStart(now.getMinutes());
-      map.set(currentKey, {
-        key: currentKey,
-        date: new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours(),start),
-        rounds: []
+    const blocks = [];
+    for (let cursor = new Date(firstBlockDate); cursor <= currentBlockDate; cursor = new Date(cursor.getTime() + 10*60*1000)) {
+      const key = blockKey(cursor);
+      const hKey = hourKey(cursor);
+      const slots = hourSlots.get(hKey) || Array(120).fill(null);
+      const offset = cursor.getMinutes() * 2;
+      blocks.push({
+        key,
+        date: new Date(cursor),
+        slots: slots.slice(offset, offset + 20),
+        isCurrent: key === blockKey(now)
       });
     }
 
-    return [...map.values()].sort((a,b) => b.date - a.date);
+    return blocks.reverse();
   }
 
   function stoneHtml(round, isNewest){
@@ -219,29 +284,18 @@
     const root = $('catalogHours');
     if (!root) return;
 
-    const blocks = groupBlocks();
+    const blocks = createTimelineBlocks();
     const newestBlock = blocks[0]?.key || '';
 
     root.innerHTML = blocks.map((block,index) => {
-      const byMinute = new Map();
-
-      block.rounds.forEach(round => {
-        const minute = new Date(round.createdAt).getMinutes();
-        if (!byMinute.has(minute)) byMinute.set(minute, []);
-        byMinute.get(minute).push(round);
-      });
-
-      byMinute.forEach(list => list.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)));
-
-      const start = block.date.getMinutes();
-      const current = index === 0;
+      const current = block.isCurrent;
       const cells = Array.from({length:10},(_,i) => {
-        const minute = start+i;
-        const list = (byMinute.get(minute) || []).slice(0,2);
-        return `<div class="sigma-minute-cell">${stoneHtml(list[0],animateNewest && list[0]?.id===latestRoundId)}${stoneHtml(list[1],animateNewest && list[1]?.id===latestRoundId)}</div>`;
+        const first = block.slots[i*2] || null;
+        const second = block.slots[i*2+1] || null;
+        return `<div class="sigma-minute-cell">${stoneHtml(first,animateNewest && first?.id===latestRoundId)}${stoneHtml(second,animateNewest && second?.id===latestRoundId)}</div>`;
       }).join('');
 
-      return `<section class="sigma-live-row sigma-live-row-clean${current?' is-current':''}${current && newestBlock!==lastRenderedBlock?' row-enter':''}">
+      return `<section class="sigma-live-row sigma-live-row-clean${current?' is-current':''}${current && newestBlock!==lastRenderedBlock?' row-enter':''}" data-block-key="${block.key}">
         <div class="sigma-row-grid"><div class="sigma-row-cells">${cells}</div></div>
       </section>`;
     }).join('');
@@ -418,6 +472,18 @@
       if (!response.ok) return;
       const health = await response.json();
 
+      const serverRounds = Number(health.rounds || 0);
+      const localRounds = rounds.length;
+
+      // Autorreparo após deploy/restart do Render: se o servidor perdeu a memória
+      // e o navegador ainda possui o histórico completo, reenvia automaticamente.
+      // Isso evita o Catalogador esburacado e devolve imediatamente os dados ao WHITE.
+      if (localRounds >= 20 && serverRounds < Math.min(300, Math.floor(localRounds * 0.75))) {
+        console.warn(`SIGMA: memória do servidor baixa (${serverRounds}) versus local (${localRounds}). Iniciando autorreparo.`);
+        await bootstrapServerFromLocal(true);
+        await hydrateFromServer(false);
+      }
+
       if (health.socketIoConnected && health.subscribed) {
         setConnection('online','Servidor ativo e inscrito no Double.','SIGMA LIVE SERVER • double_room_1');
       }
@@ -428,6 +494,7 @@
     clearInterval(pollTimer);
     pollTimer = setInterval(async () => {
       await hydrateFromServer(true);
+      await checkHealth();
       if (!eventSource) connectEventStream();
     }, POLL_MS);
   }

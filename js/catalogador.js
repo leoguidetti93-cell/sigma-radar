@@ -1,4 +1,4 @@
-/* SIGMA ORION — CATALOGADOR LIVE SERVER 3.2 • GRADE CONTÍNUA */
+/* SIGMA ORION — CATALOGADOR LIVE SERVER 3.3 • LINHA DO TEMPO CONTÍNUA DO SERVIDOR */
 (() => {
   'use strict';
 
@@ -195,70 +195,63 @@
       }];
     }
 
-    const firstRoundDate = new Date(visible[0].createdAt);
-    const firstBlockDate = new Date(
-      firstRoundDate.getFullYear(), firstRoundDate.getMonth(), firstRoundDate.getDate(),
-      firstRoundDate.getHours(), blockStart(firstRoundDate.getMinutes()), 0, 0
-    );
+    /*
+     * A memória do servidor contém uma sequência ordenada de rodadas. A Blaze
+     * pode devolver timestamps repetidos, atrasados ou com pequenos saltos.
+     * Usar esses timestamps como endereço da grade criava buracos e até fazia
+     * linhas de 10 minutos desaparecerem. A grade agora é reconstruída pela
+     * ORDEM REAL das rodadas: duas casas por minuto, sem lacunas internas.
+     * O horário da rodada mais recente ancora toda a linha do tempo.
+     */
+    const chronological = visible.slice().sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+    const newest = chronological[chronological.length - 1];
+    const newestDate = new Date(newest.createdAt);
 
-    // Agrupa por hora. Em horas já encerradas, quando existem as 120 rodadas
-    // esperadas, reconstrói a grade de modo sequencial. Isso corrige timestamps
-    // irregulares da fonte sem criar buracos ou fazer uma linha inteira sumir.
-    const byHour = new Map();
-    for (const round of visible) {
+    // Descobre se a rodada mais recente ocupa a primeira ou a segunda casa do minuto.
+    const newestMinuteKey = `${dateKey(newestDate)}-${pad(newestDate.getHours())}-${pad(newestDate.getMinutes())}`;
+    const sameMinute = chronological.filter(round => {
       const d = new Date(round.createdAt);
-      const key = hourKey(d);
-      if (!byHour.has(key)) byHour.set(key, []);
-      byHour.get(key).push(round);
-    }
-    byHour.forEach(list => list.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)));
+      return `${dateKey(d)}-${pad(d.getHours())}-${pad(d.getMinutes())}` === newestMinuteKey;
+    });
+    const newestSubslot = sameMinute.length >= 2 ? 1 : 0;
 
-    const hourSlots = new Map();
-    for (const [key, list] of byHour.entries()) {
-      const d = new Date(list[0].createdAt);
-      const hourStart = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), 0, 0, 0);
-      const isPastHour = hourStart.getTime() + 60*60*1000 <= now.getTime();
-      const slots = Array(120).fill(null);
+    const newestMinuteEpoch = Math.floor(newestDate.getTime() / 60000);
+    const newestAbsoluteSlot = newestMinuteEpoch * 2 + newestSubslot;
+    const slotMap = new Map();
 
-      if (isPastHour && list.length >= 116) {
-        // Usa no máximo as 120 rodadas da hora e as distribui em sequência: 2 por minuto.
-        // Tolerância de 4 rodadas cobre pequenas oscilações de horário da Blaze.
-        const selected = list.slice(-120);
-        selected.forEach((round, index) => { if (index < 120) slots[index] = round; });
-      } else {
-        // Hora atual ou amostra parcial: respeita o minuto real e encaixa até 2 por minuto.
-        const minuteCounts = Array(60).fill(0);
-        for (const round of list) {
-          const rd = new Date(round.createdAt);
-          const minute = rd.getMinutes();
-          let position = minute * 2 + minuteCounts[minute];
+    chronological.forEach((round, index) => {
+      const distanceFromNewest = chronological.length - 1 - index;
+      const absoluteSlot = newestAbsoluteSlot - distanceFromNewest;
+      const minuteEpoch = Math.floor(absoluteSlot / 2);
+      const subslot = ((absoluteSlot % 2) + 2) % 2;
+      const displayDate = new Date(minuteEpoch * 60000);
+      const key = `${dateKey(displayDate)}-${pad(displayDate.getHours())}-${pad(displayDate.getMinutes())}-${subslot}`;
+      slotMap.set(key, {...round, displayAt: displayDate.toISOString(), displaySubslot: subslot});
+    });
 
-          // Se houver uma terceira rodada no mesmo minuto, ocupa o próximo espaço livre
-          // da sequência em vez de desaparecer com slice(0,2).
-          if (minuteCounts[minute] >= 2 || slots[position]) {
-            position = Math.max(0, minute * 2);
-            while (position < 120 && slots[position]) position += 1;
-          }
-
-          if (position < 120) slots[position] = round;
-          minuteCounts[minute] += 1;
-        }
-      }
-
-      hourSlots.set(key, slots);
-    }
+    const oldestAbsoluteSlot = newestAbsoluteSlot - (chronological.length - 1);
+    const oldestMinuteEpoch = Math.floor(oldestAbsoluteSlot / 2);
+    const oldestDate = new Date(oldestMinuteEpoch * 60000);
+    const firstBlockDate = new Date(
+      oldestDate.getFullYear(), oldestDate.getMonth(), oldestDate.getDate(),
+      oldestDate.getHours(), blockStart(oldestDate.getMinutes()), 0, 0
+    );
 
     const blocks = [];
     for (let cursor = new Date(firstBlockDate); cursor <= currentBlockDate; cursor = new Date(cursor.getTime() + 10*60*1000)) {
-      const key = blockKey(cursor);
-      const hKey = hourKey(cursor);
-      const slots = hourSlots.get(hKey) || Array(120).fill(null);
-      const offset = cursor.getMinutes() * 2;
+      const slots = [];
+      for (let minuteOffset = 0; minuteOffset < 10; minuteOffset += 1) {
+        const minuteDate = new Date(cursor.getTime() + minuteOffset * 60000);
+        for (let subslot = 0; subslot < 2; subslot += 1) {
+          const key = `${dateKey(minuteDate)}-${pad(minuteDate.getHours())}-${pad(minuteDate.getMinutes())}-${subslot}`;
+          slots.push(slotMap.get(key) || null);
+        }
+      }
       blocks.push({
-        key,
+        key: blockKey(cursor),
         date: new Date(cursor),
-        slots: slots.slice(offset, offset + 20),
-        isCurrent: key === blockKey(now)
+        slots,
+        isCurrent: blockKey(cursor) === blockKey(now)
       });
     }
 
@@ -277,7 +270,7 @@
       ? '<span class="sigma-white-mark">Σ</span>'
       : `<span>${round.roll}</span>`;
 
-    return `<div class="sigma-stone sigma-stone-${round.color}${newest}${fx}" data-round-id="${round.id}" title="${formatTime(round.createdAt,true)} • ID ${round.id}">${value}<small>${formatTime(round.createdAt)}</small></div>`;
+    return `<div class="sigma-stone sigma-stone-${round.color}${newest}${fx}" data-round-id="${round.id}" title="${formatTime(round.displayAt || round.createdAt,true)} • ID ${round.id}">${value}<small>${formatTime(round.displayAt || round.createdAt)}</small></div>`;
   }
 
   function renderCatalog(animateNewest = false){
@@ -376,7 +369,24 @@
       const payload = await response.json();
       const list = Array.isArray(payload) ? payload : payload.rounds || [];
 
-      mergeRounds(list, animateNewest);
+      // O servidor é a fonte oficial. Quando ele entrega a memória completa,
+      // substituímos a cópia local em vez de misturar dados antigos do navegador.
+      const normalizedServer = list.map(normalizeRound).filter(Boolean)
+        .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt))
+        .slice(-MAX_ROUNDS);
+      if (normalizedServer.length) {
+        const previousNewest = rounds.length ? rounds[rounds.length - 1]?.id : null;
+        rounds = normalizedServer;
+        latestRoundId = rounds[rounds.length - 1]?.id || null;
+        saveState();
+        renderCatalog(Boolean(animateNewest && latestRoundId && latestRoundId !== previousNewest));
+        updateStats();
+        window.SIGMA_LIVE_ENGINE = window.SIGMA_LIVE_ENGINE || {};
+        window.SIGMA_LIVE_ENGINE.rounds = rounds.slice();
+        window.SIGMA_LIVE_ENGINE.latest = rounds[rounds.length - 1] || null;
+      } else {
+        mergeRounds(list, animateNewest);
+      }
       lastMessageAt = Date.now();
       updateStats();
 

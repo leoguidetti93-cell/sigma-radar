@@ -2,6 +2,8 @@
 (() => {
   "use strict";
   const API_BASE = "https://sigma-live-server.onrender.com";
+  // OPEN = acesso direto. LICENSE = reativa a validação existente.
+  const ACCESS_MODE = String(window.SIGMA_ACCESS_MODE || "OPEN").toUpperCase();
   const STORAGE = { key: "sigma_access_license", device: "sigma_access_device", session: "sigma_access_session" };
   const gate = document.getElementById("sigmaAccessGate");
   const title = document.getElementById("sigmaAccessTitle");
@@ -14,7 +16,13 @@
   const forget = document.getElementById("sigmaForgetLicense");
   let heartbeatTimer = null;
 
-  document.documentElement.classList.add("sigma-access-locked");
+  if (ACCESS_MODE === "LICENSE") {
+    document.documentElement.classList.add("sigma-access-locked");
+  } else {
+    gate.hidden = true;
+    gate.classList.add("unlocked");
+    document.documentElement.classList.remove("sigma-access-locked");
+  }
 
   function getDeviceId() {
     let id = localStorage.getItem(STORAGE.device);
@@ -92,7 +100,13 @@
         clearInterval(heartbeatTimer);
         localStorage.removeItem(STORAGE.session);
         gate.classList.remove("unlocked");
-        document.documentElement.classList.add("sigma-access-locked");
+        if (ACCESS_MODE === "LICENSE") {
+    document.documentElement.classList.add("sigma-access-locked");
+  } else {
+    gate.hidden = true;
+    gate.classList.add("unlocked");
+    document.documentElement.classList.remove("sigma-access-locked");
+  }
         const text = error.code === "SESSION_REVOKED"
           ? "Sua licença foi ativada em outro navegador ou dispositivo."
           : error.message;
@@ -107,5 +121,5 @@
   form.addEventListener("submit", event => { event.preventDefault(); const key = normalizeKey(input.value); input.value = key; if (key.length !== 6) return setMessage("Digite os seis caracteres da licença."); activate(key); });
   input.addEventListener("input", () => { input.value = normalizeKey(input.value); setMessage(""); });
   forget.addEventListener("click", () => { localStorage.removeItem(STORAGE.key); localStorage.removeItem(STORAGE.session); input.value = ""; showForm(); });
-  validateSaved();
+  if (ACCESS_MODE === "LICENSE") validateSaved();
 })();

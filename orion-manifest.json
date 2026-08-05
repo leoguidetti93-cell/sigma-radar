@@ -1,6 +1,6 @@
 {
   "name": "SIGMA RADAR",
-  "version": "4.2.2",
+  "version": "5.0.0",
   "base": "1.3",
   "migration": "structural-only",
   "modules": [

@@ -4,17 +4,17 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SIGMA RADAR — ORION UI 4.4.3</title>
+<title>SIGMA ORION — LABS 5.1</title>
 <link href="/css/base.css" rel="stylesheet"/>
 <link href="/css/layout.css" rel="stylesheet"/>
 <link href="/css/modules.css" rel="stylesheet"/>
 <link href="/css/support.css" rel="stylesheet"/>
 <link href="/css/temporal-filter.css" rel="stylesheet"/>
-<link href="/css/central-operacoes.css" rel="stylesheet"/>
+
 <link href="/css/sigma-access.css" rel="stylesheet"/>
 <link href="/css/sigma-leitura.css" rel="stylesheet"/>
 <link href="/css/catalog-validator.css" rel="stylesheet"/>
-</head>
+<link href="/css/orion-labs.css?v=5.1.0" rel="stylesheet"/></head>
 <body>
 <div aria-live="polite" class="sigma-access-gate" id="sigmaAccessGate">
 <div class="sigma-access-panel">
@@ -46,127 +46,19 @@
 <span>INTELIGÊNCIA PARA O DOUBLE</span>
 </div>
 <div class="side-status"><i></i><span>CATALOGADOR • MEMÓRIA 3000</span></div>
-<nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="sigmaLeitura" onclick="sideNavigate('sigmaLeitura','SIGMA Leitura',this)"><span class="side-icon">◉</span><span class="side-text">SIGMA Leitura</span></button><button class="side-link" data-target="centralOperacoes" onclick="sideNavigate('centralOperacoes','Central de Sinais',this)"><span class="side-icon">Σ</span><span class="side-text">Central de Sinais</span><span class="analyst-menu-badge" hidden="" id="analystMenuBadge">0</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
-<div class="side-bottom"><b>ORION UI — 4.0.0</b><span>Experiência para jogadores</span></div>
+<nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="labWhite" onclick="sideNavigate('labWhite','Laboratório do Branco',this)"><span class="side-icon">⚪</span><span class="side-text">LAB WHITE</span></button><button class="side-link" data-target="labColor" onclick="sideNavigate('labColor','Laboratório Color',this)"><span class="side-icon">◉</span><span class="side-text">LAB COLOR</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
+<div class="side-bottom"><b>ORION LABS — 5.1</b><span>Automação • Dados • Evolução</span></div>
 </aside>
-<div class="screen active" id="home">
-<div class="shell">
-<div class="clean-home">
-<div class="sigma-brand-stage sigma-brand-stage-clean">
-<div aria-hidden="true" class="sigma-home-symbol">Σ</div>
-<div class="sigma-brand-copy">
-<span class="sigma-overline">CENTRAL DE OPERAÇÕES</span>
-<h2>SIGMA</h2>
-<strong>RADAR</strong>
-<p>INTELIGÊNCIA PARA QUEM OPERA</p>
-</div>
-<div class="sigma-brand-status">
-<span><i></i> SISTEMA ONLINE</span>
-<span>BASE LIVE • 3000 RODADAS</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="screen" id="sigmaLeitura">
-<div class="shell sigma-reading-shell">
-  <div class="inner-header">
-    <button class="back" onclick="goHome()">← Voltar para Home</button>
-    <div class="title-group"><h2>SIGMA Leitura</h2><p>Análise dinâmica abastecida exclusivamente pelas 3000 rodadas do Catalogador.</p></div>
-    <span class="status-pill sigma-reading-status connecting" id="readingStatus">SINCRONIZANDO</span>
-  </div>
-
-  <div class="reading-source-bar">
-    <div><span>FONTE</span><strong>CATALOGADOR AO VIVO</strong></div>
-    <div><span>AMOSTRA ATUAL</span><strong id="readingSampleCount">0 / 3000</strong></div>
-    <div><span>ÚLTIMA RODADA</span><strong id="readingLatestTime">—</strong></div>
-    <div><span>ATUALIZAÇÃO</span><strong id="readingUpdatedAt">—</strong></div>
-  </div>
-
-  <div class="reading-main-grid">
-    <article class="card reading-decision-card">
-      <div class="reading-card-head"><div><span class="small">LEITURA COLOR ATUAL</span><h3 id="readingDecision">AGUARDANDO DADOS</h3></div><span class="reading-grade neutral" id="readingGrade">NEUTRO</span></div>
-      <div class="reading-score-wrap"><div class="reading-score-ring" id="readingScoreRing"><strong id="readingScore">0</strong><span>SCORE</span></div><div class="reading-decision-copy"><span>ENTRADA ESTATÍSTICA</span><strong id="readingEntry">—</strong><small>Até G1 + cobertura no branco</small></div></div>
-      <div class="reading-reasons" id="readingReasons"><p>O módulo será atualizado assim que o Catalogador sincronizar as rodadas.</p></div>
-      <button class="action-btn reading-refresh" type="button" onclick="window.SIGMA_READING?.refresh(true)">↻ Atualizar leitura</button>
-    </article>
-
-    <article class="card reading-white-card">
-      <div class="reading-card-head"><div><span class="small">RADAR DO BRANCO</span><h3 id="readingWhiteState">SEM LEITURA</h3></div><span class="reading-white-dot">Σ</span></div>
-      <div class="reading-white-metrics">
-        <div><span>Rodadas sem branco</span><strong id="readingSinceWhite">—</strong></div>
-        <div><span>Média de intervalo</span><strong id="readingWhiteAverage">—</strong></div>
-        <div><span>Mediana</span><strong id="readingWhiteMedian">—</strong></div>
-        <div><span>Maior intervalo</span><strong id="readingWhiteMax">—</strong></div>
-      </div>
-      <div class="reading-progress"><span id="readingWhiteProgress"></span></div>
-      <p id="readingWhiteText">Aguardando intervalos suficientes para comparação.</p>
-    </article>
-  </div>
-
-  <div class="reading-window-grid">
-    <article class="card reading-window-card" data-window="20"><span>ÚLTIMAS 20</span><div class="reading-bars" id="readingBars20"></div><strong id="readingDominant20">—</strong></article>
-    <article class="card reading-window-card" data-window="50"><span>ÚLTIMAS 50</span><div class="reading-bars" id="readingBars50"></div><strong id="readingDominant50">—</strong></article>
-    <article class="card reading-window-card" data-window="100"><span>ÚLTIMAS 100</span><div class="reading-bars" id="readingBars100"></div><strong id="readingDominant100">—</strong></article>
-    <article class="card reading-window-card" data-window="1000"><span>AMOSTRA COMPLETA</span><div class="reading-bars" id="readingBars1000"></div><strong id="readingDominant1000">—</strong></article>
-  </div>
-
-  <div class="reading-detail-grid">
-    <article class="card">
-      <div class="reading-card-head"><div><span class="small">PADRÃO ATUAL</span><h3 id="readingPatternName">—</h3></div><span class="reading-occurrences" id="readingPatternOccurrences">0 casos</span></div>
-      <div class="reading-pattern-results">
-        <div><span>WIN direta</span><strong id="readingDirectWin">0%</strong></div>
-        <div><span>WIN G1</span><strong id="readingG1Win">0%</strong></div>
-        <div><span>WIN branco</span><strong id="readingWhiteWin">0%</strong></div>
-        <div><span>LOSS</span><strong id="readingLoss">0%</strong></div>
-      </div>
-      <p class="reading-note" id="readingPatternText">O sistema compara a sequência atual com ocorrências anteriores dentro da memória.</p>
-    </article>
-    <article class="card">
-      <div class="reading-card-head"><div><span class="small">SEQUÊNCIAS E TRANSIÇÕES</span><h3>Comportamento recente</h3></div></div>
-      <div class="reading-transition-list" id="readingTransitions"><div class="analyst-empty">Aguardando dados...</div></div>
-    </article>
-  </div>
+<div class="screen active" id="home"><div class="shell lab-home-shell">
+<section class="lab-hero"><div class="lab-hero-grid"></div><div class="lab-orbit orbit-a"></div><div class="lab-orbit orbit-b"></div>
+<div class="lab-hero-copy"><span class="lab-kicker">SIGMA ORION • AUTONOMOUS OPERATIONS</span><h1><span>Σ</span> ORION LABS</h1><p>Leitura contínua, telemetria operacional e análise comparativa em uma única central.</p><div class="lab-live-row"><span><i></i> SERVER 24H</span><span>MEMÓRIA 3000</span><span>DISCO PERSISTENTE</span></div></div></section>
+<section class="lab-home-cards">
+<button onclick="sideNavigate('labWhite','Laboratório do Branco',document.querySelector('[data-target=labWhite]'))"><em>⚪</em><span>LAB WHITE</span><strong>Força, capturas, casas, padrões e observações</strong></button>
+<button onclick="sideNavigate('labColor','Laboratório Color',document.querySelector('[data-target=labColor]'))"><em>◉</em><span>LAB COLOR</span><strong>Direta, G1, G2, faixas de score e desempenho</strong></button>
+<button onclick="sideNavigate('catalogador','Catalogador Ao Vivo',document.querySelector('[data-target=catalogador]'))"><em>▦</em><span>CATALOGADOR</span><strong>Grade oficial reconstruída pelo servidor</strong></button>
+</section></div></div>
 
 
-  <section class="card reading-white-auto-card">
-    <div class="reading-card-head">
-      <div><span class="small">WHITE AUTOMÁTICO</span><h3>Próxima projeção de branco</h3></div>
-      <span class="reading-grade neutral" id="readingWhiteAutoStatus">ANALISANDO</span>
-    </div>
-    <div class="reading-white-auto-grid">
-      <div class="reading-white-auto-main"><span>HORÁRIO PROJETADO</span><strong id="readingWhiteAutoTime">—</strong><small id="readingWhiteAutoDetail">Aguardando base suficiente.</small></div>
-      <div><span>FORÇA / 10</span><strong id="readingWhiteAutoScore">—</strong></div>
-      <div><span>JANELA</span><strong>± 1 MIN</strong><small>6 casas por rodada</small></div>
-      <div><span>CASAS PROCESSADAS</span><strong id="readingWhiteAutoProgress">0 / 6</strong></div>
-    </div>
-    <div class="reading-white-auto-reasons" id="readingWhiteAutoReasons"><p>O scanner está procurando a melhor janela.</p></div>
-    <div class="reading-white-auto-result" id="readingWhiteAutoResult" hidden></div>
-    <div class="reading-card-head reading-white-history-head"><div><span class="small">HISTÓRICO AUTOMÁTICO</span><h3>Últimas 20 projeções WHITE</h3></div><div class="reading-history-summary"><span>ASSERTIVIDADE <strong id="readingWhiteAutoAccuracy">—</strong></span><button type="button" id="readingClearWhiteAuto">Limpar</button></div></div>
-    <div class="reading-white-auto-history" id="readingWhiteAutoHistory"><div class="analyst-empty">Nenhuma projeção finalizada ainda.</div></div>
-    <p class="reading-note">A operação começa 1 minuto antes do horário projetado e termina 1 minuto depois: 2 rodadas no minuto anterior, 2 no minuto central e 2 no minuto seguinte. Cada rodada vale uma casa. O sistema prioriza score 72 ou mais. Quando não houver, mantém a melhor janela disponível em modo observação e continua recalculando até o início da operação.</p>
-  </section>
-
-  <section class="card reading-history-card">
-    <div class="reading-card-head reading-history-head">
-      <div><span class="small">DESEMPENHO DAS SUGESTÕES</span><h3>Últimos 20 resultados</h3></div>
-      <div class="reading-history-summary"><span>REGISTROS <strong id="readingHistoryCount">0 / 20</strong></span><span>ASSERTIVIDADE <strong id="readingHistoryAccuracy">—</strong></span><button type="button" onclick="window.SIGMA_READING?.clearHistory()">Limpar</button></div>
-    </div>
-    <div class="reading-pending-suggestion" id="readingPendingSuggestion" hidden></div>
-    <div class="reading-history-list" id="readingSuggestionHistory"><div class="analyst-empty">Nenhuma entrada finalizada ainda.</div></div>
-    <p class="reading-note">Cada sugestão é acompanhada nas duas rodadas seguintes: WIN direta, WIN G1, WIN branco ou LOSS. Ao completar 20 resultados, o registro mais antigo sai automaticamente.</p>
-  </section>
-  <p class="reading-disclaimer">Leitura estatística da amostra atual. Não representa garantia de resultado.</p>
-</div>
-</div>
-<div class="screen" id="centralOperacoes">
-<div class="shell">
-<div class="inner-header"><button class="back" onclick="goHome()">← Voltar para Home</button><div class="title-group"><h2>Central de Sinais</h2><p>WHITE e COLOR publicados ao vivo pela Central do Analista.</p></div><span class="status-pill" id="analystConnectionStatus">CONECTANDO</span></div>
-<div class="analyst-stats"><div class="analyst-stat"><span>Sinais ativos</span><strong id="analystActiveCount">0</strong></div><div class="analyst-stat analyst-win-stat"><span>Wins hoje</span><strong id="analystPaidToday">0</strong></div><div class="analyst-stat analyst-loss-stat"><span>Losses hoje</span><strong id="analystFailedToday">0</strong></div><div class="analyst-stat"><span>Assertividade hoje</span><strong id="analystAccuracyToday">—</strong></div></div>
-<div class="signal-zone white-zone"><div class="player-section-title"><div><span class="signal-zone-tag white">WHITE</span><h3>Sinais de branco</h3></div><span>Margem oficial de 1 minuto</span></div><div class="analyst-rule white-rule"><span>⚪</span><div><strong>Janela operacional</strong><p>Minuto anterior, minuto central e minuto seguinte.</p></div></div><div class="analyst-active-grid" id="analystWhiteSignals"><div class="analyst-empty">Buscando sinais WHITE...</div></div></div>
-<div class="signal-zone color-zone"><div class="player-section-title"><div><span class="signal-zone-tag color">COLOR</span><h3>Sinais de cor</h3></div><span>Até G1 + cobertura no branco</span></div><div class="analyst-rule color-rule"><span>◐</span><div><strong>Regra COLOR</strong><p>Entrada na cor indicada, proteção no G1 e cobertura no branco.</p></div></div><div class="analyst-active-grid" id="analystColorSignals"><div class="analyst-empty">Buscando sinais COLOR...</div></div></div>
-<div class="player-section-title analyst-history-title"><h3>Últimos 10 sinais</h3><span>Histórico geral encerrado pelo analista</span></div><div class="card analyst-history-card"><div class="analyst-history-list" id="analystHistory"><div class="analyst-empty">Carregando histórico...</div></div></div>
-</div></div>
 <div class="screen" id="operacional">
 <div class="shell">
 <div class="inner-header">
@@ -228,9 +120,26 @@
 </div>
 </div>
 </div>
-
-
-<div class="screen" id="gestor">
+<div class="screen" id="labWhite"><div class="shell lab-shell">
+<header class="lab-page-head"><div><span class="lab-kicker">AUTOMATIC WHITE INTELLIGENCE</span><h2>⚪ LAB WHITE</h2><p>Operação atual, capturas, padrões, sensores e oportunidades que ficaram em observação.</p></div><div class="lab-head-status" id="lwStatus"><i></i> CONECTANDO</div></header>
+<div class="lab-source-strip"><span>AMOSTRA <b id="lwRounds">—</b></span><span>BRANCOS NA BASE <b id="lwBaseWhites">—</b></span><span>QUALIDADE <b id="lwQuality">—</b></span><span>ATUALIZADO <b id="lwUpdated">—</b></span></div>
+<section class="lab-operation-card white"><div class="lab-operation-main"><span>OPERAÇÃO / CANDIDATO ATUAL</span><h3 id="lwTarget">PROCURANDO</h3><p id="lwWindow">Aguardando projeção do servidor</p></div><div class="lab-force"><strong id="lwForce">—</strong><small>FORÇA / 10</small></div><div class="lab-operation-progress"><span>CASAS</span><strong id="lwProgress">0 / 6</strong><div class="lab-house-dots" id="lwHouses"></div></div><div class="lab-operation-class" id="lwTier">OBSERVAÇÃO</div></section>
+<div class="lab-metric-grid" id="lwMetrics"></div>
+<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Capturas por casa</h3><span>operações concluídas</span></div><div class="lab-bars" id="lwHouseBars"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>Padrões capturados</h3><span>múltiplos na janela</span></div><div class="lab-pattern-grid" id="lwPatterns"></div></section></div>
+<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Sensores: com branco × sem branco</h3><span>comparativo operacional</span></div><div class="lab-sensor-compare" id="lwSensors"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>Faixas de força</h3><span>captura média por operação</span></div><div class="lab-band-list" id="lwForceBands"></div></section></div>
+<section class="lab-panel"><div class="lab-panel-head"><h3>Observações monitoradas</h3><span>janelas não publicadas e resultado simulado</span></div><div class="lab-observation-summary" id="lwObsSummary"></div><div class="lab-table-wrap"><table class="lab-table"><thead><tr><th>Horário</th><th>Força</th><th>Casas</th><th>Brancos</th><th>Resultado</th></tr></thead><tbody id="lwObservations"></tbody></table></div></section>
+<section class="lab-panel"><div class="lab-panel-head"><h3>Histórico de operações</h3><span>últimas operações oficiais</span></div><div class="lab-table-wrap"><table class="lab-table"><thead><tr><th>Horário</th><th>Força</th><th>Casas</th><th>Capturas</th><th>Classificação</th></tr></thead><tbody id="lwHistory"></tbody></table></div></section>
+<section class="lab-panel lab-insight"><div class="lab-panel-head"><h3>Leitura automática do laboratório</h3><span>apoio para calibração manual</span></div><div id="lwInsights"></div></section>
+</div></div><div class="screen" id="labColor"><div class="shell lab-shell">
+<header class="lab-page-head"><div><span class="lab-kicker">AUTOMATIC COLOR INTELLIGENCE</span><h2>◉ LAB COLOR</h2><p>Operação atual, desempenho por etapa, score, G2 opcional e comportamento por faixa.</p></div><div class="lab-head-status" id="lcStatus"><i></i> CONECTANDO</div></header>
+<div class="lab-source-strip"><span>MOTOR <b>SERVER 24H</b></span><span>SINAIS HOJE <b id="lcSignals">—</b></span><span>ASSERTIVIDADE <b id="lcAccuracy">—</b></span><span>ATUALIZADO <b id="lcUpdated">—</b></span></div>
+<section class="lab-operation-card color"><div class="lab-operation-main"><span>OPERAÇÃO COLOR ATUAL</span><h3 id="lcTarget">AGUARDANDO</h3><p id="lcStage">O motor está procurando a próxima entrada.</p></div><div class="lab-force"><strong id="lcScore">—</strong><small>SCORE</small></div><div class="lab-operation-progress"><span>COBERTURA</span><strong id="lcCoverage">ATÉ G1</strong><small id="lcG2">G2 bloqueado</small></div><div class="lab-operation-class" id="lcTier">NEUTRO</div></section>
+<div class="lab-metric-grid" id="lcMetrics"></div>
+<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Resultados por etapa</h3><span>direta, G1, G2, branco e loss</span></div><div class="lab-bars" id="lcResultBars"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>Faixas de score</h3><span>assertividade e volume</span></div><div class="lab-band-list" id="lcScoreBands"></div></section></div>
+<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Desempenho por cor</h3><span>vermelho × preto</span></div><div class="lab-color-split" id="lcColors"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>G2 opcional</h3><span>score 80+</span></div><div class="lab-g2-card" id="lcG2Stats"></div></section></div>
+<section class="lab-panel"><div class="lab-panel-head"><h3>Histórico de operações</h3><span>últimas operações automáticas</span></div><div class="lab-table-wrap"><table class="lab-table"><thead><tr><th>Horário</th><th>Entrada</th><th>Score</th><th>Cobertura</th><th>Resultado</th></tr></thead><tbody id="lcHistory"></tbody></table></div></section>
+<section class="lab-panel lab-insight"><div class="lab-panel-head"><h3>Leitura automática do laboratório</h3><span>pontos para acompanhamento</span></div><div id="lcInsights"></div></section>
+</div></div><div class="screen" id="gestor">
 <div class="shell">
 <div class="inner-header">
 <button class="back" onclick="goHome()">← Voltar para Home</button>
@@ -344,7 +253,6 @@
 </div>
 </div>
 </div>
-
 <div class="screen" id="padroes">
 <div class="shell">
 <div class="inner-header">
@@ -372,7 +280,6 @@
 </div>
 </div>
 </div>
-
 <div class="screen" id="catalogador">
 <div class="shell">
 <div class="inner-header catalog-clean-header">
@@ -397,22 +304,22 @@
 </div>
 <div aria-live="polite" class="sigma-live-message offline catalog-alert-hidden" id="catalogAlert">Conectando ao SIGMA LIVE SERVER…</div>
 <div class="catalog-toolbar">
-  <div class="catalog-tabs"><button class="catalog-tab active" data-catalog-tab="history">Histórico</button><button class="catalog-tab" data-catalog-tab="validator">Validador de Branco</button></div>
-  <div class="catalog-limit"><span>EXIBIR / ANALISAR</span><div id="catalogLimitButtons"><button data-limit="300">300</button><button data-limit="500" class="active">500</button><button data-limit="1000">1000</button><button data-limit="3000">3000</button></div><strong id="catalogCount">0 / 3000 rodadas</strong></div>
+<div class="catalog-tabs"><button class="catalog-tab active" data-catalog-tab="history">Histórico</button><button class="catalog-tab" data-catalog-tab="validator">Validador de Branco</button></div>
+<div class="catalog-limit"><span>EXIBIR / ANALISAR</span><div id="catalogLimitButtons"><button data-limit="300">300</button><button class="active" data-limit="500">500</button><button data-limit="1000">1000</button><button data-limit="3000">3000</button></div><strong id="catalogCount">0 / 3000 rodadas</strong></div>
 </div>
-<section class="catalog-validator" id="catalogValidator" hidden>
-  <div class="validator-builder">
-    <div class="validator-head"><div><span>VALIDADOR DE PADRÃO</span><h3>Monte a sequência anterior ao branco</h3></div><button id="validatorClear" type="button">Limpar</button></div>
-    <div class="validator-pattern" id="validatorPattern"><div class="validator-empty">Selecione cores ou números abaixo.</div></div>
-    <div class="validator-palette">
-      <div><span>CORES GENÉRICAS</span><button class="pick red" data-token="red">Vermelho</button><button class="pick black" data-token="black">Preto</button><button class="pick white" data-token="white">Branco</button></div>
-      <div><span>NÚMEROS EXATOS</span><div class="number-picks" id="validatorNumbers"></div></div>
-    </div>
-    <div class="validator-actions"><label>Validar branco até <select id="validatorGale"><option value="0">Direta</option><option value="1">G1</option><option value="2">G2</option><option value="3">G3</option><option value="4">G4</option><option value="5" selected>G5</option></select> <small class="validator-round-note">cada G = 1 rodada</small></label><button class="validator-run" id="validatorRun" type="button">VALIDAR PADRÃO</button></div>
-  </div>
-  <div class="validator-summary" id="validatorSummary"><div class="validator-empty">Monte um padrão para pesquisar na base selecionada.</div></div>
-  <div class="validator-nav" id="validatorNav" hidden><button id="validatorPrev">← Anterior</button><strong id="validatorPosition">0 de 0</strong><button id="validatorNext">Próxima →</button><button id="validatorShowAll">Mostrar todas</button><button id="validatorHide">Ocultar marcações</button></div>
-  <div class="validator-occurrences" id="validatorOccurrences"></div>
+<section class="catalog-validator" hidden="" id="catalogValidator">
+<div class="validator-builder">
+<div class="validator-head"><div><span>VALIDADOR DE PADRÃO</span><h3>Monte a sequência anterior ao branco</h3></div><button id="validatorClear" type="button">Limpar</button></div>
+<div class="validator-pattern" id="validatorPattern"><div class="validator-empty">Selecione cores ou números abaixo.</div></div>
+<div class="validator-palette">
+<div><span>CORES GENÉRICAS</span><button class="pick red" data-token="red">Vermelho</button><button class="pick black" data-token="black">Preto</button><button class="pick white" data-token="white">Branco</button></div>
+<div><span>NÚMEROS EXATOS</span><div class="number-picks" id="validatorNumbers"></div></div>
+</div>
+<div class="validator-actions"><label>Validar branco até <select id="validatorGale"><option value="0">Direta</option><option value="1">G1</option><option value="2">G2</option><option value="3">G3</option><option value="4">G4</option><option selected="" value="5">G5</option></select> <small class="validator-round-note">cada G = 1 rodada</small></label><button class="validator-run" id="validatorRun" type="button">VALIDAR PADRÃO</button></div>
+</div>
+<div class="validator-summary" id="validatorSummary"><div class="validator-empty">Monte um padrão para pesquisar na base selecionada.</div></div>
+<div class="validator-nav" hidden="" id="validatorNav"><button id="validatorPrev">← Anterior</button><strong id="validatorPosition">0 de 0</strong><button id="validatorNext">Próxima →</button><button id="validatorShowAll">Mostrar todas</button><button id="validatorHide">Ocultar marcações</button></div>
+<div class="validator-occurrences" id="validatorOccurrences"></div>
 </section>
 <div class="sigma-catalog-board" id="catalogHours"></div>
 <div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O ORION preserva até 3000 rodadas mais recentes neste navegador.</div>
@@ -493,19 +400,16 @@
 <div class="tooltip" id="tooltip"></div>
 <script>window.SIGMA_ACCESS_MODE = "OPEN";</script>
 <script src="/js/sigma-access.js?v=4.4.3"></script>
-
 <script src="/js/core.js"></script>
 <script src="/js/live-engine-config.js"></script>
 <script src="/js/catalogador.js?v=4.4.9"></script>
 <script src="/js/catalog-validator.js"></script>
-<script src="/js/sigma-leitura.js?v=4.2.3-URGENT-SERVER-ONLY"></script>
-<script src="/js/sigma-projections.js?v=4.3.0-WHITE-SERVER"></script>
 
 
 <script src="/js/simulador.js"></script>
 <script src="/js/gestor-banca.js"></script>
 <script src="/js/padroes.js"></script>
-<script src="/js/central-operacoes.js"></script>
+
 <a aria-label="Suporte no Telegram" class="telegram-support" href="https://t.me/suportesigmaradar" rel="noopener noreferrer" target="_blank"><span class="telegram-support-icon">✈</span><span class="telegram-support-text">Suporte no Telegram</span></a>
-</body>
+<script src="/js/orion-labs.js?v=5.1.0"></script></body>
 </html>

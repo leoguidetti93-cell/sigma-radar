@@ -1,4 +1,4 @@
-/* SIGMA ORION — CATALOGADOR LIVE SERVER 3.3 • LINHA DO TEMPO CONTÍNUA DO SERVIDOR */
+/* SIGMA ORION — CATALOGADOR LIVE SERVER 3.4 • TIMESTAMP OFICIAL SINCRONIZADO */
 (() => {
   'use strict';
 
@@ -196,56 +196,71 @@
     }
 
     /*
-     * A memória do servidor contém uma sequência ordenada de rodadas. A Blaze
-     * pode devolver timestamps repetidos, atrasados ou com pequenos saltos.
-     * Usar esses timestamps como endereço da grade criava buracos e até fazia
-     * linhas de 10 minutos desaparecerem. A grade agora é reconstruída pela
-     * ORDEM REAL das rodadas: duas casas por minuto, sem lacunas internas.
-     * O horário da rodada mais recente ancora toda a linha do tempo.
+     * O timestamp oficial da rodada é a fonte da posição no Catalogador.
+     * Não reconstruímos mais a grade apenas pela sequência do array, pois isso
+     * deslocava todas as casas em 30 segundos quando a última rodada ocupava um
+     * subslot diferente do esperado. Cada minuto recebe, em ordem cronológica,
+     * no máximo duas rodadas: primeira casa e segunda casa do minuto.
      */
-    const chronological = visible.slice().sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
-    const newest = chronological[chronological.length - 1];
-    const newestDate = new Date(newest.createdAt);
+    const chronological = visible.slice().sort((a,b) => {
+      const timeDiff = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      if (timeDiff) return timeDiff;
+      const receivedDiff = new Date(a.receivedAt || a.createdAt).getTime() - new Date(b.receivedAt || b.createdAt).getTime();
+      if (receivedDiff) return receivedDiff;
+      return String(a.id).localeCompare(String(b.id));
+    });
 
-    // Descobre se a rodada mais recente ocupa a primeira ou a segunda casa do minuto.
-    const newestMinuteKey = `${dateKey(newestDate)}-${pad(newestDate.getHours())}-${pad(newestDate.getMinutes())}`;
-    const sameMinute = chronological.filter(round => {
+    const minuteBuckets = new Map();
+    for (const round of chronological) {
       const d = new Date(round.createdAt);
-      return `${dateKey(d)}-${pad(d.getHours())}-${pad(d.getMinutes())}` === newestMinuteKey;
-    });
-    const newestSubslot = sameMinute.length >= 2 ? 1 : 0;
+      if (Number.isNaN(d.getTime())) continue;
+      const minuteDate = new Date(
+        d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), 0, 0
+      );
+      const minuteKey = `${dateKey(minuteDate)}-${pad(minuteDate.getHours())}-${pad(minuteDate.getMinutes())}`;
+      if (!minuteBuckets.has(minuteKey)) minuteBuckets.set(minuteKey, []);
+      minuteBuckets.get(minuteKey).push(round);
+    }
 
-    const newestMinuteEpoch = Math.floor(newestDate.getTime() / 60000);
-    const newestAbsoluteSlot = newestMinuteEpoch * 2 + newestSubslot;
     const slotMap = new Map();
+    for (const [minuteKey, bucket] of minuteBuckets.entries()) {
+      bucket.sort((a,b) => {
+        const timeDiff = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        if (timeDiff) return timeDiff;
+        const receivedDiff = new Date(a.receivedAt || a.createdAt).getTime() - new Date(b.receivedAt || b.createdAt).getTime();
+        if (receivedDiff) return receivedDiff;
+        return String(a.id).localeCompare(String(b.id));
+      });
 
-    chronological.forEach((round, index) => {
-      const distanceFromNewest = chronological.length - 1 - index;
-      const absoluteSlot = newestAbsoluteSlot - distanceFromNewest;
-      const minuteEpoch = Math.floor(absoluteSlot / 2);
-      const subslot = ((absoluteSlot % 2) + 2) % 2;
-      const displayDate = new Date(minuteEpoch * 60000);
-      const key = `${dateKey(displayDate)}-${pad(displayDate.getHours())}-${pad(displayDate.getMinutes())}-${subslot}`;
-      slotMap.set(key, {...round, displayAt: displayDate.toISOString(), displaySubslot: subslot});
-    });
+      // A Blaze possui duas casas por minuto. Se houver algum evento repetido
+      // com ID diferente, mantemos as duas primeiras rodadas cronológicas.
+      bucket.slice(0, 2).forEach((round, subslot) => {
+        slotMap.set(`${minuteKey}-${subslot}`, {
+          ...round,
+          displayAt: round.createdAt,
+          displaySubslot: subslot
+        });
+      });
+    }
 
-    const oldestAbsoluteSlot = newestAbsoluteSlot - (chronological.length - 1);
-    const oldestMinuteEpoch = Math.floor(oldestAbsoluteSlot / 2);
-    const oldestDate = new Date(oldestMinuteEpoch * 60000);
+    const oldestDate = new Date(chronological[0].createdAt);
     const firstBlockDate = new Date(
       oldestDate.getFullYear(), oldestDate.getMonth(), oldestDate.getDate(),
       oldestDate.getHours(), blockStart(oldestDate.getMinutes()), 0, 0
     );
 
     const blocks = [];
-    for (let cursor = new Date(firstBlockDate); cursor <= currentBlockDate; cursor = new Date(cursor.getTime() + 10*60*1000)) {
+    for (
+      let cursor = new Date(firstBlockDate);
+      cursor <= currentBlockDate;
+      cursor = new Date(cursor.getTime() + 10 * 60 * 1000)
+    ) {
       const slots = [];
       for (let minuteOffset = 0; minuteOffset < 10; minuteOffset += 1) {
         const minuteDate = new Date(cursor.getTime() + minuteOffset * 60000);
-        for (let subslot = 0; subslot < 2; subslot += 1) {
-          const key = `${dateKey(minuteDate)}-${pad(minuteDate.getHours())}-${pad(minuteDate.getMinutes())}-${subslot}`;
-          slots.push(slotMap.get(key) || null);
-        }
+        const minuteKey = `${dateKey(minuteDate)}-${pad(minuteDate.getHours())}-${pad(minuteDate.getMinutes())}`;
+        slots.push(slotMap.get(`${minuteKey}-0`) || null);
+        slots.push(slotMap.get(`${minuteKey}-1`) || null);
       }
       blocks.push({
         key: blockKey(cursor),

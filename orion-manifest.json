@@ -1,6 +1,6 @@
 {
-  "name": "SIGMA ORION LABS",
-  "version": "5.1.0",
+  "name": "SIGMA ORION 5.2.0 LABS + SENSOR DE PADRÕES",
+  "version": "5.2.0",
   "modules": [
     "home",
     "catalogador",

@@ -160,3 +160,32 @@ body{background:radial-gradient(circle at 82% 7%,rgba(230,33,60,.10),transparent
 .lab-bar-track i{background:linear-gradient(90deg,#e6213c,#fff)}.lab-mini-bar i{background:rgba(255,255,255,.68)}.lab-mini-bar.loss i{background:rgba(230,33,60,.66)}.lab-insight-card{border-left-color:#e6213c}.lab-head-status,.lab-live-row span,.lab-source-strip span{border-color:rgba(255,255,255,.12)}
 
 .lab-current-sensors{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}.lab-current-sensor{padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:#111114}.lab-current-sensor span{display:block;font-size:10px;color:#8d8f96;letter-spacing:.06em}.lab-current-sensor strong{display:block;margin:8px 0 5px;font-size:13px}.lab-current-sensor b{font-size:18px}.lab-current-sensor.on{border-color:rgba(230,33,60,.48);box-shadow:inset 3px 0 #e6213c}.lab-current-sensor.on strong,.lab-current-sensor.on b{color:#fff}.lab-current-sensor.off{opacity:.55}.lab-current-sensor.off strong,.lab-current-sensor.off b{color:#71737a}@media(max-width:1000px){.lab-current-sensors{grid-template-columns:repeat(4,1fr)}}@media(max-width:650px){.lab-current-sensors{grid-template-columns:repeat(2,1fr)}}
+
+/* ORION 6.1.2 — TEMA BLAZE DEFINITIVO (carregado por último) */
+:root{
+  --lab-cyan:#ffffff!important;--lab-blue:#e82145!important;--lab-violet:#9b1029!important;
+  --lab-white:#ffffff!important;--lab-muted:#a6a7ad!important;--lab-card:rgba(17,17,20,.94)!important;
+  --lab-line:rgba(255,255,255,.10)!important;--orion-cyan:#ffffff!important;--orion-blue:#e82145!important;
+  --orion-violet:#8f1028!important;--orion-border:rgba(255,255,255,.10)!important;
+  --orion-border-strong:rgba(232,33,69,.45)!important;--orion-panel:#121216!important;
+  --orion-panel-solid:#121216!important;--orion-panel-soft:#19191e!important;
+}
+html,body{background:#09090b!important;color:#f7f7f8!important}
+body{background-image:radial-gradient(circle at 88% 5%,rgba(232,33,69,.10),transparent 28%)!important}
+.player-sidebar{background:linear-gradient(180deg,#111114,#09090b)!important;border-right:1px solid rgba(255,255,255,.08)!important}
+.side-logo strong em{color:#fff!important;text-shadow:none!important}
+.side-link,.side-link:hover{color:#aeb0b7!important}
+.side-link.active{background:linear-gradient(90deg,rgba(232,33,69,.18),rgba(232,33,69,.03))!important;border-color:rgba(232,33,69,.55)!important;box-shadow:inset 3px 0 0 #e82145!important;color:#fff!important}
+.side-icon{color:#fff!important}.side-link.active .side-icon{color:#fff!important;background:#e82145!important}
+.lab-hero,.lab-operation-card,.lab-panel,.lab-metric,.lab-home-cards button,.topbar,.catalog-toolbar,.catalog-block{background:#121216!important;border-color:rgba(255,255,255,.10)!important;box-shadow:0 18px 50px rgba(0,0,0,.26)!important}
+.lab-hero-grid,.lab-orbit,.lab-operation-card:after,.lab-operation-card:before{display:none!important}
+.lab-kicker,.lab-hero h1 span,.lab-force strong,.lab-operation-class,.lab-home-cards span{color:#fff!important;text-shadow:none!important}
+.lab-head-status,.lab-live-row span,.lab-source-strip span{border-color:rgba(255,255,255,.14)!important;background:#18181d!important;color:#c3c4c9!important}
+.lab-bar-track i,.lab-mini-bar i{background:linear-gradient(90deg,#e82145,#ff5574)!important;box-shadow:none!important}
+.lab-mini-bar.loss i{background:#47474f!important}
+.lab-insight-card{border-left-color:#e82145!important}.lab-operation-card:before{background:#e82145!important}
+.status-pill,.catalog-limit.active,.action-btn,.tab-btn.active{background:#e82145!important;color:#fff!important;border-color:#e82145!important}
+.catalog-limit,.tab-btn,.action-btn.secondary-action{background:#17171c!important;color:#ddd!important;border-color:rgba(255,255,255,.12)!important}
+.catalog-current{border-color:#e82145!important;box-shadow:0 0 0 1px rgba(232,33,69,.22)!important}
+.telegram-support{background:#e82145!important;box-shadow:0 10px 30px rgba(232,33,69,.28)!important}
+::-webkit-scrollbar-track{background:#09090b!important}::-webkit-scrollbar-thumb{background:#3a3a41!important;border:2px solid #09090b!important}

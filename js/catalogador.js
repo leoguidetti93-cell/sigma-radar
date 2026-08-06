@@ -10,9 +10,9 @@
   const HEALTH_URL = `${LIVE_BASE}/health`;
   const EVENTS_URL = `${LIVE_BASE}/events`;
   const BOOTSTRAP_URL = `${LIVE_BASE}/memory/bootstrap`;
-  const POLL_MS = 6000;
-  const RECENT_URL = '/api/blaze-double';
-  let recentOfficial = [];
+  const POLL_MS = 10000;
+  const OFFICIAL_RECENT_URL = '/api/blaze-double';
+  const OFFICIAL_RECONCILE_MS = 5000;
 
   let rounds = [];
   let eventSource = null;
@@ -156,6 +156,36 @@
 
     if (isNew) broadcastRound(rounds[rounds.length - 1]);
     return isNew;
+  }
+
+
+  async function reconcileOfficialRecent(){
+    try {
+      const response = await fetch(`${OFFICIAL_RECENT_URL}?_=${Date.now()}`, {cache:'no-store'});
+      if (!response.ok) return false;
+      const payload = await response.json().catch(()=>null);
+      const official = Array.isArray(payload) ? payload : (payload?.rounds || []);
+      if (!official.length) return false;
+
+      const before = new Set(rounds.map(r => r.id));
+      const normalized = official.map(normalizeRound).filter(Boolean);
+      const missing = normalized.filter(r => !before.has(r.id));
+      if (!missing.length) return false;
+
+      console.warn(`SIGMA: recuperando ${missing.length} rodada(s) recente(s) ausente(s) pelo histórico oficial.`);
+      mergeRounds(normalized, false);
+      // Garante que motores e widgets recebam a sequência oficial reparada.
+      window.SIGMA_LIVE_ENGINE = window.SIGMA_LIVE_ENGINE || {};
+      window.SIGMA_LIVE_ENGINE.rounds = rounds.slice();
+      window.SIGMA_LIVE_ENGINE.latest = rounds[rounds.length - 1] || null;
+      window.dispatchEvent(new CustomEvent('sigma:memory-reconciled', {
+        detail:{missing:missing.length, rounds:rounds.slice()}
+      }));
+      return true;
+    } catch (error) {
+      console.warn('SIGMA: falha na conferência do histórico oficial.', error);
+      return false;
+    }
   }
 
   function broadcastRound(round){
@@ -363,41 +393,8 @@
     if ($('catalogSource')) $('catalogSource').textContent = source || '—';
   }
 
-
-  async function hydrateRecentOfficial(){
-    try {
-      const response = await fetch(`${RECENT_URL}?t=${Date.now()}`, {cache:'no-store'});
-      if (!response.ok) return [];
-      const payload = await response.json();
-      const list = Array.isArray(payload) ? payload : (payload.rounds || []);
-      recentOfficial = list.map(normalizeRound).filter(Boolean)
-        .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
-      return recentOfficial;
-    } catch {
-      return recentOfficial;
-    }
-  }
-
-  function mergeOfficialMemory(serverRounds){
-    const map = new Map();
-    const add = round => {
-      if (!round) return;
-      const key = round.id || `${round.createdAt}-${round.roll}`;
-      map.set(key, round);
-    };
-    serverRounds.forEach(add);
-    recentOfficial.forEach(add);
-    // Preserva apenas rodadas locais muito recentes até o servidor concluir o reparo.
-    const recentCutoff = Date.now() - 20 * 60 * 1000;
-    rounds.filter(r => new Date(r.createdAt).getTime() >= recentCutoff).forEach(add);
-    return [...map.values()]
-      .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt))
-      .slice(-MAX_ROUNDS);
-  }
-
   async function hydrateFromServer(animateNewest = false){
     try {
-      await hydrateRecentOfficial();
       const response = await fetch(MEMORY_URL, {cache:'no-store'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
@@ -409,9 +406,9 @@
       const normalizedServer = list.map(normalizeRound).filter(Boolean)
         .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt))
         .slice(-MAX_ROUNDS);
-      if (normalizedServer.length || recentOfficial.length) {
+      if (normalizedServer.length) {
         const previousNewest = rounds.length ? rounds[rounds.length - 1]?.id : null;
-        rounds = mergeOfficialMemory(normalizedServer);
+        rounds = normalizedServer;
         latestRoundId = rounds[rounds.length - 1]?.id || null;
         saveState();
         renderCatalog(Boolean(animateNewest && latestRoundId && latestRoundId !== previousNewest));

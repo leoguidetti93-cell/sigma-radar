@@ -10,7 +10,9 @@
   const HEALTH_URL = `${LIVE_BASE}/health`;
   const EVENTS_URL = `${LIVE_BASE}/events`;
   const BOOTSTRAP_URL = `${LIVE_BASE}/memory/bootstrap`;
-  const POLL_MS = 10000;
+  const POLL_MS = 6000;
+  const RECENT_URL = '/api/blaze-double';
+  let recentOfficial = [];
 
   let rounds = [];
   let eventSource = null;
@@ -361,8 +363,41 @@
     if ($('catalogSource')) $('catalogSource').textContent = source || '—';
   }
 
+
+  async function hydrateRecentOfficial(){
+    try {
+      const response = await fetch(`${RECENT_URL}?t=${Date.now()}`, {cache:'no-store'});
+      if (!response.ok) return [];
+      const payload = await response.json();
+      const list = Array.isArray(payload) ? payload : (payload.rounds || []);
+      recentOfficial = list.map(normalizeRound).filter(Boolean)
+        .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+      return recentOfficial;
+    } catch {
+      return recentOfficial;
+    }
+  }
+
+  function mergeOfficialMemory(serverRounds){
+    const map = new Map();
+    const add = round => {
+      if (!round) return;
+      const key = round.id || `${round.createdAt}-${round.roll}`;
+      map.set(key, round);
+    };
+    serverRounds.forEach(add);
+    recentOfficial.forEach(add);
+    // Preserva apenas rodadas locais muito recentes até o servidor concluir o reparo.
+    const recentCutoff = Date.now() - 20 * 60 * 1000;
+    rounds.filter(r => new Date(r.createdAt).getTime() >= recentCutoff).forEach(add);
+    return [...map.values()]
+      .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .slice(-MAX_ROUNDS);
+  }
+
   async function hydrateFromServer(animateNewest = false){
     try {
+      await hydrateRecentOfficial();
       const response = await fetch(MEMORY_URL, {cache:'no-store'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
@@ -374,9 +409,9 @@
       const normalizedServer = list.map(normalizeRound).filter(Boolean)
         .sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt))
         .slice(-MAX_ROUNDS);
-      if (normalizedServer.length) {
+      if (normalizedServer.length || recentOfficial.length) {
         const previousNewest = rounds.length ? rounds[rounds.length - 1]?.id : null;
-        rounds = normalizedServer;
+        rounds = mergeOfficialMemory(normalizedServer);
         latestRoundId = rounds[rounds.length - 1]?.id || null;
         saveState();
         renderCatalog(Boolean(animateNewest && latestRoundId && latestRoundId !== previousNewest));

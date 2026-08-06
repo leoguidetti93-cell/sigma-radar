@@ -1,3 +1,7 @@
+const PAGE_TEMPLATES = [
+  'https://blaze.bet.br/api/singleplayer-originals/originals/roulette_games/recent/{page}',
+  'https://blaze.com/api/singleplayer-originals/originals/roulette_games/recent/{page}'
+];
 const SOURCES = [
   'https://blaze.bet.br/api/singleplayer-originals/originals/roulette_games/recent/1',
   'https://blaze.bet.br/api/roulette_games/recent',
@@ -72,8 +76,11 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
+  const requestedPage = Math.max(1, Math.min(200, Number(req.query?.page || 1) || 1));
+  const pageSources = PAGE_TEMPLATES.map(t => t.replace('{page}', String(requestedPage)));
+  const candidates = requestedPage > 1 ? pageSources : [...pageSources, ...SOURCES];
   const errors = [];
-  for (const url of SOURCES) {
+  for (const url of candidates) {
     try {
       const rounds = await requestSource(url);
       return res.status(200).json({ ok: true, rounds, count: rounds.length });

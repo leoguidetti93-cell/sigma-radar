@@ -13,6 +13,8 @@
   const POLL_MS = 10000;
   const OFFICIAL_RECENT_URL = '/api/blaze-double';
   const OFFICIAL_RECONCILE_MS = 5000;
+  const OFFICIAL_PAGE_SIZE_ESTIMATE = 20;
+  const OFFICIAL_MAX_PAGES = 170;
 
   let rounds = [];
   let eventSource = null;
@@ -110,7 +112,7 @@
       const response = await fetch(BOOTSTRAP_URL, {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({rounds:payload, source:'orion-local-v4.3.6'})
+        body:JSON.stringify({rounds:payload, source:'orion-official-v6.1.3', replace:true, official:true})
       });
       const data = await response.json().catch(()=>null);
 
@@ -158,6 +160,40 @@
     return isNew;
   }
 
+
+  async function syncOfficialHistory(){
+    const map = new Map();
+    let consecutiveEmpty = 0;
+    setConnection('connecting','Sincronizando as 3.000 rodadas oficiais da Blaze…','BLAZE • HISTÓRICO OFICIAL');
+    for (let start = 1; start <= OFFICIAL_MAX_PAGES && map.size < MAX_ROUNDS; start += 6) {
+      const pages = Array.from({length:6},(_,i)=>start+i).filter(p=>p<=OFFICIAL_MAX_PAGES);
+      const results = await Promise.all(pages.map(async page => {
+        try {
+          const response = await fetch(`${OFFICIAL_RECENT_URL}?page=${page}&_=${Date.now()}`, {cache:'no-store'});
+          if(!response.ok) return [];
+          const payload=await response.json().catch(()=>null);
+          return Array.isArray(payload)?payload:(payload?.rounds||[]);
+        } catch { return []; }
+      }));
+      let batchAdded=0;
+      for(const list of results){
+        for(const raw of list){
+          const round=normalizeRound(raw); if(!round) continue;
+          if(!map.has(round.id)){map.set(round.id,round);batchAdded++;}
+        }
+      }
+      if(!batchAdded) consecutiveEmpty += pages.length; else consecutiveEmpty=0;
+      if(consecutiveEmpty>=12) break;
+    }
+    const official=[...map.values()].sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)).slice(-MAX_ROUNDS);
+    if(official.length < 20) return false;
+    rounds=official; latestRoundId=rounds.at(-1)?.id||null; saveState(); renderCatalog(false); updateStats();
+    await bootstrapServerFromLocal(true);
+    window.SIGMA_LIVE_ENGINE = window.SIGMA_LIVE_ENGINE || {};
+    window.SIGMA_LIVE_ENGINE.rounds=rounds.slice(); window.SIGMA_LIVE_ENGINE.latest=rounds.at(-1)||null;
+    setConnection('online',`Histórico oficial sincronizado: ${rounds.length} rodadas.`,`BLAZE • ${rounds.length}/${MAX_ROUNDS}`);
+    return true;
+  }
 
   async function reconcileOfficialRecent(){
     try {
@@ -211,83 +247,25 @@
   function hourKey(d){ return `${dateKey(d)}-${pad(d.getHours())}`; }
 
   function createTimelineBlocks(){
-    const visible = visibleRounds();
-    const now = new Date();
-    const currentBlockDate = new Date(
-      now.getFullYear(), now.getMonth(), now.getDate(),
-      now.getHours(), blockStart(now.getMinutes()), 0, 0
-    );
-
-    if (!visible.length) {
-      return [{
-        key: blockKey(currentBlockDate),
-        date: currentBlockDate,
-        slots: Array(20).fill(null),
-        isCurrent: true
-      }];
+    const visible=visibleRounds().slice().sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+    const now=new Date();
+    const currentBlockDate=new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours(),blockStart(now.getMinutes()),0,0);
+    const grouped=new Map();
+    for(const round of visible){
+      const d=new Date(round.createdAt); if(Number.isNaN(d.getTime())) continue;
+      const b=new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),blockStart(d.getMinutes()),0,0);
+      const key=blockKey(b);
+      if(!grouped.has(key)) grouped.set(key,{key,date:b,byMinute:Array.from({length:10},()=>[])});
+      grouped.get(key).byMinute[d.getMinutes()-blockStart(d.getMinutes())].push(round);
     }
-
-    /*
-     * A memória do servidor contém uma sequência ordenada de rodadas. A Blaze
-     * pode devolver timestamps repetidos, atrasados ou com pequenos saltos.
-     * Usar esses timestamps como endereço da grade criava buracos e até fazia
-     * linhas de 10 minutos desaparecerem. A grade agora é reconstruída pela
-     * ORDEM REAL das rodadas: duas casas por minuto, sem lacunas internas.
-     * O horário da rodada mais recente ancora toda a linha do tempo.
-     */
-    const chronological = visible.slice().sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
-    const newest = chronological[chronological.length - 1];
-    const newestDate = new Date(newest.createdAt);
-
-    // Descobre se a rodada mais recente ocupa a primeira ou a segunda casa do minuto.
-    const newestMinuteKey = `${dateKey(newestDate)}-${pad(newestDate.getHours())}-${pad(newestDate.getMinutes())}`;
-    const sameMinute = chronological.filter(round => {
-      const d = new Date(round.createdAt);
-      return `${dateKey(d)}-${pad(d.getHours())}-${pad(d.getMinutes())}` === newestMinuteKey;
-    });
-    const newestSubslot = sameMinute.length >= 2 ? 1 : 0;
-
-    const newestMinuteEpoch = Math.floor(newestDate.getTime() / 60000);
-    const newestAbsoluteSlot = newestMinuteEpoch * 2 + newestSubslot;
-    const slotMap = new Map();
-
-    chronological.forEach((round, index) => {
-      const distanceFromNewest = chronological.length - 1 - index;
-      const absoluteSlot = newestAbsoluteSlot - distanceFromNewest;
-      const minuteEpoch = Math.floor(absoluteSlot / 2);
-      const subslot = ((absoluteSlot % 2) + 2) % 2;
-      const displayDate = new Date(minuteEpoch * 60000);
-      const key = `${dateKey(displayDate)}-${pad(displayDate.getHours())}-${pad(displayDate.getMinutes())}-${subslot}`;
-      slotMap.set(key, {...round, displayAt: displayDate.toISOString(), displaySubslot: subslot});
-    });
-
-    const oldestAbsoluteSlot = newestAbsoluteSlot - (chronological.length - 1);
-    const oldestMinuteEpoch = Math.floor(oldestAbsoluteSlot / 2);
-    const oldestDate = new Date(oldestMinuteEpoch * 60000);
-    const firstBlockDate = new Date(
-      oldestDate.getFullYear(), oldestDate.getMonth(), oldestDate.getDate(),
-      oldestDate.getHours(), blockStart(oldestDate.getMinutes()), 0, 0
-    );
-
-    const blocks = [];
-    for (let cursor = new Date(firstBlockDate); cursor <= currentBlockDate; cursor = new Date(cursor.getTime() + 10*60*1000)) {
-      const slots = [];
-      for (let minuteOffset = 0; minuteOffset < 10; minuteOffset += 1) {
-        const minuteDate = new Date(cursor.getTime() + minuteOffset * 60000);
-        for (let subslot = 0; subslot < 2; subslot += 1) {
-          const key = `${dateKey(minuteDate)}-${pad(minuteDate.getHours())}-${pad(minuteDate.getMinutes())}-${subslot}`;
-          slots.push(slotMap.get(key) || null);
-        }
-      }
-      blocks.push({
-        key: blockKey(cursor),
-        date: new Date(cursor),
-        slots,
-        isCurrent: blockKey(cursor) === blockKey(now)
-      });
-    }
-
-    return blocks.reverse();
+    const keys=[...grouped.values()].sort((a,b)=>a.date-b.date);
+    if(!keys.length) keys.push({key:blockKey(currentBlockDate),date:currentBlockDate,byMinute:Array.from({length:10},()=>[])});
+    // Preserve all real timestamps. Each minute receives at most the two official rounds,
+    // ordered chronologically; missing data stays visibly empty instead of shifting neighbors.
+    return keys.map(block=>({
+      key:block.key,date:block.date,isCurrent:block.key===blockKey(now),
+      slots:block.byMinute.flatMap(list=>list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt)).slice(0,2).concat(Array(Math.max(0,2-list.length)).fill(null)).slice(0,2))
+    })).reverse();
   }
 
   function stoneHtml(round, isNewest){
@@ -544,7 +522,6 @@
   async function startLiveCatalog(){
     if (!started) {
       loadState();
-      await bootstrapServerFromLocal();
       renderCatalog(false);
       updateStats();
       started = true;
@@ -562,7 +539,8 @@
     }
 
     setConnection('connecting','Conectando ao SIGMA LIVE SERVER…','SIGMA LIVE SERVER');
-    await hydrateFromServer(false);
+    const officialOk = await syncOfficialHistory();
+    if (!officialOk) await hydrateFromServer(false);
     await checkHealth();
     connectEventStream();
     startPolling();

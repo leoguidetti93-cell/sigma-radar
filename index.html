@@ -4,17 +4,16 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SIGMA ORION — CONTROL CENTER 6.0</title>
+<title>SIGMA RADAR — Sigma Nexus 1.0</title>
 <link href="/css/base.css" rel="stylesheet"/>
 <link href="/css/layout.css" rel="stylesheet"/>
 <link href="/css/modules.css" rel="stylesheet"/>
 <link href="/css/support.css" rel="stylesheet"/>
 <link href="/css/temporal-filter.css" rel="stylesheet"/>
-
 <link href="/css/sigma-access.css" rel="stylesheet"/>
 <link href="/css/sigma-leitura.css" rel="stylesheet"/>
 <link href="/css/catalog-validator.css" rel="stylesheet"/>
-<link href="/css/orion-labs.css?v=6.1.5" rel="stylesheet"/></head>
+<link href="/css/nexus-radar.css?v=1.0" rel="stylesheet"/></head>
 <body>
 <div aria-live="polite" class="sigma-access-gate" id="sigmaAccessGate">
 <div class="sigma-access-panel">
@@ -25,7 +24,7 @@
 <form hidden="" id="sigmaAccessForm">
 <label for="sigmaLicenseInput">Chave de licença</label>
 <input autocomplete="off" id="sigmaLicenseInput" maxlength="6" placeholder="EX.: VVCNE9" spellcheck="false" type="text"/>
-<button id="sigmaActivateButton" type="submit">ATIVAR ORION</button>
+<button id="sigmaActivateButton" type="submit">ATIVAR SIGMA</button>
 </form>
 <div class="sigma-access-message" id="sigmaAccessMessage"></div>
 <div class="sigma-access-account" hidden="" id="sigmaAccessAccount"></div>
@@ -41,23 +40,11 @@
 </div>
 </div>
 <aside class="player-sidebar">
-<div class="side-logo">
-<strong>SIGMA <em>ORION</em></strong>
-<span>CONTROL CENTER • DOUBLE INTELLIGENCE</span>
-</div>
+<div class="side-logo"><strong>Σ SIGMA <em>RADAR</em></strong><span>SIGMA NEXUS 1.0 • DOUBLE INTELLIGENCE</span></div>
 <div class="side-status"><i></i><span>CATALOGADOR • MEMÓRIA 3000</span></div>
-<nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','',this)"><span class="side-icon">⌂</span><span class="side-text">Início</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="labWhite" onclick="sideNavigate('labWhite','Laboratório do Branco',this)"><span class="side-icon">⚪</span><span class="side-text">LAB WHITE</span></button><button class="side-link" data-target="labColor" onclick="sideNavigate('labColor','Laboratório Color',this)"><span class="side-icon">◉</span><span class="side-text">LAB COLOR</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
-<div class="side-bottom"><b>ORION CONTROL — 6.1.5</b><span>Live • Labs • Intelligence</span></div>
+<nav class="side-nav"><button class="side-link active" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="estatisticas" onclick="sideNavigate('estatisticas','Estatísticas',this)"><span class="side-icon">Σ</span><span class="side-text">Estatísticas</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
+<div class="side-bottom"><b>SIGMA NEXUS — 1.0</b><span>Radar • Estatísticas • Gestão</span></div>
 </aside>
-<div class="screen active" id="home"><div class="shell lab-home-shell">
-<section class="lab-hero"><div class="lab-hero-grid"></div><div class="lab-orbit orbit-a"></div><div class="lab-orbit orbit-b"></div>
-<div class="lab-hero-copy"><span class="lab-kicker">SIGMA ORION • LIVE INTELLIGENCE PLATFORM</span><h1><span>Σ</span> ORION CONTROL</h1><p>Operações automáticas, laboratórios analíticos e leitura em tempo real em uma única interface.</p><div class="lab-live-row"><span><i></i> SERVER 24H</span><span>MEMÓRIA 3000</span><span>DISCO PERSISTENTE</span></div></div></section>
-<section class="lab-home-cards">
-<button onclick="sideNavigate('labWhite','Laboratório do Branco',document.querySelector('[data-target=labWhite]'))"><em>⚪</em><span>LAB WHITE</span><strong>Força, capturas, casas, padrões e observações</strong></button>
-<button onclick="sideNavigate('labColor','Laboratório Color',document.querySelector('[data-target=labColor]'))"><em>◉</em><span>LAB COLOR</span><strong>Direta, G1, G2, faixas de score e desempenho</strong></button>
-<button onclick="sideNavigate('catalogador','Catalogador Ao Vivo',document.querySelector('[data-target=catalogador]'))"><em>▦</em><span>CATALOGADOR</span><strong>Grade oficial reconstruída pelo servidor</strong></button>
-</section></div></div>
-
 
 <div class="screen" id="operacional">
 <div class="shell">
@@ -120,29 +107,7 @@
 </div>
 </div>
 </div>
-<div class="screen" id="labWhite"><div class="shell lab-shell">
-<header class="lab-page-head"><div><span class="lab-kicker">AUTOMATIC WHITE INTELLIGENCE</span><h2>⚪ LAB WHITE</h2><p>Operação atual, capturas, sensores ativos e oportunidades que ficaram em observação.</p></div><div class="lab-head-status" id="lwStatus"><i></i> CONECTANDO</div></header>
-<div class="lab-source-strip"><span>AMOSTRA <b id="lwRounds">—</b></span><span>BRANCOS NA BASE <b id="lwBaseWhites">—</b></span><span>QUALIDADE <b id="lwQuality">—</b></span><span>ATUALIZADO <b id="lwUpdated">—</b></span></div>
-<section class="lab-operation-card white"><div class="lab-operation-main"><span>OPERAÇÃO / CANDIDATO ATUAL</span><h3 id="lwTarget">PROCURANDO</h3><p id="lwWindow">Aguardando projeção do servidor</p></div><div class="lab-force"><strong id="lwForce">—</strong><small>SOMA DOS SENSORES</small></div><div class="lab-operation-progress"><span>CASAS</span><strong id="lwProgress">0 / 6</strong><div class="lab-house-dots" id="lwHouses"></div></div><div class="lab-operation-class" id="lwTier">OBSERVAÇÃO</div></section>
-<div class="lab-metric-grid" id="lwMetrics"></div>
-<section class="lab-panel"><div class="lab-panel-head"><h3>Sensores do candidato atual</h3><span>ATIVO soma o valor completo</span></div><div class="lab-current-sensors" id="lwCurrentSensors"></div></section>
-<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Capturas por casa</h3><span>operações concluídas</span></div><div class="lab-bars" id="lwHouseBars"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>Padrões capturados</h3><span>múltiplos na janela</span></div><div class="lab-pattern-grid" id="lwPatterns"></div></section></div>
-
-<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Sensores: com branco × sem branco</h3><span>comparativo operacional</span></div><div class="lab-sensor-compare" id="lwSensors"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>Faixas de força</h3><span>captura média por operação</span></div><div class="lab-band-list" id="lwForceBands"></div></section></div>
-<section class="lab-panel"><div class="lab-panel-head"><h3>Observações monitoradas</h3><span>janelas não publicadas e resultado simulado</span></div><div class="lab-observation-summary" id="lwObsSummary"></div><div class="lab-table-wrap"><table class="lab-table"><thead><tr><th>Horário</th><th>Força</th><th>Casas</th><th>Brancos</th><th>Resultado</th></tr></thead><tbody id="lwObservations"></tbody></table></div></section>
-<section class="lab-panel"><div class="lab-panel-head"><h3>Histórico de operações</h3><span>últimas operações oficiais</span></div><div class="lab-table-wrap"><table class="lab-table"><thead><tr><th>Horário</th><th>Força</th><th>Casas</th><th>Capturas</th><th>Classificação</th></tr></thead><tbody id="lwHistory"></tbody></table></div></section>
-<section class="lab-panel lab-insight"><div class="lab-panel-head"><h3>Leitura automática do laboratório</h3><span>apoio para calibração manual</span></div><div id="lwInsights"></div></section>
-</div></div><div class="screen" id="labColor"><div class="shell lab-shell">
-<header class="lab-page-head"><div><span class="lab-kicker">AUTOMATIC COLOR INTELLIGENCE</span><h2>◉ LAB COLOR</h2><p>Operação atual, desempenho por etapa, score, G2 opcional e comportamento por faixa.</p></div><div class="lab-head-status" id="lcStatus"><i></i> CONECTANDO</div></header>
-<div class="lab-source-strip"><span>MOTOR <b>SERVER 24H</b></span><span>SINAIS HOJE <b id="lcSignals">—</b></span><span>ASSERTIVIDADE <b id="lcAccuracy">—</b></span><span>ATUALIZADO <b id="lcUpdated">—</b></span></div>
-<section class="lab-operation-card color"><div class="lab-operation-main"><span>OPERAÇÃO COLOR ATUAL</span><h3 id="lcTarget">AGUARDANDO</h3><p id="lcStage">O motor está procurando a próxima entrada.</p></div><div class="lab-force"><strong id="lcScore">—</strong><small>SCORE</small></div><div class="lab-operation-progress"><span>COBERTURA</span><strong id="lcCoverage">ATÉ G1</strong><small id="lcG2">G2 bloqueado</small></div><div class="lab-operation-class" id="lcTier">NEUTRO</div></section>
-<div class="lab-metric-grid" id="lcMetrics"></div>
-<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Resultados por etapa</h3><span>direta, G1, G2, branco e loss</span></div><div class="lab-bars" id="lcResultBars"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>Faixas de score</h3><span>assertividade e volume</span></div><div class="lab-band-list" id="lcScoreBands"></div></section></div>
-<div class="lab-two-col"><section class="lab-panel"><div class="lab-panel-head"><h3>Desempenho por cor</h3><span>vermelho × preto</span></div><div class="lab-color-split" id="lcColors"></div></section><section class="lab-panel"><div class="lab-panel-head"><h3>G2 opcional</h3><span>score 80+</span></div><div class="lab-g2-card" id="lcG2Stats"></div></section></div>
-<section class="lab-panel"><div class="lab-panel-head"><h3>Sensor de padrões recorrentes</h3><span>sequências atuais × 3.000 rodadas</span></div><div class="lab-pattern-opportunity" id="lcPatternActive"></div><div class="lab-table-wrap"><table class="lab-table"><thead><tr><th>Padrão</th><th>Entrada</th><th>Ocorrências</th><th>Até G1</th><th>Até G2</th><th>Força</th></tr></thead><tbody id="lcPatternTable"></tbody></table></div></section>
-<section class="lab-panel"><div class="lab-panel-head"><h3>Histórico de operações</h3><span>últimas operações automáticas</span></div><div class="lab-table-wrap"><table class="lab-table"><thead><tr><th>Horário</th><th>Entrada</th><th>Score</th><th>Cobertura</th><th>Resultado</th></tr></thead><tbody id="lcHistory"></tbody></table></div></section>
-<section class="lab-panel lab-insight"><div class="lab-panel-head"><h3>Leitura automática do laboratório</h3><span>pontos para acompanhamento</span></div><div id="lcInsights"></div></section>
-</div></div><div class="screen" id="gestor">
+<div class="screen" id="estatisticas"><div class="shell radar-stats-shell"><div class="inner-header radar-stats-head"><div class="title-group"><span class="radar-eyebrow">SIGMA RADAR • LEITURA DAS ÚLTIMAS 3000</span><h2>Estatísticas</h2><p>Uma leitura simples do comportamento real do Double.</p></div><span class="status-pill sigma-live-pill">● AO VIVO</span></div><div class="radar-stat-cards"><article><span>BRANCOS • 24H</span><strong id="rsWhites24">—</strong><small id="rsWhites24Sub">aguardando dados</small></article><article><span>INTERVALO MÉDIO</span><strong id="rsAvgGap">—</strong><small>rodadas entre brancos</small></article><article><span>MAIOR INTERVALO</span><strong id="rsMaxGap">—</strong><small>nas rodadas carregadas</small></article><article><span>MOMENTO ATUAL</span><strong id="rsRegime">—</strong><small id="rsRegimeSub">leitura de concentração</small></article></div><section class="radar-stats-panel"><div class="radar-panel-title"><div><span>MINUTOS PAGANTES</span><h3>Onde o branco mais apareceu</h3></div><small>últimas 3000 rodadas</small></div><div class="paying-minutes" id="rsMinutes"></div></section><div class="radar-stats-columns"><section class="radar-stats-panel"><div class="radar-panel-title"><div><span>MELHORES HORÁRIOS</span><h3>Faixas mais ativas do dia</h3></div></div><div class="radar-ranking" id="rsHours"></div></section><section class="radar-stats-panel"><div class="radar-panel-title"><div><span>RADAR AGORA</span><h3>Comportamento recente</h3></div></div><div class="radar-now" id="rsNow"></div></section></div><section class="radar-stats-panel"><div class="radar-panel-title"><div><span>PROJEÇÃO ESTATÍSTICA</span><h3>Leitura do próximo ciclo</h3></div></div><div class="radar-projection" id="rsProjection">Aguardando histórico suficiente para calcular a leitura.</div></section></div></div><div class="screen" id="gestor">
 <div class="shell">
 <div class="inner-header">
 <button class="back" onclick="goHome()">← Voltar para Home</button>
@@ -283,11 +248,11 @@
 </div>
 </div>
 </div>
-<div class="screen" id="catalogador">
+<div class="screen active" id="catalogador">
 <div class="shell">
 <div class="inner-header catalog-clean-header">
-<button class="back" onclick="goHome()">← Voltar para Home</button>
-<div class="title-group"><h2>Catalogador ao Vivo</h2></div>
+
+<div class="title-group"><h2>SIGMA RADAR • Catalogador ao Vivo</h2></div>
 <span class="status-pill sigma-live-pill offline" id="catalogStatus">● STATUS: DESCONECTADO</span>
 </div>
 <div class="catalog-summary-grid">
@@ -325,7 +290,7 @@
 <div class="validator-occurrences" id="validatorOccurrences"></div>
 </section>
 <div class="sigma-catalog-board" id="catalogHours"></div>
-<div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O ORION preserva até 3000 rodadas mais recentes neste navegador.</div>
+<div style="margin-top:10px;color:var(--muted);font-size:10px">Última atualização: <span id="catalogUpdated">—</span>. O SIGMA RADAR preserva até 3000 rodadas mais recentes neste navegador.</div>
 </div>
 </div>
 <div class="screen" id="simulador">
@@ -407,12 +372,9 @@
 <script src="/js/live-engine-config.js"></script>
 <script src="/js/catalogador.js?v=6.1.5"></script>
 <script src="/js/catalog-validator.js"></script>
-
-
 <script src="/js/simulador.js"></script>
 <script src="/js/gestor-banca.js"></script>
 <script src="/js/padroes.js"></script>
-
 <a aria-label="Suporte no Telegram" class="telegram-support" href="https://t.me/suportesigmaradar" rel="noopener noreferrer" target="_blank"><span class="telegram-support-icon">✈</span><span class="telegram-support-text">Suporte no Telegram</span></a>
-<script src="/js/orion-labs.js?v=5.1.0"></script></body>
+<script src="/js/nexus-stats.js?v=1.0"></script></body>
 </html>

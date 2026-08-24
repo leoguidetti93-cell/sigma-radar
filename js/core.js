@@ -6,18 +6,14 @@ function setActiveSideLink(target){
   });
 }
 function sideNavigate(id,title,button){
-  if(id==='home'){
-    goHome();
-    setActiveSideLink('home');
-    return;
-  }
+  if(id==='home'){ id='catalogador'; }
   openFeature(id,title);
   setActiveSideLink(id);
 }
 const originalGoHome=goHome;
 goHome=function(){
   originalGoHome();
-  setActiveSideLink('home');
+  setActiveSideLink('catalogador');
 };
 function updatePlayerClock(){
   const now=new Date();
@@ -29,7 +25,7 @@ function updatePlayerClock(){
 updatePlayerClock();
 setInterval(updatePlayerClock,1000);
 
-function goHome(){screens.forEach(s=>s.classList.remove('active'));document.getElementById('home').classList.add('active');window.scrollTo(0,0)}
+function goHome(){screens.forEach(s=>s.classList.remove('active'));document.getElementById('catalogador')?.classList.add('active');setActiveSideLink('catalogador');window.scrollTo(0,0)}
 const loaderMessages={
   sigmaColor:'Calculando predominância e selecionando os 12 sinais da sessão.',
   padroes:'Minerando sequências de quatro casas e validando resultados até G1.',

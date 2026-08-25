@@ -1,16 +1,9 @@
 {
-  "name": "SIGMA ORION 6.1.0",
-  "version": "6.3.0",
-  "modules": [
-    "home",
-    "catalogador",
-    "labWhite",
-    "labColor",
-    "gestor"
-  ],
-  "manualAnalystRemoved": true,
+  "name": "SIGMA RADAR",
+  "version": "Sigma Nexus 1.0",
+  "modules": ["catalogador", "estatisticas", "gestor"],
   "catalogadorVersion": "4.4.9-preserved",
-  "catalogador": "3.4-timestamp-oficial",
-  "whitePatternSensor": "gradual-0.2-0.5-0.8",
-  "whiteMinuteSensor": "hot-minute-relative"
+  "catalogadorProtected": true,
+  "statistics": "today-hours + minute-map-3000 + white-hour-radar",
+  "telegram": "single-group-lock-replies"
 }

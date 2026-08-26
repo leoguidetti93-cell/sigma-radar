@@ -4,6 +4,7 @@ const TZ='America/Sao_Paulo',$=id=>document.getElementById(id);
 const API='https://sigma-live-server.onrender.com/api/nexus/home-state';
 const fmtIso=iso=>iso?new Intl.DateTimeFormat('pt-BR',{timeZone:TZ,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(iso)):'—';
 let lastState=null,loading=false;
+const LOCAL_STATE_KEY='sigma:nexus-home:virtual-suggestion:v1';
 
 function paint(state){
   if(!state||!state.ready)return false;
@@ -12,6 +13,13 @@ function paint(state){
   if(entry){
     entry.textContent=state.nextEntry?fmtIso(state.nextEntry):'AGUARDAR';
     entry.classList.toggle('is-wait',!state.nextEntry);
+  }
+  const hist=$('nhSuggestionHistory');
+  if(hist){
+    const items=(state.suggestionHistory||state.history||[]).slice(0,3);
+    hist.innerHTML=items.length
+      ? items.map(x=>{const paid=Boolean(x.paid),label=paid?(Number(x.whiteCount)>1?`PAGO • ${Number(x.whiteCount)} BRANCOS`:'PAGO'):'NÃO PAGOU';return `<article class="${paid?'is-paid':'is-loss'}"><b>${fmtIso(x.target)}</b><em>${label}</em></article>`}).join('')
+      : '<article><b>—</b><em>AGUARDANDO HISTÓRICO</em></article>';
   }
   const root=$('nhWindows');
   if(root){
@@ -124,11 +132,37 @@ function future(rounds,horizonMin){
   const pred=near.reduce((a,x)=>a+x.fw,0)/near.length,expected=target*base;
   if(pred>=expected*1.25)return 'FAVORÁVEL';if(pred<=expected*.72)return 'RECUPERAÇÃO';return 'ATENÇÃO';
 }
+function readLocalVirtual(){
+  try{return JSON.parse(localStorage.getItem(LOCAL_STATE_KEY)||'{}')||{}}catch(_e){return {}}
+}
+function saveLocalVirtual(v){try{localStorage.setItem(LOCAL_STATE_KEY,JSON.stringify(v))}catch(_e){}}
+function minuteFloor(d){return new Date(Math.floor(d.getTime()/60000)*60000)}
+function settleLocalVirtual(rounds,now,st){
+  if(!st.active?.target)return st;
+  const target=minuteFloor(new Date(st.active.target)),start=addMin(target,-1),end=addMin(target,2);
+  if(now<end)return st;
+  const houses=rounds.filter(r=>{const t=rdate(r);return t>=start&&t<end}).slice(0,6);
+  if(houses.length<6&&now<addMin(end,1.5))return st;
+  const whiteCount=houses.filter(isWhite).length;
+  const item={target:target.toISOString(),paid:whiteCount>0,whiteCount,houses:houses.length,settledAt:now.toISOString()};
+  st.history=[item,...(Array.isArray(st.history)?st.history:[])].slice(0,20);
+  st.active=null;
+  saveLocalVirtual(st);
+  return st;
+}
+function localLockedEntry(rounds,now){
+  let st=settleLocalVirtual(rounds,now,readLocalVirtual());
+  if(!st.active?.target){
+    const entry=nextEntry(rounds,now);
+    if(entry){const target=minuteFloor(entry);st.active={target:target.toISOString(),createdAt:now.toISOString()};saveLocalVirtual(st)}
+  }
+  return {entry:st.active?.target?new Date(st.active.target):null,history:(st.history||[]).slice(0,3),active:st.active||null};
+}
 function computeLocal(){
   const rounds=localRounds(),now=new Date();
   if(rounds.length<100)return null;
-  const entry=nextEntry(rounds,now),ws=windows(rounds,now);
-  return {ready:true,source:'LOCAL_MEMORY',count:rounds.length,updatedAt:now.toISOString(),currentRegime:regime(rounds),nextEntry:entry?entry.toISOString():null,windows:ws.map(x=>({start:x.s.toISOString(),end:x.e.toISOString()})),moment10:future(rounds,10),moment20:future(rounds,20)};
+  const locked=localLockedEntry(rounds,now),ws=windows(rounds,now);
+  return {ready:true,source:'LOCAL_MEMORY',count:rounds.length,updatedAt:now.toISOString(),currentRegime:regime(rounds),nextEntry:locked.entry?locked.entry.toISOString():null,activeSuggestion:locked.active,suggestionHistory:locked.history,windows:ws.map(x=>({start:x.s.toISOString(),end:x.e.toISOString()})),moment10:future(rounds,10),moment20:future(rounds,20)};
 }
 function paintFallback(){
   const local=computeLocal();

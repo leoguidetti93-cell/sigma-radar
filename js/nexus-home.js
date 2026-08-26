@@ -28,6 +28,17 @@ function paint(state){
       ? list.map((x,i)=>`<article><span>0${i+1}</span><strong>${fmtIso(x.start)} – ${fmtIso(x.end)}</strong></article>`).join('')
       : '<article><span>01</span><strong>—</strong></article><article><span>02</span><strong>—</strong></article>';
   }
+  const wh=$('nhWindowHistory');
+  if(wh){
+    const items=(state.windowHistory||[]).slice(0,4);
+    wh.innerHTML=items.length?items.map(x=>{
+      const inside=Number(x.insideCount||0),border=Number(x.borderCount||0);
+      let label=inside>0?`PAGOU${inside>1?` • ${inside} BRANCOS`:''}`:(border>0?'BRANCO NA BORDA':'NÃO PAGOU');
+      if(inside>0&&border>0)label+=` • +${border} BORDA`;
+      const cls=inside>0?'is-paid':(border>0?'is-border':'is-loss');
+      return `<article class="${cls}"><b>${fmtIso(x.start)}–${fmtIso(x.end)}</b><em>${label}</em></article>`;
+    }).join(''):'<small>AGUARDANDO HISTÓRICO</small>';
+  }
   [['nhMoment10','moment10'],['nhMoment20','moment20']].forEach(([id,key])=>{
     const el=$(id);if(!el)return;
     const v=state[key]||'ATENÇÃO';el.textContent=v;el.dataset.state=v;

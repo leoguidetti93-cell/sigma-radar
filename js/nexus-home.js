@@ -1,27 +1,26 @@
 (function(){
 const TZ='America/Sao_Paulo',$=id=>document.getElementById(id);
-const num=r=>Number(r?.roll??r?.number??r?.value),isWhite=r=>num(r)===0||r?.color==='white'||r?.color===0;
-const dt=r=>new Date(r?.createdAt||r?.created_at||r?.timestamp||0);
-const parts=d=>{if(!(d instanceof Date)||isNaN(d))return null;return Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(d).map(x=>[x.type,x.value]))};
-const med=a=>{if(!a.length)return 0;const b=[...a].sort((x,y)=>x-y),m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2};
-const fmt=d=>new Intl.DateTimeFormat('pt-BR',{timeZone:TZ,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d);
-const addMin=(d,m)=>new Date(d.getTime()+m*60000);
-function chronological(){const src=(window.SIGMA_LIVE_ENGINE?.rounds||[]).slice(-3000);if(src.length<2)return src;return dt(src[0])<=dt(src.at(-1))?src:src.reverse()}
-function whiteStats(rounds){const wi=[];rounds.forEach((r,i)=>{if(isWhite(r))wi.push(i)});const gaps=[];for(let i=1;i<wi.length;i++)gaps.push(wi[i]-wi[i-1]);return{wi,gaps,since:wi.length?rounds.length-1-wi.at(-1):rounds.length,avg:gaps.length?gaps.slice(-30).reduce((a,b)=>a+b,0)/Math.min(gaps.length,30):0,median:med(gaps.slice(-30))}}
-function regime(rounds){const base=rounds.filter(isWhite).length/Math.max(rounds.length,1),recent=rounds.slice(-60).filter(isWhite).length,expected=60*base;return recent>=expected*1.35?'PIPOCANDO':recent<=expected*.65?'RECUPERAÇÃO':'NORMAL'}
-function minuteModel(rounds){const a=Array.from({length:60},()=>({w:0,t:0}));rounds.forEach(r=>{const p=parts(dt(r));if(!p)return;const m=+p.minute;a[m].t++;if(isWhite(r))a[m].w++});return a}
-function candidateStrategies(rounds,now){const out=[],st=whiteStats(rounds),model=minuteModel(rounds),base=rounds.filter(isWhite).length/Math.max(rounds.length,1);const push=(time,source,weight=1)=>{if(time<=now||time-now>45*60000)return;const p=parts(time),m=p?+p.minute:0,mm=model[m],rate=mm.t?mm.w/mm.t:base;out.push({time,source,weight,rate})};
-// Formula 1: pedras do ultimo minuto 00/10/20/30/40/50, em minutos e em quantidade de rodadas (~30s cada).
-let zeroGroup=[];for(let i=rounds.length-1;i>=0;i--){const p=parts(dt(rounds[i]));if(!p)continue;if((+p.minute)%10===0){const key=`${p.hour}:${p.minute}`;if(!zeroGroup.length||zeroGroup[0].key===key){zeroGroup.push({key,r:rounds[i]});if(zeroGroup.length===2)break}else if(zeroGroup.length)break}}
-zeroGroup.forEach(x=>{const stone=num(x.r);if(stone>0&&stone<=14){const baseTime=dt(x.r);push(addMin(baseTime,stone),'PEDRA_0_MIN',1.1);push(addMin(baseTime,stone/2),'PEDRA_0_RODADAS',1.0)}});
-// Formula 2: pedra imediatamente anterior ao ultimo branco.
-let lastW=-1;for(let i=rounds.length-1;i>=0;i--)if(isWhite(rounds[i])){lastW=i;break}if(lastW>0){const stone=num(rounds[lastW-1]),wtime=dt(rounds[lastW]);if(stone>0&&stone<=14){push(addMin(wtime,stone),'PEDRA_ANTES_BRANCO',1.25);push(addMin(wtime,stone/2),'PEDRA_ANTES_BRANCO_RODADAS',1.05)}}
-// Contexto já usado pelo Sigma: média e mediana dos intervalos recentes, convertidas de rodadas para minutos.
-if(lastW>=0){const wtime=dt(rounds[lastW]);if(st.avg)push(addMin(wtime,st.avg/2),'MEDIA_INTERVALO',1.0);if(st.median)push(addMin(wtime,st.median/2),'MEDIANA_INTERVALO',1.0)}
-return out}
-function nextEntry(rounds){const now=new Date(),rg=regime(rounds);if(rg==='RECUPERAÇÃO')return null;const cs=candidateStrategies(rounds,now);if(!cs.length)return null;const groups=[];cs.forEach(c=>{let g=groups.find(x=>Math.abs(x.time-c.time)<=90000);if(!g){g={time:c.time,items:[]};groups.push(g)}g.items.push(c)});groups.forEach(g=>{const avgT=g.items.reduce((a,x)=>a+x.time.getTime(),0)/g.items.length;g.time=new Date(avgT);const conv=g.items.reduce((a,x)=>a+x.weight,0),rate=Math.max(...g.items.map(x=>x.rate));g.score=conv*1.6+rate*10+(rg==='PIPOCANDO'?1.1:0)});groups.sort((a,b)=>b.score-a.score||a.time-b.time);const best=groups[0];return best&&best.score>=2.15?best.time:null}
-function favorableWindows(rounds){const now=new Date(),model=minuteModel(rounds),base=rounds.filter(isWhite).length/Math.max(rounds.length,1),cand=[];for(let start=1;start<=40;start++){const s=addMin(now,start),e=addMin(s,5),rates=[];for(let k=0;k<6;k++){const p=parts(addMin(s,k)),m=+p.minute,x=model[m];rates.push(x.t?x.w/x.t:base)}const score=rates.reduce((a,b)=>a+b,0)/6;cand.push({s,e,score})}cand.sort((a,b)=>b.score-a.score||a.s-b.s);const chosen=[];for(const c of cand){if(chosen.every(x=>Math.abs(c.s-x.s)>=8*60000)){chosen.push(c);if(chosen.length===2)break}}return chosen.sort((a,b)=>a.s-b.s)}
-function futureModel(rounds,horizonMin){if(rounds.length<500)return 'ATENÇÃO';const st=whiteStats(rounds),base=rounds.filter(isWhite).length/rounds.length,targetRounds=horizonMin*2,feature=(arr)=>{const s=whiteStats(arr),w20=arr.slice(-40).filter(isWhite).length,w60=arr.slice(-120).filter(isWhite).length;return[s.since/25,w20/4,w60/8,(s.avg||15)/15,(s.median||11)/11]};const cur=feature(rounds),samples=[];for(let i=500;i<rounds.length-targetRounds;i+=4){const past=rounds.slice(0,i),f=feature(past),dist=f.reduce((a,v,j)=>a+Math.pow(v-cur[j],2),0),future=rounds.slice(i,i+targetRounds).filter(isWhite).length;samples.push({dist,future})}samples.sort((a,b)=>a.dist-b.dist);const near=samples.slice(0,Math.min(80,samples.length));if(!near.length)return 'ATENÇÃO';const pred=near.reduce((a,x)=>a+x.future,0)/near.length,expected=targetRounds*base;if(pred>=expected*1.25)return 'FAVORÁVEL';if(pred<=expected*.72)return 'RECUPERAÇÃO';return 'ATENÇÃO'}
-function render(){const rounds=chronological();if(rounds.length<100)return;const n=nextEntry(rounds),entry=$('nhNextEntry');if(entry){entry.textContent=n?fmt(n):'AGUARDAR';entry.classList.toggle('is-wait',!n)}const wins=favorableWindows(rounds),root=$('nhWindows');if(root)root.innerHTML=wins.map((x,i)=>`<article><span>0${i+1}</span><strong>${fmt(x.s)} – ${fmt(x.e)}</strong></article>`).join('');[['nhMoment10',10],['nhMoment20',20]].forEach(([id,h])=>{const el=$(id);if(el){const v=futureModel(rounds,h);el.textContent=v;el.dataset.state=v}})}
-window.addEventListener('sigma:live-round',render);window.addEventListener('sigma:memory-reconciled',render);window.addEventListener('sigma:catalog-rendered',render);setTimeout(render,1400);setInterval(render,15000);
+const API='https://sigma-live-server.onrender.com/api/nexus/home-state';
+const fmtIso=iso=>iso?new Intl.DateTimeFormat('pt-BR',{timeZone:TZ,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(iso)):'—';
+let lastState=null,loading=false;
+function paint(state){
+  if(!state||!state.ready)return;
+  lastState=state;
+  const entry=$('nhNextEntry');
+  if(entry){entry.textContent=state.nextEntry?fmtIso(state.nextEntry):'AGUARDAR';entry.classList.toggle('is-wait',!state.nextEntry)}
+  const root=$('nhWindows');
+  if(root){root.innerHTML=(state.windows||[]).slice(0,2).map((x,i)=>`<article><span>0${i+1}</span><strong>${fmtIso(x.start)} – ${fmtIso(x.end)}</strong></article>`).join('')}
+  [['nhMoment10','moment10'],['nhMoment20','moment20']].forEach(([id,key])=>{const el=$(id);if(el){const v=state[key]||'ATENÇÃO';el.textContent=v;el.dataset.state=v}});
+}
+async function refresh(){
+  if(loading)return;loading=true;
+  try{const r=await fetch(`${API}?_=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);paint(await r.json())}
+  catch(e){console.warn('SIGMA NEXUS: home-state indisponível; mantendo última leitura.',e)}
+  finally{loading=false}
+}
+// Estado da HOME vem pronto do Render. Nova rodada dispara atualização imediata; polling é redundância.
+window.addEventListener('sigma:live-round',refresh);
+window.addEventListener('sigma:memory-reconciled',refresh);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
+refresh();setInterval(refresh,10000);
 })();

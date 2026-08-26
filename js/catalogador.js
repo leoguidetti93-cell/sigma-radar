@@ -538,15 +538,24 @@
       };
     }
 
-    setConnection('connecting','Conectando ao SIGMA LIVE SERVER…','SIGMA LIVE SERVER');
-    const officialOk = await syncOfficialHistory();
-    if (!officialOk) await hydrateFromServer(false);
+    // NEXUS: o servidor 24/7 é a fonte oficial. O navegador apenas consome o estado já pronto.
+    setConnection('connecting','Sincronizando com o núcleo 24/7…','SIGMA LIVE SERVER');
+    const serverOk = await hydrateFromServer(false);
+    // Fallback excepcional: só tenta a fonte oficial no navegador se o servidor realmente não responder.
+    if (!serverOk) {
+      const officialOk = await syncOfficialHistory();
+      if (officialOk) await bootstrapServerFromLocal(true);
+    }
     await checkHealth();
     connectEventStream();
     startPolling();
   }
 
   window.startLiveCatalog = startLiveCatalog;
+
+  // Mantém a memória global viva desde a abertura do site, mesmo sem visitar o Catalogador.
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => startLiveCatalog());
+  else startLiveCatalog();
 
   function ensureWhiteCelebrationLayer(){
     let canvas = document.getElementById("sigma-white-particles");

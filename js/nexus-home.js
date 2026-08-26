@@ -108,18 +108,24 @@ function candidateList(rounds,now){
   if(lastW>=0){const wtime=rdate(rounds[lastW]);if(st.avg)push(addMin(wtime,st.avg/2),'MEDIA_INTERVALO',1);if(st.median)push(addMin(wtime,st.median/2),'MEDIANA_INTERVALO',1)}
   return out;
 }
-function nextEntry(rounds,now){
-  const rg=regime(rounds);if(rg==='RECUPERAÇÃO')return null;
-  const cs=candidateList(rounds,now);if(!cs.length)return null;
+function localInWindowTolerance(time,w){
+  if(!w?.start||!w?.end)return false;
+  const s=new Date(w.start),e=new Date(w.end);
+  return time>=addMin(s,-2)&&time<=addMin(e,1);
+}
+function nextEntry(rounds,now,lockedWindows=[],moment='ATENÇÃO'){
+  const rg=regime(rounds);if(rg==='RECUPERAÇÃO'||moment==='RECUPERAÇÃO')return null;
+  const cs=candidateList(rounds,now).filter(c=>lockedWindows.some(w=>localInWindowTolerance(c.time,w)));if(!cs.length)return null;
   const groups=[];
   cs.forEach(c=>{let g=groups.find(x=>Math.abs(x.time-c.time)<=90000);if(!g){g={time:c.time,items:[]};groups.push(g)}g.items.push(c)});
   groups.forEach(g=>{
     g.time=new Date(g.items.reduce((a,x)=>a+x.time.getTime(),0)/g.items.length);
     const conv=g.items.reduce((a,x)=>a+x.weight,0),rate=Math.max(...g.items.map(x=>x.rate));
-    g.score=conv*1.6+rate*10+(rg==='PIPOCANDO'?1.1:0);
+    const inside=lockedWindows.some(w=>{const s=new Date(w.start),e=new Date(w.end);return g.time>=s&&g.time<=e});
+    g.score=conv*1.6+rate*10+(rg==='PIPOCANDO'?1.1:0)+(inside?0.8:0.25);
   });
   groups.sort((a,b)=>b.score-a.score||a.time-b.time);
-  const best=groups[0];return best&&best.score>=2.15?best.time:null;
+  const best=groups[0],threshold=moment==='ATENÇÃO'?2.75:2.15;return best&&best.score>=threshold?best.time:null;
 }
 function windows(rounds,now){
   const model=minuteModel(rounds),base=rounds.filter(isWhite).length/Math.max(rounds.length,1),cand=[];
@@ -161,10 +167,14 @@ function settleLocalVirtual(rounds,now,st){
   saveLocalVirtual(st);
   return st;
 }
-function localLockedEntry(rounds,now){
+function localLockedEntry(rounds,now,lockedWindows,moment10){
   let st=settleLocalVirtual(rounds,now,readLocalVirtual());
+  if(st.active?.target){
+    const t=minuteFloor(new Date(st.active.target));
+    if(!(t>now && lockedWindows.some(w=>localInWindowTolerance(t,w)))){st.active=null;saveLocalVirtual(st)}
+  }
   if(!st.active?.target){
-    const entry=nextEntry(rounds,now);
+    const entry=nextEntry(rounds,now,lockedWindows,moment10);
     if(entry){const target=minuteFloor(entry);st.active={target:target.toISOString(),createdAt:now.toISOString()};saveLocalVirtual(st)}
   }
   return {entry:st.active?.target?new Date(st.active.target):null,history:(st.history||[]).slice(0,3),active:st.active||null};
@@ -172,8 +182,9 @@ function localLockedEntry(rounds,now){
 function computeLocal(){
   const rounds=localRounds(),now=new Date();
   if(rounds.length<100)return null;
-  const locked=localLockedEntry(rounds,now),ws=windows(rounds,now);
-  return {ready:true,source:'LOCAL_MEMORY',count:rounds.length,updatedAt:now.toISOString(),currentRegime:regime(rounds),nextEntry:locked.entry?locked.entry.toISOString():null,activeSuggestion:locked.active,suggestionHistory:locked.history,windows:ws.map(x=>({start:x.s.toISOString(),end:x.e.toISOString()})),moment10:future(rounds,10),moment20:future(rounds,20)};
+  const ws=windows(rounds,now),lockedWindows=ws.map(x=>({start:x.s.toISOString(),end:x.e.toISOString()}));
+  const moment10=future(rounds,10),locked=localLockedEntry(rounds,now,lockedWindows,moment10);
+  return {ready:true,source:'LOCAL_MEMORY',count:rounds.length,updatedAt:now.toISOString(),currentRegime:regime(rounds),nextEntry:locked.entry?locked.entry.toISOString():null,activeSuggestion:locked.active,suggestionHistory:locked.history,windows:lockedWindows,moment10,moment20:future(rounds,20)};
 }
 function paintFallback(){
   const local=computeLocal();

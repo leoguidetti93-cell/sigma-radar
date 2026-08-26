@@ -42,10 +42,38 @@
 <aside class="player-sidebar">
 <div class="side-logo"><strong>Σ SIGMA <em>RADAR</em></strong><span>SIGMA NEXUS 1.0 • DOUBLE INTELLIGENCE</span></div>
 <div class="side-status"><i></i><span>CATALOGADOR • MEMÓRIA 3000</span></div>
-<nav class="side-nav"><button class="side-link active" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="estatisticas" onclick="sideNavigate('estatisticas','Estatísticas',this)"><span class="side-icon">Σ</span><span class="side-text">Estatísticas</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
+<nav class="side-nav"><button class="side-link active" data-target="home" onclick="sideNavigate('home','Sugestões',this)"><span class="side-icon">⌂</span><span class="side-text">Home</span></button><button class="side-link" data-target="catalogador" onclick="sideNavigate('catalogador','Catalogador Ao Vivo',this)"><span class="side-icon">▦</span><span class="side-text">Catalogador</span></button><button class="side-link" data-target="estatisticas" onclick="sideNavigate('estatisticas','Estatísticas',this)"><span class="side-icon">Σ</span><span class="side-text">Estatísticas</span></button><button class="side-link" data-target="gestor" onclick="sideNavigate('gestor','Gestão',this)"><span class="side-icon">◇</span><span class="side-text">Gestão</span></button></nav>
 <div class="side-bottom"><b>SIGMA NEXUS — 1.0</b><span>Radar • Estatísticas • Gestão</span></div>
 </aside>
 
+
+<div class="screen active" id="home">
+  <div class="shell nexus-home-shell">
+    <div class="nexus-home-head">
+      <span>SIGMA RADAR • SUGESTÕES AO VIVO</span>
+      <h1>Próximo movimento</h1>
+      <p>Leitura dinâmica das rodadas carregadas. As sugestões mudam conforme o comportamento da plataforma.</p>
+    </div>
+    <section class="suggestion-main">
+      <span>SUGESTÃO PARA PRÓXIMA ENTRADA</span>
+      <strong id="nhNextEntry">ANALISANDO</strong>
+    </section>
+    <section class="suggestion-windows">
+      <div class="suggestion-section-title"><span>PRÓXIMAS 2 JANELAS FAVORÁVEIS</span><small>janelas de 6 minutos</small></div>
+      <div class="suggestion-window-grid" id="nhWindows">
+        <article><span>01</span><strong>—</strong></article><article><span>02</span><strong>—</strong></article>
+      </div>
+    </section>
+    <section class="suggestion-moment">
+      <div class="suggestion-section-title"><span>MOMENTO PRÓXIMO</span><small>projeção de comportamento</small></div>
+      <div class="suggestion-moment-grid">
+        <article><span>PRÓXIMOS 10 MIN</span><strong id="nhMoment10">ANALISANDO</strong></article>
+        <article><span>PRÓXIMOS 20 MIN</span><strong id="nhMoment20">ANALISANDO</strong></article>
+      </div>
+    </section>
+    <div class="nexus-home-foot">Projeções estatísticas baseadas no histórico carregado e no contexto atual. Não representam garantia de resultado.</div>
+  </div>
+</div>
 <div class="screen" id="operacional">
 <div class="shell">
 <div class="inner-header">
@@ -248,7 +276,7 @@
 </div>
 </div>
 </div>
-<div class="screen active" id="catalogador">
+<div class="screen" id="catalogador">
 <div class="shell">
 <div class="inner-header catalog-clean-header">
 
@@ -376,5 +404,6 @@
 <script src="/js/gestor-banca.js"></script>
 <script src="/js/padroes.js"></script>
 <a aria-label="Suporte no Telegram" class="telegram-support" href="https://t.me/suportesigmaradar" rel="noopener noreferrer" target="_blank"><span class="telegram-support-icon">✈</span><span class="telegram-support-text">Suporte no Telegram</span></a>
-<script src="/js/nexus-stats.js?v=1.0"></script></body>
+<script src="/js/nexus-stats.js?v=1.0"></script>
+<script src="/js/nexus-home.js?v=1.0"></script></body>
 </html>

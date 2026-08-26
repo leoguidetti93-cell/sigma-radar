@@ -2,7 +2,7 @@
 'use strict';
 const TZ='America/Sao_Paulo',$=id=>document.getElementById(id);
 const API='https://sigma-live-server.onrender.com/api/nexus/home-state';
-const SNAPSHOT_KEY='sigma:nexus-home:server-snapshot:v2';
+const SNAPSHOT_KEY='sigma:nexus-home:server-snapshot:v3';
 const fmtIso=iso=>iso?new Intl.DateTimeFormat('pt-BR',{timeZone:TZ,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(iso)):'—';
 let lastState=null,loading=false;
 

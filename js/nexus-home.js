@@ -264,21 +264,41 @@ function paintFallback(){
   if(local){paint(local);return true}
   return false;
 }
+function mirrorServerStateToLocal(state){
+  if(!state?.ready)return;
+  try{
+    const current=readLocalVirtual();
+    const serverHistory=Array.isArray(state.suggestionHistory)?state.suggestionHistory:[];
+    const serverWindows=Array.isArray(state.windows)?state.windows:[];
+    const serverWindowHistory=Array.isArray(state.windowHistory)?state.windowHistory:[];
+    saveLocalVirtual({
+      active:state.activeSuggestion||null,
+      history:serverHistory.length?serverHistory:(current.history||[]),
+      windows:serverWindows.length?serverWindows:(current.windows||[]),
+      windowHistory:serverWindowHistory.length?serverWindowHistory:(current.windowHistory||[])
+    });
+  }catch(_e){}
+}
 
 async function refresh(){
   if(loading)return;
   loading=true;
+
+  // HOME híbrida: pinta imediatamente com a memória local para nunca congelar.
+  // Em paralelo, sincroniza com o estado 24h do Render. Quando o servidor está
+  // saudável, ele atualiza a tela e também alimenta o fallback local.
+  paintFallback();
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),4500);
   try{
-    // A HOME usa a memória global viva do Catalogador como fonte de dados.
-    // O servidor mantém essa memória 24h, mas não disputa o estado operacional
-    // das janelas/sugestões com o navegador.
-    if(!paintFallback()){
-      const r=await fetch(`${API}?_=${Date.now()}`,{cache:'no-store'});
-      if(r.ok){const state=await r.json();paint(state)}
+    const r=await fetch(`${API}?_=${Date.now()}`,{cache:'no-store',signal:controller.signal});
+    if(r.ok){
+      const state=await r.json();
+      if(state?.ready){mirrorServerStateToLocal(state);paint(state)}
     }
   }catch(e){
-    console.warn('SIGMA NEXUS: HOME aguardando memória global.',e);
-  }finally{loading=false}
+    console.warn('SIGMA NEXUS: usando fallback local enquanto sincroniza o 24h.',e);
+  }finally{clearTimeout(timeout);loading=false}
 }
 
 window.addEventListener('sigma:live-round',refresh);

@@ -1,9 +1,0 @@
-SIGMA ORION 4.2.2 — COLOR SOMENTE NO SERVIDOR
-
-- Desativa definitivamente o motor COLOR do navegador.
-- Remove geração, Direta/G1, resultados, resumos e Telegram locais.
-- O navegador apenas consulta /api/sigma-reading/state e exibe o estado oficial.
-- Mantém SIGMA WHITE local e demais módulos sem alteração.
-- Inclui cache-busting no sigma-leitura.js para impedir carregamento da versão antiga.
-
-PUBLICAÇÃO: atualizar SOMENTE o ORION/Vercel. O SERVER 4.2.1 permanece como está.

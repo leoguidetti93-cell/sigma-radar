@@ -1,7 +1,0 @@
-SIGMA ORION 4.0.1 — VALIDADOR COMPACTO
-
-- Lista de ocorrências reduzida e com rolagem interna.
-- Botões, pedras e métricas mais compactos.
-- Mantida a marcação visual no histórico.
-- Regra confirmada: Direta, G1, G2, G3, G4 e G5 são calculados por RODADA, não por minuto.
-- Cada nova pedra após o padrão representa uma tentativa. As duas rodadas de um mesmo minuto contam como duas tentativas separadas.

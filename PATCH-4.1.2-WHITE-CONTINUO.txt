@@ -1,9 +1,0 @@
-SIGMA ORION 4.1.2 — WHITE CONTÍNUO
-
-- Scanner avalia as próximas 4 horas.
-- Prioriza score 72 ou mais.
-- Se não houver, mantém o melhor candidato em modo EM OBSERVAÇÃO.
-- Recalcula e pode substituir a projeção antes do início da janela.
-- Congela a projeção a partir de 1 minuto antes.
-- Mantém janela de 6 casas: minuto anterior, central e seguinte.
-- Exibe motivos estatísticos da projeção.

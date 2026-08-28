@@ -1,9 +1,0 @@
-SIGMA ORION 4.2.3 — BLOQUEIO URGENTE DO COLOR NO NAVEGADOR
-
-- O endpoint /api/sigma-leitura-telegram foi desativado no backend da Vercel.
-- Mesmo navegadores antigos, abas abertas e JavaScript em cache não conseguem mais enviar COLOR.
-- SIGNAL, G1, RESULT, resumo de 30 minutos e resumo diário são exclusivos do SERVER no Render.
-- Adicionada trava absoluta também no JavaScript do ORION.
-- Atualizada a versão do script para forçar renovação de cache.
-
-PUBLICAÇÃO: somente ORION/Vercel. Não alterar o SERVER.

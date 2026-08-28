@@ -1,9 +1,0 @@
-{
-  "name": "SIGMA RADAR",
-  "version": "Sigma Nexus 1.0",
-  "modules": ["catalogador", "estatisticas", "gestor"],
-  "catalogadorVersion": "4.4.9-preserved",
-  "catalogadorProtected": true,
-  "statistics": "today-hours + minute-map-3000 + white-hour-radar",
-  "telegram": "single-group-lock-replies"
-}

@@ -1,7 +1,0 @@
-SIGMA ORION 4.1.1 — WHITE REFINADO
-
-- Visual do WHITE automático redesenhado.
-- Corte mínimo de score em 72; abaixo disso o sistema não publica projeção.
-- Janela corrigida para 1 minuto antes, minuto central e 1 minuto depois.
-- As 6 casas são contadas por rodada: 2 + 2 + 2.
-- O primeiro branco encerra imediatamente a operação.

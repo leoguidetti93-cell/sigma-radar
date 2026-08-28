@@ -1,8 +1,0 @@
-SIGMA ORION 4.2.0 — COLOR SERVER 24H
-
-- Motor COLOR movido para o SIGMA Live Server.
-- Continua enviando sinal, G1, WIN DIRETA, WIN G1, WIN BRANCO e LOSS com o site fechado.
-- Resultado sempre é enviado antes do próximo sinal; novo sinal somente após 1 segundo.
-- Resumos de 30 minutos e fechamento diário às 23:59 rodam no servidor.
-- O ORION apenas consulta e exibe a operação centralizada.
-- Atualizar SERVER no Render e ORION no Vercel.

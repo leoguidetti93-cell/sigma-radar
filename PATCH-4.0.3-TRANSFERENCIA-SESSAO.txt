@@ -1,7 +1,0 @@
-SIGMA ORION 4.0.3 — TRANSFERÊNCIA DE SESSÃO
-
-- Uma nova ativação assume imediatamente a licença.
-- A sessão anterior é invalidada automaticamente.
-- O navegador anterior volta para a tela de ativação ao detectar a troca.
-- Heartbeat reduzido para 15 segundos para acelerar a desconexão.
-- Continua permitido somente um navegador/dispositivo ativo por licença.

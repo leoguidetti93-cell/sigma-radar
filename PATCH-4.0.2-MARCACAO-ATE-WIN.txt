@@ -1,6 +1,0 @@
-SIGMA ORION 4.0.2 — MARCAÇÃO VISUAL ATÉ O PRIMEIRO BRANCO
-
-- O Validador continua calculando Direta, G1, G2, G3, G4 e G5 por rodada.
-- Quando o branco aparece, a marcação visual termina imediatamente naquela rodada.
-- Rodadas posteriores ao WIN não recebem mais marcação amarela.
-- Em ocorrências LOSS, todas as tentativas até o limite selecionado continuam marcadas.

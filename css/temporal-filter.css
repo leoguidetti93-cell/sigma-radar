@@ -1,0 +1,52 @@
+/* ===== FILTRO INTERATIVO DO RADAR TEMPORAL ===== */
+.heat-filter-legend{
+  gap:7px;
+  flex-wrap:wrap;
+  user-select:none;
+}
+.heat-filter{
+  appearance:none;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:transform .16s ease,opacity .16s ease,box-shadow .16s ease,border-color .16s ease;
+}
+.heat-filter:not(.heat-filter-color){
+  width:auto;
+  height:26px;
+  padding:0 10px;
+  border-radius:999px;
+  background:#15222d;
+  color:#91a0ae;
+  border-color:#2c3b47;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.55px;
+}
+.heat-filter-color{
+  width:24px!important;
+  height:10px!important;
+  min-width:24px;
+  padding:0;
+  border-radius:999px!important;
+}
+.heat-filter:hover{
+  transform:translateY(-2px) scale(1.08);
+}
+.heat-filter.active{
+  border-color:#fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,.16),0 0 16px rgba(241,44,76,.22);
+  color:#fff;
+}
+.heat-filter-caption{
+  margin-left:2px;
+  white-space:nowrap;
+}
+.heat-cell.heat-muted{
+  opacity:.06;
+  filter:saturate(.15);
+  pointer-events:none;
+}
+.heat-cell.heat-highlight{
+  opacity:1;
+  box-shadow:0 0 7px currentColor;
+}

@@ -1,0 +1,172 @@
+/* ===== CENTRAL DE OPERAÇÕES / SINAIS DO ANALISTA ===== */
+.analyst-menu-badge{
+  margin-left:auto;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  background:var(--red);
+  color:#fff;
+  font-size:9px;
+  font-weight:950;
+  box-shadow:0 0 13px rgba(241,44,76,.34);
+}
+.analyst-rule{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:16px 18px;
+  border:1px solid rgba(241,44,76,.27);
+  border-radius:15px;
+  background:linear-gradient(120deg,rgba(241,44,76,.09),rgba(21,33,44,.96));
+  margin-bottom:16px;
+}
+.analyst-rule>span{
+  width:42px;height:42px;display:grid;place-items:center;
+  border-radius:12px;background:#fff;color:var(--red);font-size:20px;
+  box-shadow:0 0 22px rgba(255,255,255,.12);
+}
+.analyst-rule strong{display:block;font-size:13px}
+.analyst-rule p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.45}
+.analyst-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:11px;
+}
+.analyst-stat{
+  padding:15px 16px;
+  border:1px solid #293946;
+  border-radius:14px;
+  background:linear-gradient(145deg,#15212c,#101923);
+}
+.analyst-stat span{
+  color:#8191a0;font-size:9px;font-weight:850;
+  text-transform:uppercase;letter-spacing:.6px;
+}
+.analyst-stat strong{
+  display:block;margin-top:8px;font-size:25px;letter-spacing:-1px;
+}
+.analyst-win-stat strong{color:#52dfa6}
+.analyst-loss-stat strong{color:#ff7188}
+.analyst-active-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+}
+.analyst-signal-card{
+  position:relative;
+  min-height:250px;
+  padding:19px;
+  border-radius:17px;
+  border:1px solid #2a3946;
+  background:
+    radial-gradient(circle at 85% 5%,rgba(241,44,76,.13),transparent 32%),
+    linear-gradient(145deg,#15212c,#0e1720);
+  overflow:hidden;
+}
+.analyst-signal-card.live{
+  border-color:rgba(241,44,76,.56);
+  box-shadow:0 0 30px rgba(241,44,76,.11);
+}
+.analyst-signal-card.finished{
+  border-color:rgba(244,201,93,.25);
+}
+.analyst-signal-top{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.analyst-white-ball{
+  width:33px;height:33px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#fff;color:var(--red);
+  font-size:15px;font-weight:950;
+  border:2px solid #ff8799;
+  box-shadow:0 0 18px rgba(255,255,255,.16);
+}
+.analyst-live-pill{
+  padding:6px 8px;border-radius:999px;
+  font-size:8px;font-weight:950;letter-spacing:.6px;
+  color:#9eabb7;background:#1b2833;
+}
+.analyst-live-pill.waiting{color:#f5d273;background:rgba(244,201,93,.09)}
+.analyst-live-pill.live{color:#fff;background:var(--red);animation:analystPulse 1.2s infinite}
+.analyst-live-pill.finished{color:#f5d273;background:rgba(244,201,93,.09)}
+@keyframes analystPulse{50%{box-shadow:0 0 0 7px rgba(241,44,76,0)}0%,100%{box-shadow:0 0 0 0 rgba(241,44,76,.24)}}
+.analyst-signal-time{
+  margin:22px 0 6px;
+  font-size:54px;
+  line-height:.92;
+  font-weight:950;
+  letter-spacing:-3px;
+}
+.analyst-signal-label{
+  color:#7f8f9e;font-size:9px;font-weight:900;
+  letter-spacing:.75px;text-transform:uppercase;
+}
+.analyst-window{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  margin-top:16px;
+}
+.analyst-window span{
+  padding:8px 4px;text-align:center;border-radius:9px;
+  border:1px solid #2c3b47;background:#0b151e;
+  color:#a7b3be;font-size:11px;font-weight:850;
+}
+.analyst-window span.central{
+  color:#fff;border-color:rgba(241,44,76,.45);
+  background:rgba(241,44,76,.12);
+}
+.analyst-countdown{
+  margin-top:15px;padding-top:13px;border-top:1px solid #24323e;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.analyst-countdown span{color:#7e8e9c;font-size:9px;text-transform:uppercase}
+.analyst-countdown strong{font-size:13px}
+.analyst-note{
+  min-height:31px;margin:13px 0 0;
+  color:#8b9aa8;font-size:10px;line-height:1.45;
+}
+.analyst-history-title{margin-top:21px}
+.analyst-history-card{padding:7px 17px}
+.analyst-history-list{display:flex;flex-direction:column}
+.analyst-history-row{
+  display:grid;
+  grid-template-columns:90px 1fr 115px 115px;
+  gap:13px;
+  align-items:center;
+  padding:13px 4px;
+  border-bottom:1px solid #22313d;
+}
+.analyst-history-row:last-child{border-bottom:0}
+.analyst-history-time{font-size:19px;font-weight:950}
+.analyst-history-window{color:#81909e;font-size:10px}
+.analyst-history-result{
+  justify-self:end;
+  padding:7px 10px;border-radius:999px;
+  font-size:9px;font-weight:950;letter-spacing:.55px;
+}
+.analyst-history-result.pago{color:#57e4ab;background:rgba(52,211,153,.1)}
+.analyst-history-result.falhou{color:#ff8296;background:rgba(241,44,76,.1)}
+.analyst-result-minute{
+  justify-self:end;color:#8796a4;font-size:10px;
+}
+.analyst-empty{
+  grid-column:1/-1;
+  padding:34px 18px;
+  text-align:center;
+  color:#718291;
+  border:1px dashed #2a3945;
+  border-radius:14px;
+  background:rgba(255,255,255,.015);
+}
+@media(max-width:1000px){
+  .analyst-active-grid{grid-template-columns:1fr 1fr}
+  .analyst-stats{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .analyst-active-grid{grid-template-columns:1fr}
+  .analyst-history-row{grid-template-columns:72px 1fr 78px}
+  .analyst-result-minute{display:none}
+  .analyst-signal-time{font-size:48px}
+}

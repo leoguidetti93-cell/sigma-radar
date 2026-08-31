@@ -1,161 +1,183 @@
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-const state=JSON.parse(localStorage.getItem("sigmaRadarProto")||"null")||{
- profile:{name:"Leonardo",age:33,height:180,weight:97.4,target:90,sex:"m",goal:"loss",days:4,level:"Intermediário",minutes:60,cardio:3,priority:"Peitoral + braços",sleep:7,stress:"Moderado",steps:8000},
- water:2.6, protein:142, workoutDone:true, split:"upperlower"
+const store={
+ get(k,d=null){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
+ set(k,v){localStorage.setItem(k,JSON.stringify(v))}
 };
+let auth=store.get("sigma_auth");
+let profile=store.get("sigma_profile");
+let onboarding={goal:null,med:"none"};
+let step=1;
 
-const icons={
- press:`<svg viewBox="0 0 120 100"><circle cx="60" cy="20" r="9"/><path d="M60 30v28M42 45h36M42 45l-12 18M78 45l12 18M50 58l-9 25M70 58l9 25"/><path d="M18 68h84M28 60v16M92 60v16"/></svg>`,
- squat:`<svg viewBox="0 0 120 100"><circle cx="60" cy="18" r="9"/><path d="M60 28l-8 26M52 54l-18 15M52 54l13 17M65 71l16 14M34 69l-10 18"/><path d="M30 35h60M35 29v12M85 29v12"/></svg>`,
- row:`<svg viewBox="0 0 120 100"><circle cx="52" cy="20" r="8"/><path d="M50 28l-13 29M37 57l-18 20M37 57l20 18M57 75l18 13"/><path d="M41 39l34 9M75 48l22-5"/></svg>`,
- curl:`<svg viewBox="0 0 120 100"><circle cx="60" cy="18" r="9"/><path d="M60 28v33M42 42l18 12 18-12M42 42l-7 22M78 42l7 22M50 61l-8 25M70 61l8 25"/><path d="M25 66h20M75 66h20"/></svg>`,
- deadlift:`<svg viewBox="0 0 120 100"><circle cx="60" cy="19" r="8"/><path d="M58 27l-10 31M48 58l-18 16M48 58l15 19M63 77l19 11"/><path d="M19 72h82M24 66v12M96 66v12"/></svg>`,
- shoulder:`<svg viewBox="0 0 120 100"><circle cx="60" cy="20" r="8"/><path d="M60 28v32M42 43l18 10 18-10M50 60l-8 25M70 60l8 25"/><path d="M37 43L27 26M83 43l10-17M20 23h18M82 23h18"/></svg>`,
- leg:`<svg viewBox="0 0 120 100"><circle cx="60" cy="18" r="8"/><path d="M60 26v30M49 39h22M51 56l-5 30M69 56l12 23M81 79h15"/><path d="M31 72h33M31 62v20"/></svg>`,
- pullup:`<svg viewBox="0 0 120 100"><circle cx="60" cy="27" r="8"/><path d="M60 35v29M40 31l20 12 20-12M40 31l-7-16M80 31l7-16M50 64l-8 23M70 64l8 23"/><path d="M20 12h80"/></svg>`
-};
-
-const exerciseDB={
- "Supino reto":{group:"PEITORAL",icon:"press",desc:"Movimento composto para força e hipertrofia do peitoral.",tip:"Controle a descida e mantenha as escápulas estabilizadas."},
- "Supino inclinado":{group:"PEITORAL",icon:"press",desc:"Ênfase na porção superior do peitoral e deltoide anterior.",tip:"Evite inclinação excessiva do banco para não transformar em desenvolvimento."},
- "Desenvolvimento":{group:"OMBROS",icon:"shoulder",desc:"Press vertical para deltoides e tríceps.",tip:"Mantenha abdômen firme e evite hiperextensão lombar."},
- "Tríceps corda":{group:"TRÍCEPS",icon:"press",desc:"Isolamento de tríceps com boa amplitude.",tip:"Abra a corda ao final sem deslocar os cotovelos."},
- "Remada baixa":{group:"COSTAS",icon:"row",desc:"Remada horizontal para dorsais e região média das costas.",tip:"Puxe com os cotovelos e evite jogar o tronco para trás."},
- "Puxada alta":{group:"COSTAS",icon:"pullup",desc:"Puxada vertical para dorsais.",tip:"Leve a barra ao topo do peito mantendo o tórax aberto."},
- "Rosca direta":{group:"BÍCEPS",icon:"curl",desc:"Movimento clássico para bíceps.",tip:"Evite balanço do tronco e controle a fase excêntrica."},
- "Rosca martelo":{group:"BÍCEPS",icon:"curl",desc:"Ênfase em braquial e braquiorradial.",tip:"Mantenha punhos neutros e cotovelos próximos ao corpo."},
- "Agachamento":{group:"PERNAS",icon:"squat",desc:"Movimento composto para quadríceps, glúteos e core.",tip:"Desça com controle mantendo joelhos acompanhando a ponta dos pés."},
- "Leg press":{group:"PERNAS",icon:"leg",desc:"Exercício guiado de alta produção de força para membros inferiores.",tip:"Não deixe a lombar perder contato com o encosto."},
- "Cadeira extensora":{group:"QUADRÍCEPS",icon:"leg",desc:"Isolamento de quadríceps.",tip:"Controle o topo do movimento sem chutar a carga."},
- "Mesa flexora":{group:"POSTERIORES",icon:"leg",desc:"Isolamento dos posteriores de coxa.",tip:"Mantenha quadril estável durante toda a série."},
- "Levantamento terra romeno":{group:"POSTERIORES",icon:"deadlift",desc:"Padrão de hinge para posteriores e glúteos.",tip:"Empurre o quadril para trás mantendo a coluna neutra."},
- "Elevação lateral":{group:"OMBROS",icon:"shoulder",desc:"Isolamento de deltoide lateral.",tip:"Use carga que permita controle, sem embalo."},
-};
-
-const splits={
- upperlower:[
-  {day:"SEGUNDA",title:"Upper A — Peito + Costas + Braços",ex:[["Supino reto","4×8–10"],["Remada baixa","4×8–10"],["Supino inclinado","3×10–12"],["Puxada alta","3×10–12"],["Rosca direta","3×10–12"],["Tríceps corda","3×10–12"]]},
-  {day:"QUARTA",title:"Lower A — Quadríceps + Posteriores",ex:[["Agachamento","4×6–8"],["Leg press","4×10–12"],["Cadeira extensora","3×12–15"],["Mesa flexora","3×10–12"],["Levantamento terra romeno","3×8–10"]]},
-  {day:"QUINTA",title:"Upper B — Costas + Ombros + Braços",ex:[["Puxada alta","4×8–10"],["Supino inclinado","3×8–10"],["Remada baixa","4×10"],["Desenvolvimento","3×8–10"],["Elevação lateral","3×12–15"],["Rosca martelo","3×10–12"]]},
-  {day:"SEXTA",title:"Lower B — Glúteos + Posteriores",ex:[["Levantamento terra romeno","4×8"],["Leg press","4×10"],["Mesa flexora","4×10–12"],["Agachamento","3×10"],["Cadeira extensora","3×12–15"]]}
- ],
- pushpulllegs:[
-  {day:"SEGUNDA",title:"Push — Peito + Ombros + Tríceps",ex:[["Supino reto","4×6–8"],["Supino inclinado","3×8–10"],["Desenvolvimento","3×8–10"],["Elevação lateral","3×12–15"],["Tríceps corda","3×10–12"]]},
-  {day:"TERÇA",title:"Pull — Costas + Bíceps",ex:[["Puxada alta","4×8"],["Remada baixa","4×8–10"],["Rosca direta","3×10"],["Rosca martelo","3×10–12"]]},
-  {day:"QUINTA",title:"Legs — Pernas completas",ex:[["Agachamento","4×6–8"],["Leg press","4×10"],["Levantamento terra romeno","3×8–10"],["Mesa flexora","3×10–12"],["Cadeira extensora","3×12–15"]]},
-  {day:"SEXTA",title:"Push B — Ênfase peitoral",ex:[["Supino inclinado","4×8"],["Supino reto","3×10"],["Elevação lateral","4×12"],["Tríceps corda","4×10"]]}
- ],
- abc:[
-  {day:"SEGUNDA",title:"A — Peito + Tríceps",ex:[["Supino reto","4×8"],["Supino inclinado","4×10"],["Elevação lateral","3×12"],["Tríceps corda","4×10"]]},
-  {day:"QUARTA",title:"B — Costas + Bíceps",ex:[["Puxada alta","4×8"],["Remada baixa","4×10"],["Rosca direta","3×10"],["Rosca martelo","3×12"]]},
-  {day:"SEXTA",title:"C — Pernas + Ombros",ex:[["Agachamento","4×8"],["Leg press","4×10"],["Levantamento terra romeno","3×10"],["Desenvolvimento","3×10"],["Elevação lateral","3×15"]]}
- ],
- fullbody:[
-  {day:"SEGUNDA",title:"Full Body A",ex:[["Agachamento","4×8"],["Supino reto","4×8"],["Remada baixa","4×10"],["Elevação lateral","3×12"],["Rosca direta","2×12"]]},
-  {day:"QUARTA",title:"Full Body B",ex:[["Levantamento terra romeno","4×8"],["Supino inclinado","4×10"],["Puxada alta","4×10"],["Tríceps corda","3×12"],["Cadeira extensora","3×12"]]},
-  {day:"SEXTA",title:"Full Body C",ex:[["Leg press","4×10"],["Desenvolvimento","4×8"],["Remada baixa","4×10"],["Mesa flexora","3×12"],["Rosca martelo","3×12"]]}
- ]
-};
-
-function save(){localStorage.setItem("sigmaRadarProto",JSON.stringify(state))}
-function navigate(id){$$(".view").forEach(v=>v.classList.remove("active"));$("#"+id).classList.add("active");$$(".nav").forEach(n=>n.classList.toggle("active",n.dataset.view===id));scrollTo({top:0,behavior:"smooth"})}
-$$(".nav").forEach(n=>n.onclick=()=>navigate(n.dataset.view)); $("#openProfile").onclick=()=>navigate("perfil");
-
-function calcNutrition(p=state.profile){
- const w=+p.weight,h=+p.height,a=+p.age; 
- const bmr=(p.sex==="f"?10*w+6.25*h-5*a-161:10*w+6.25*h-5*a+5);
- const mult=1.6;
- let kcal=bmr*mult;
- if(p.goal==="loss") kcal-=600; else if(p.goal==="gain") kcal+=250;
- kcal=Math.round(kcal/50)*50;
- const prot=Math.round(w*(p.goal==="gain"?1.8:2.0));
- const fat=Math.round(w*.7);
- const carbs=Math.max(90,Math.round((kcal-prot*4-fat*9)/4));
- return {kcal,prot,fat,carbs}
+function showOnly(id){
+ ["publicArea","authPage","onboardingPage","analysisPage","appArea"].forEach(x=>$("#"+x).classList.remove("active"));
+ if(id==="publicArea") $("#publicArea").style.display="block"; else {$("#publicArea").style.display="none";$("#"+id).classList.add("active")}
+ scrollTo(0,0);
 }
-function calcScore(){
- const waterGoal=Math.max(2.2,state.profile.weight*.035), waterPct=Math.min(1,state.water/waterGoal);
- const protGoal=calcNutrition().prot, protPct=Math.min(1,state.protein/protGoal);
- const workout=state.workoutDone?1:.68;
- const sleep=Math.min(1,state.profile.sleep/8);
- const cardio=Math.min(1,state.profile.cardio/3);
- return Math.round((workout*.26+protPct*.22+waterPct*.16+sleep*.16+cardio*.10+.1)*100)
-}
-function updateDashboard(){
- const n=calcNutrition(), score=calcScore(), p=state.profile;
- $("#scoreValue").textContent=score; $("#sideScore").textContent=score;
- $("#scoreRing").style.background=`conic-gradient(#00e6a8 0 ${score}%,#202630 ${score}% 100%)`;
- $("#miniWeight").textContent=p.weight.toFixed(1).replace(".",",")+" kg";
- $("#miniWorkouts").textContent=p.days+"/"+p.days;
- $("#miniProtein").textContent=Math.round(state.protein/n.prot*100)+"%";
- $("#waterNow").textContent=state.water.toFixed(1).replace(".",",");
- $("#waterGoal").textContent=Math.max(2.2,p.weight*.035).toFixed(1).replace(".",",");
- $("#proteinNow").textContent=Math.round(state.protein); $("#proteinGoal").textContent=n.prot;
- const gap=Math.max(0,p.weight-p.target), weeks=gap/.8; $("#projectionText").textContent=`Meta estimada em ~${Math.max(1,Math.round(weeks))} semanas.`;
- $("#scoreStatus").textContent=score>=82?"EVOLUÇÃO FAVORÁVEL":score>=70?"EM PROGRESSO":"PONTO DE ATENÇÃO";
- $("#scoreHeadline").textContent=score>=82?"Você está evoluindo bem.":score>=70?"Boa base, mas há ajustes claros.":"Seu radar pede consistência.";
-}
-$("#addWater").onclick=()=>{state.water=Math.min(6,state.water+.3);save();updateDashboard()}
-$("#addProtein").onclick=()=>{state.protein=Math.min(350,state.protein+20);save();updateDashboard()}
+if(auth&&profile) {showOnly("appArea");initApp()} else showOnly("publicArea");
 
-function renderWorkout(){
- const cont=$("#workoutDays"), plan=splits[state.split]; cont.innerHTML="";
- plan.forEach(d=>{
-  const el=document.createElement("div"); el.className="workout-day";
-  el.innerHTML=`<div class="day-head"><b>${d.day} • ${d.title}</b><span>${d.ex.length} EXERCÍCIOS</span></div><div class="exercise-list">${d.ex.map(([name,setrep])=>{
-   const ex=exerciseDB[name], [sets,reps]=setrep.split("×");
-   return `<div class="exercise" data-name="${name}" data-sets="${sets}" data-reps="${reps}"><div class="exercise-visual">${icons[ex.icon]}</div><div class="exercise-info"><b>${name}</b><span>${ex.group}</span><em>${setrep}</em></div></div>`
-  }).join("")}</div>`;
-  cont.appendChild(el)
+$$("[data-auth]").forEach(b=>b.onclick=()=>openAuth(b.dataset.auth));
+function openAuth(tab){showOnly("authPage");setAuthTab(tab)}
+$("#backPublic").onclick=()=>showOnly("publicArea");
+$("#demoBtn").onclick=()=>{auth={name:"Demo Sigma",email:"demo@sigmaradar.com.br"};store.set("sigma_auth",auth);profile=demoProfile();store.set("sigma_profile",profile);showOnly("appArea");initApp()}
+$$(".auth-tabs button").forEach(b=>b.onclick=()=>setAuthTab(b.dataset.tab));
+function setAuthTab(t){$$(".auth-tabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));$("#signupForm").classList.toggle("hidden",t!=="signup");$("#loginForm").classList.toggle("hidden",t!=="login")}
+$("#signupForm").onsubmit=e=>{e.preventDefault();auth={name:$("#signupName").value.trim(),email:$("#signupEmail").value.trim(),pass:$("#signupPass").value};store.set("sigma_auth",auth);startOnboarding()}
+$("#loginForm").onsubmit=e=>{e.preventDefault();const a=store.get("sigma_auth");if(a&&a.email===$("#loginEmail").value.trim()&&a.pass===$("#loginPass").value){auth=a;profile=store.get("sigma_profile"); if(profile){showOnly("appArea");initApp()}else startOnboarding()}else $("#loginError").textContent="E-mail ou senha não encontrados neste protótipo."}
+function startOnboarding(){step=1;onboarding={goal:null,med:"none"};showOnly("onboardingPage");renderStep()}
+function renderStep(){
+ $$(".onboard-step").forEach(s=>s.classList.toggle("active",+s.dataset.step===step));
+ $("#stepCounter").textContent=`${step} / 7`;$("#onboardProgress").style.width=`${step/7*100}%`;$("#prevStep").classList.toggle("hidden",step===1);$("#nextStep").textContent=step===7?"GERAR MEU PLANO Σ":"CONTINUAR →";
+ if(step===7) buildReview()
+}
+$("#prevStep").onclick=()=>{if(step>1){step--;renderStep()}};
+$("#nextStep").onclick=()=>{
+ if(step===1&&!onboarding.goal){alert("Escolha seu objetivo para continuar.");return}
+ if(step===7){generateProfile();return}
+ if(step===3 && onboarding.goal!=="loss"){step=5;renderStep();return}
+ step++;renderStep()
+};
+$$(".goal-grid button").forEach(b=>b.onclick=()=>{onboarding.goal=b.dataset.value;$$(".goal-grid button").forEach(x=>x.classList.toggle("selected",x===b))});
+$$(".meds button").forEach(b=>b.onclick=()=>{onboarding.med=b.dataset.med;$$(".meds button").forEach(x=>x.classList.toggle("selected",x===b));$("#medExtra").classList.toggle("hidden",onboarding.med==="none")});
+function buildReview(){
+ const goalNames={loss:"Perder gordura",recomp:"Recomposição",gain:"Ganhar massa",fitness:"Condicionamento"};
+ const medNames={none:"Não usa",tirzepatide:"Tirzepatida",semaglutide:"Semaglutida",other:"Outro medicamento"};
+ $("#reviewBox").innerHTML=`
+ <div><span>OBJETIVO</span><b>${goalNames[onboarding.goal]}</b></div>
+ <div><span>PONTO DE PARTIDA</span><b>${$("#obWeight").value} kg → ${$("#obTarget").value} kg</b></div>
+ <div><span>TREINO</span><b>${$("#obDays").value} dias • ${$("#obMinutes").value} min</b></div>
+ <div><span>EXPERIÊNCIA</span><b>${$("#obLevel").value}</b></div>
+ <div><span>ALIMENTAÇÃO</span><b>${$("#obMeals").value} refeições • ${$("#obDiet").value}</b></div>
+ <div><span>MEDICAÇÃO</span><b>${onboarding.goal==="loss"?medNames[onboarding.med]:"Não aplicável ao fluxo atual"}</b></div>`
+}
+function generateProfile(){
+ profile={
+  name:auth.name, goal:onboarding.goal, age:+$("#obAge").value,sex:$("#obSex").value,height:+$("#obHeight").value,weight:+$("#obWeight").value,target:+$("#obTarget").value,fat:+$("#obFat").value||null,
+  level:$("#obLevel").value,days:+$("#obDays").value,minutes:+$("#obMinutes").value,place:$("#obPlace").value,priority:$("#obPriority").value,cardio:+$("#obCardio").value,
+  medication:onboarding.goal==="loss"?onboarding.med:"none",medDetails:$("#obMedDetails").value||"",appetite:$("#obAppetite").value,gi:$("#obGI").value,largeMeals:$("#obLargeMeals").value,
+  meals:+$("#obMeals").value,diet:$("#obDiet").value,dislikes:$("#obDislikes").value,restrictions:$("#obRestrictions").value,dietChallenge:$("#obDietChallenge").value,currentWater:+$("#obWater").value,
+  sleep:+$("#obSleep").value,sleepQuality:$("#obSleepQuality").value,stress:$("#obStress").value,steps:+$("#obSteps").value,limitations:$("#obLimitations").value,notes:$("#obNotes").value
+ };
+ store.set("sigma_profile",profile);
+ showOnly("analysisPage");
+ if(profile.medication!=="none") $("#medAnalysis").textContent="✓ Tolerância alimentar e contexto medicamentoso considerados";
+ setTimeout(()=>{showOnly("appArea");initApp()},2100)
+}
+function demoProfile(){return {name:"Leonardo",goal:"loss",age:33,sex:"m",height:180,weight:97.4,target:90,fat:null,level:"Intermediário",days:4,minutes:60,place:"Academia completa",priority:"Peitoral + braços",cardio:3,medication:"tirzepatide",medDetails:"Exemplo demonstrativo",appetite:"Menor que antes",gi:"Não",largeMeals:"Um pouco",meals:4,diet:"Sem restrição específica",dislikes:"",restrictions:"",dietChallenge:"Organização",currentWater:2.5,sleep:7,sleepQuality:"Regular",stress:"Moderado",steps:8000,limitations:"",notes:""}}
+
+function calcNutrition(){
+ let bmr=10*profile.weight+6.25*profile.height-5*profile.age+(profile.sex==="m"?5:-161);
+ let mult=profile.days>=5?1.65:profile.days>=3?1.52:1.4, kcal=bmr*mult;
+ if(profile.goal==="loss") kcal-=550; if(profile.goal==="gain") kcal+=250;
+ kcal=Math.max(1400,Math.round(kcal/50)*50);
+ let prot=Math.round(profile.weight*(profile.goal==="gain"?1.8:2.0));
+ let fat=Math.round(profile.weight*.7);
+ let carb=Math.max(80,Math.round((kcal-prot*4-fat*9)/4));
+ return {kcal,prot,fat,carb,water:Math.max(2.2,profile.weight*.035)}
+}
+function splitInfo(){if(profile.days<=3)return {key:"full",name:"FULL BODY",sessions:3};if(profile.days===4)return {key:"upper",name:"UPPER / LOWER",sessions:4};return {key:"ppl",name:"PUSH / PULL / LEGS",sessions:profile.days}}
+const exerciseInfo={
+ "Supino reto":["PEITORAL","4","6–10","Pressione mantendo escápulas firmes e controle a descida.","Abrir cotovelos demais ou perder estabilidade das escápulas.","Priorize amplitude controlada antes de aumentar a carga."],
+ "Supino inclinado":["PEITORAL SUPERIOR","3","8–12","Banco moderadamente inclinado, descida controlada e peito aberto.","Inclinar demais o banco e transferir trabalho para o ombro.","Pense em aproximar os braços do centro do peito."],
+ "Remada baixa":["COSTAS","4","8–12","Puxe com os cotovelos mantendo tronco estável.","Usar balanço para movimentar mais carga.","Segure brevemente a contração no final."],
+ "Puxada alta":["DORSAIS","3","8–12","Leve os cotovelos para baixo e mantenha o tórax aberto.","Puxar atrás da nuca ou jogar o tronco excessivamente.","Conduza o movimento pelos cotovelos."],
+ "Desenvolvimento":["OMBROS","3","8–10","Pressione acima da cabeça com abdômen firme.","Arquear excessivamente a lombar.","Use amplitude confortável e estável."],
+ "Elevação lateral":["OMBROS","3","12–15","Eleve os braços com controle até uma amplitude confortável.","Usar embalo e carga excessiva.","Controle a descida por mais tempo."],
+ "Rosca direta":["BÍCEPS","3","10–12","Mantenha cotovelos estáveis e flexione sem balanço.","Projetar ombros ou tronco para trás.","Reduza a carga se perder controle."],
+ "Tríceps corda":["TRÍCEPS","3","10–15","Estenda os cotovelos e abra a corda ao final.","Movimentar os cotovelos para frente e para trás.","Mantenha tensão contínua."],
+ "Agachamento":["PERNAS","4","6–10","Desça com controle, joelhos acompanhando os pés e tronco firme.","Perder estabilidade ou amplitude para usar mais carga.","A técnica vem antes da progressão de peso."],
+ "Leg press":["PERNAS","4","10–12","Empurre mantendo quadril e lombar estáveis no encosto.","Descer além da mobilidade e arredondar a lombar.","Ajuste a amplitude ao seu controle."],
+ "Mesa flexora":["POSTERIORES","3","10–15","Flexione os joelhos mantendo quadril apoiado.","Levantar o quadril para completar a repetição.","Faça a fase de retorno lentamente."],
+ "Terra romeno":["POSTERIORES + GLÚTEOS","3","8–12","Leve o quadril para trás mantendo coluna neutra.","Transformar em agachamento ou arredondar a coluna.","Pare a descida quando perder tensão controlada."],
+ "Panturrilha":["PANTURRILHAS","4","10–15","Faça amplitude completa com pausa em cima e embaixo.","Repetições curtas e rápidas.","Controle cada repetição."],
+ "Prancha":["CORE","3","30–45s","Mantenha alinhamento e abdômen ativo.","Deixar quadril cair ou subir demais.","Qualidade da posição vale mais que tempo."],
+};
+function day(name,title,ex){return {name,title,ex}}
+function workoutPlan(){
+ const s=splitInfo();
+ if(s.key==="full")return [
+  day("SEGUNDA","Full Body A",["Agachamento","Supino reto","Remada baixa","Elevação lateral","Prancha"]),
+  day("QUARTA","Full Body B",["Terra romeno","Supino inclinado","Puxada alta","Tríceps corda","Panturrilha"]),
+  day("SEXTA","Full Body C",["Leg press","Supino reto","Remada baixa","Rosca direta","Prancha"])
+ ];
+ if(s.key==="upper")return [
+  day("SEGUNDA","Upper A • Peito + Costas + Braços",["Supino reto","Remada baixa","Supino inclinado","Puxada alta","Rosca direta","Tríceps corda"]),
+  day("QUARTA","Lower A • Quadríceps + Posteriores",["Agachamento","Leg press","Mesa flexora","Terra romeno","Panturrilha"]),
+  day("QUINTA","Upper B • Costas + Ombros + Braços",["Puxada alta","Supino inclinado","Remada baixa","Desenvolvimento","Elevação lateral","Rosca direta"]),
+  day("SEXTA","Lower B • Posteriores + Glúteos",["Terra romeno","Leg press","Mesa flexora","Agachamento","Panturrilha"])
+ ];
+ let p=[
+  day("SEGUNDA","Push • Peito + Ombros + Tríceps",["Supino reto","Supino inclinado","Desenvolvimento","Elevação lateral","Tríceps corda"]),
+  day("TERÇA","Pull • Costas + Bíceps",["Puxada alta","Remada baixa","Rosca direta","Prancha"]),
+  day("QUARTA","Legs • Pernas completas",["Agachamento","Leg press","Terra romeno","Mesa flexora","Panturrilha"]),
+  day("SEXTA","Upper • Ênfase de prioridade",["Supino inclinado","Remada baixa","Puxada alta","Elevação lateral","Rosca direta"]),
+  day("SÁBADO","Lower + Core",["Leg press","Terra romeno","Mesa flexora","Panturrilha","Prancha"])
+ ];return p.slice(0,profile.days)
+}
+function initApp(){
+ if(!profile)return;
+ const n=calcNutrition(),s=splitInfo();
+ $("#helloName").textContent=`${profile.name.split(" ")[0].toUpperCase()}, SEU RADAR DE HOJE.`;
+ $("#userChip").textContent=profile.name.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase();
+ const recovery=Math.min(95,Math.round(profile.sleep/8*82+(profile.stress==="Baixo"?8:profile.stress==="Moderado"?2:-8)));
+ const train=Math.min(95,78+profile.days*2),nut=profile.medication!=="none"&&profile.appetite==="Muito reduzido"?72:82;
+ const score=Math.round(train*.36+nut*.34+recovery*.30);
+ $("#scoreValue").textContent=score;$("#mainRing").style.background=`conic-gradient(#00e6a8 0 ${score}%,#222832 ${score}% 100%)`;$("#scoreTraining").textContent=train;$("#scoreNutrition").textContent=nut;$("#scoreRecovery").textContent=recovery;
+ $("#planType").textContent=s.name;$("#planDays").textContent=`${s.sessions}x / semana`;$("#planCardio").textContent=`${profile.cardio}x / semana`;$("#planCalories").textContent=`${n.kcal.toLocaleString("pt-BR")} kcal`;$("#planProtein").textContent=`${n.prot} g`;$("#planWater").textContent=`${n.water.toFixed(1).replace(".",",")} L`;
+ $("#dailyWater").textContent=`0 / ${n.water.toFixed(1).replace(".",",")} L`;$("#dailyProtein").textContent=`0 / ${n.prot} g`;
+ $("#strategyInsight").textContent=profile.goal==="loss"?"Déficit moderado + musculação estruturada.":profile.goal==="gain"?"Superávit controlado + progressão de treino.":"Treino consistente + alimentação ajustada à resposta.";
+ if(profile.medication!=="none"){
+  $("#medInsightTitle").textContent="Refeições menores podem ser mais confortáveis.";
+  $("#medInsightText").textContent=`Seu perfil informa ${profile.appetite.toLowerCase()} apetite. O plano prioriza proteína distribuída e hidratação sem interferir no tratamento.`;
+ }
+ $("#trainSplit").textContent=s.name;$("#trainSessions").textContent=`${s.sessions} / semana`;$("#trainDuration").textContent=`~${profile.minutes} min`;$("#trainPriority").textContent=profile.priority;
+ renderTraining();renderNutrition();renderProgress();renderProfile();
+}
+function renderTraining(){
+ const box=$("#trainingDays");box.innerHTML="";
+ workoutPlan().forEach(d=>{
+  let art=document.createElement("article");art.className="training-day glass";art.innerHTML=`<div class="day-header"><div><span>${d.name}</span><b>${d.title}</b></div><small>${d.ex.length} exercícios</small></div><div class="exercise-grid">${d.ex.map(name=>{let e=exerciseInfo[name]||["GERAL","3","10–12","","",""];return `<div class="exercise-card" data-ex="${name}"><div class="exercise-thumb"></div><div class="exercise-meta-card"><span>${e[0]}</span><b>${name}</b><small>${e[1]} séries • ${e[2]} reps</small></div></div>`}).join("")}</div>`;box.appendChild(art)
  });
- $$(".exercise").forEach(e=>e.onclick=()=>openExercise(e.dataset.name,e.dataset.sets,e.dataset.reps));
- const names={upperlower:"UPPER / LOWER",pushpulllegs:"PUSH / PULL / LEGS",abc:"ABC CLÁSSICO",fullbody:"FULL BODY"};
- $("#splitName").textContent=names[state.split];
- $("#strategyLabel").textContent=names[state.split];
+ $$(".exercise-card").forEach(c=>c.onclick=()=>openExercise(c.dataset.ex))
 }
-$$(".split").forEach(b=>b.onclick=()=>{state.split=b.dataset.split; $$(".split").forEach(x=>x.classList.toggle("active",x===b)); save();renderWorkout()});
-$("#generateWorkout").onclick=()=>{
- const d=+state.profile.days;
- state.split=d<=3?"fullbody":d===4?"upperlower":"pushpulllegs";
- $$(".split").forEach(x=>x.classList.toggle("active",x.dataset.split===state.split)); save();renderWorkout();
- $("#coachText").innerHTML=`<h3>Plano ajustado para ${d} dias e objetivo de ${state.profile.goal==="loss"?"perda de gordura com preservação muscular":"performance"}.</h3><p>Priorizamos exercícios compostos, volume compatível com sua frequência e recuperação suficiente entre estímulos.</p>`;
-};
-
-function openExercise(name,sets,reps){
- const ex=exerciseDB[name]; $("#modalName").textContent=name;$("#modalGroup").textContent=ex.group;$("#modalDesc").textContent=ex.desc;$("#modalTip").textContent=ex.tip;$("#modalSets").textContent=sets;$("#modalReps").textContent=reps;$("#modalVisual").innerHTML=icons[ex.icon];$("#exerciseModal").classList.add("open")
+function openExercise(name){let e=exerciseInfo[name];$("#exGroup").textContent=e[0];$("#artMuscle").textContent=e[0];$("#exName").textContent=name;$("#exDesc").textContent=`Exercício selecionado pelo Training Engine para o seu plano inicial.`;$("#exSets").textContent=e[1];$("#exReps").textContent=e[2];$("#exExecution").textContent=e[3];$("#exError").textContent=e[4];$("#exTip").textContent=e[5];$("#exerciseModal").classList.add("active")}
+$("#modalClose").onclick=()=>$("#exerciseModal").classList.remove("active");$("#exerciseModal").onclick=e=>{if(e.target===$("#exerciseModal"))$("#exerciseModal").classList.remove("active")};
+function renderNutrition(){
+ const n=calcNutrition();$("#nutCal").textContent=n.kcal.toLocaleString("pt-BR");$("#nutProt").textContent=n.prot;$("#nutCarb").textContent=n.carb;$("#nutFat").textContent=n.fat;$("#mealMode").textContent=`${profile.meals} REFEIÇÕES`;
+ let medSmall=profile.medication!=="none" && (profile.appetite!=="Normal"||profile.largeMeals==="Sim"||profile.largeMeals==="Um pouco");
+ let meals=medSmall?[
+  ["07:30","Café da manhã proteico","Ovos + opção de carboidrato + fruta","Porção moderada"],
+  ["10:30","Lanche proteico","Iogurte proteico / whey + fruta","Pequeno volume"],
+  ["13:30","Almoço","Proteína magra + arroz/batata + legumes","Sem exagerar no volume"],
+  ["17:00","Pré/pós-treino","Proteína + carboidrato de boa tolerância","Ajustar ao treino"],
+  ["20:30","Jantar","Peixe/frango + acompanhamento + legumes","Leve e proteico"]
+ ]:[
+  ["07:30","Café da manhã","Proteína + carboidrato + fruta","~25% das calorias"],
+  ["12:30","Almoço","Proteína magra + carboidrato + legumes","~30% das calorias"],
+  ["16:30","Lanche / pré-treino","Proteína + fonte de energia","~20% das calorias"],
+  ["20:30","Jantar","Proteína + acompanhamento + vegetais","~25% das calorias"]
+ ];
+ $("#mealList").innerHTML=meals.map(m=>`<div class="meal-item"><span>${m[0]}</span><div><b>${m[1]}</b><p>${m[2]}</p></div><small>${m[3]}</small></div>`).join("");
+ let reads=[["PROTEÍNA",`${n.prot} g/dia como referência inicial.`,"Distribua ao longo do dia para facilitar consistência."],["HIDRATAÇÃO",`${n.water.toFixed(1).replace(".",",")} L/dia como ponto de partida.`,"A necessidade real varia com clima, suor e treino."]];
+ if(medSmall)reads.unshift(["TOLERÂNCIA ALIMENTAR","Prioridade para refeições menores e mais distribuídas.","Seu perfil relata redução de apetite e/ou desconforto com grandes volumes."]);
+ $("#nutritionRead").innerHTML=reads.map(r=>`<div class="nutrition-read-item"><span>${r[0]}</span><b>${r[1]}</b><p>${r[2]}</p></div>`).join("")
 }
-$("#closeExercise").onclick=()=>$("#exerciseModal").classList.remove("open");
-$("#exerciseModal").onclick=e=>{if(e.target.id==="exerciseModal")$("#exerciseModal").classList.remove("open")};
-
-const meals=[
- ["07:30","Café da manhã","Ovos mexidos + pão integral + fruta","430 kcal • 32g P"],
- ["10:30","Lanche","Iogurte proteico + banana","220 kcal • 20g P"],
- ["13:00","Almoço","Frango grelhado + arroz + legumes + salada","610 kcal • 52g P"],
- ["16:30","Pré-treino","Aveia + iogurte + fruta","340 kcal • 24g P"],
- ["20:00","Jantar","Tilápia + batata + legumes","510 kcal • 48g P"],
- ["22:30","Ceia","Opção proteica leve","160 kcal • 20g P"]
-];
-function renderMeals(){ $("#mealPlan").innerHTML=meals.map(m=>`<div class="meal"><div class="meal-time">${m[0]}</div><div><b>${m[1]}</b><p>${m[2]}</p></div><div class="meal-macros">${m[3]}</div></div>`).join("") }
-function updateNutrition(){
- const n=calcNutrition(); $("#calGoal").textContent=n.kcal.toLocaleString("pt-BR");$("#protGoal").textContent=n.prot;$("#carbGoal").textContent=n.carbs;$("#fatGoal").textContent=n.fat; $("#profileCalories").textContent=n.kcal.toLocaleString("pt-BR")+" kcal"; updateDashboard()
+function renderProgress(){let bmi=profile.weight/((profile.height/100)**2);$("#baseWeight").textContent=profile.weight.toFixed(1).replace(".",",")+" kg";$("#baseTarget").textContent=profile.target.toFixed(1).replace(".",",")+" kg";$("#baseGap").textContent=(profile.target-profile.weight).toFixed(1).replace(".",",")+" kg";$("#baseBmi").textContent=bmi.toFixed(1).replace(".",",")}
+function renderProfile(){
+ const goalNames={loss:"Perda de gordura",recomp:"Recomposição",gain:"Ganho de massa",fitness:"Condicionamento"},medNames={none:"Não informado / não usa",tirzepatide:"Tirzepatida",semaglutide:"Semaglutida",other:"Outro"};
+ let cards=[
+ ["DADOS CORPORAIS",[["Idade",profile.age+" anos"],["Altura",profile.height+" cm"],["Peso",profile.weight+" kg"],["Meta",profile.target+" kg"],["Objetivo",goalNames[profile.goal]]]],
+ ["TREINO",[["Nível",profile.level],["Frequência",profile.days+"x/sem"],["Duração",profile.minutes+" min"],["Local",profile.place],["Prioridade",profile.priority]]],
+ ["ROTINA",[["Cardio",profile.cardio+"x/sem"],["Sono",profile.sleep+" h"],["Estresse",profile.stress],["Passos",profile.steps+"/dia"],["Água atual",profile.currentWater+" L"]]],
+ ["ALIMENTAÇÃO",[["Refeições",profile.meals+"/dia"],["Estilo",profile.diet],["Desafio",profile.dietChallenge],["Restrições",profile.restrictions||"Nenhuma informada"]]],
+ ["CONTEXTO DE PESO",[["Medicação",medNames[profile.medication]],["Apetite",profile.medication!=="none"?profile.appetite:"—"],["Grandes refeições",profile.medication!=="none"?profile.largeMeals:"—"],["GI",profile.medication!=="none"?profile.gi:"—"]]],
+ ["OBSERVAÇÕES",[["Limitações",profile.limitations||"Nenhuma informada"],["Observações",profile.notes||"Nenhuma"],["Plano",splitInfo().name],["Status","Baseline criado"]]]
+ ];
+ $("#profileCards").innerHTML=cards.map(c=>`<article class="profile-card glass"><span>${c[0]}</span><h3>${c[0]}</h3>${c[1].map(x=>`<div class="profile-line"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")}</article>`).join("")
 }
-$("#recalcNutrition").onclick=updateNutrition;
-$("#nutritionSim").onclick=()=>{
- const tmp={...state.profile,weight:+$("#nWeight").value,goal:$("#nGoal").value}; const n=calcNutrition(tmp);
- $("#calGoal").textContent=n.kcal.toLocaleString("pt-BR");$("#protGoal").textContent=n.prot;$("#carbGoal").textContent=n.carbs;$("#fatGoal").textContent=n.fat;
-};
-
-function profileToForm(){
- const p=state.profile;
- $("#pName").value=p.name;$("#pAge").value=p.age;$("#pHeight").value=p.height;$("#pWeight").value=p.weight;$("#pTarget").value=p.target;$("#pSex").value=p.sex;$("#pGoal").value=p.goal;$("#pDays").value=p.days;$("#pLevel").value=p.level;$("#pMinutes").value=p.minutes;$("#pCardio").value=p.cardio;$("#pPriority").value=p.priority;$("#pSleep").value=p.sleep;$("#pStress").value=p.stress;$("#pSteps").value=p.steps;$("#profileName").textContent=p.name.toUpperCase(); updateProfileSummary()
-}
-function updateProfileSummary(){
- const p=state.profile,bmi=p.weight/((p.height/100)**2);$("#bmiValue").textContent=bmi.toFixed(1).replace(".",",");$("#goalGap").textContent="-"+Math.max(0,p.weight-p.target).toFixed(1).replace(".",",")+" kg";$("#profileName").textContent=p.name.toUpperCase(); updateNutrition()
-}
-$("#saveProfile").onclick=()=>{
- state.profile={name:$("#pName").value,age:+$("#pAge").value,height:+$("#pHeight").value,weight:+$("#pWeight").value,target:+$("#pTarget").value,sex:$("#pSex").value,goal:$("#pGoal").value,days:+$("#pDays").value,level:$("#pLevel").value,minutes:+$("#pMinutes").value,cardio:+$("#pCardio").value,priority:$("#pPriority").value,sleep:+$("#pSleep").value,stress:$("#pStress").value,steps:+$("#pSteps").value};
- save();updateProfileSummary();$("#nWeight").value=state.profile.weight; alert("Perfil salvo no navegador para este protótipo.")
-};
-$("#addCheckin").onclick=()=>alert("No produto real, aqui abriria um check-in com peso, medidas, fotos, força, sono e observações.");
-
-renderWorkout();renderMeals();profileToForm();updateNutrition();updateDashboard();
+$$(".nav").forEach(n=>n.onclick=()=>{if(n.id==="logoutBtn")return;$$(".nav").forEach(x=>x.classList.remove("active"));n.classList.add("active");$$(".app-view").forEach(v=>v.classList.remove("active"));$("#"+n.dataset.view).classList.add("active");scrollTo(0,0)});
+$$("[data-jump]").forEach(b=>b.onclick=()=>{const n=$(`.nav[data-view="${b.dataset.jump}"]`);if(n)n.click()});
+$("#logoutBtn").onclick=()=>{showOnly("publicArea")};
+$("#changeSplit").onclick=()=>alert("Na versão com banco, aqui o usuário poderá comparar outras divisões e pedir uma nova montagem.");
+$("#nutritionSettings").onclick=()=>alert("Na versão seguinte, esta área permitirá trocar refeições, preferências e alimentos mantendo as metas do plano.");
+$("#newCheckin").onclick=()=>alert("Próxima etapa do MVP: check-in com peso, medidas, fotos, cargas, sono e observações.");
+$("#editProfile").onclick=()=>startOnboarding();

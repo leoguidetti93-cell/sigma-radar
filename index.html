@@ -8,214 +8,282 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="ambient a1"></div><div class="ambient a2"></div>
-<header class="topbar">
-  <div class="logo"><span>Σ</span><div><b>SIGMA</b><small>RADAR</small></div></div>
-  <div class="topstatus"><i></i><span>PROTO LAB</span></div>
-  <button class="avatar" id="openProfile">LG</button>
+<div class="ambient red"></div><div class="ambient green"></div>
+
+<!-- PUBLIC HOME -->
+<section id="publicArea">
+<header class="public-header">
+  <div class="brand"><span>Σ</span><div><b>SIGMA</b><small>RADAR</small></div></div>
+  <nav><a href="#como">COMO FUNCIONA</a><a href="#insights">INTELLIGENCE</a><a href="#produto">PRODUTO</a></nav>
+  <div class="head-actions"><button class="btn ghost" data-auth="login">ENTRAR</button><button class="btn primary" data-auth="signup">CRIAR CONTA</button></div>
 </header>
 
-<div class="app">
-<aside class="sidebar">
-  <button class="nav active" data-view="dashboard"><span>◫</span><b>Dashboard</b></button>
-  <button class="nav" data-view="treino"><span>⌁</span><b>Treino</b></button>
-  <button class="nav" data-view="nutricao"><span>◉</span><b>Nutrição</b></button>
-  <button class="nav" data-view="evolucao"><span>↗</span><b>Evolução</b></button>
-  <button class="nav" data-view="perfil"><span>◎</span><b>Perfil</b></button>
-  <div class="sidebar-foot">
-    <small>Σ SCORE</small><strong id="sideScore">86</strong><span>Performance geral</span>
+<main>
+<section class="hero">
+  <div class="hero-copy">
+    <span class="kicker"><i></i> PERFORMANCE INTELLIGENCE</span>
+    <h1>SEU OBJETIVO.<br>SEU PLANO.<br><em>SUA EVOLUÇÃO.</em></h1>
+    <p>O Sigma transforma seus dados de treino, nutrição e rotina em um plano pessoal — e ajusta a leitura conforme você evolui.</p>
+    <div class="hero-actions"><button class="btn primary big" data-auth="signup">CRIAR MEU RADAR <span>↗</span></button><button class="linkbtn" id="demoBtn">VER DEMONSTRAÇÃO</button></div>
   </div>
-</aside>
-
-<main class="content">
-<section class="view active" id="dashboard">
-  <div class="page-head">
-    <div><span class="kicker">Σ PERFORMANCE INTELLIGENCE</span><h1>SEU RADAR DE HOJE.</h1><p>Uma leitura única de treino, nutrição, recuperação e evolução.</p></div>
-    <div class="date-pill">SEMANA ATUAL</div>
-  </div>
-
-  <div class="dash-grid">
-    <article class="score-card glass">
-      <div class="card-title"><span>Σ SCORE</span><em id="scoreStatus">EVOLUÇÃO FAVORÁVEL</em></div>
-      <div class="score-wrap">
-        <div class="score-ring" id="scoreRing"><div><strong id="scoreValue">86</strong><small>/100</small></div></div>
-        <div class="score-copy"><h3 id="scoreHeadline">Você está evoluindo bem.</h3><p id="scoreText">Treino consistente, boa hidratação e força em crescimento. Nutrição ainda pode melhorar.</p></div>
-      </div>
-      <div class="mini-stats"><div><span>PESO</span><b id="miniWeight">97,4 kg</b><em>↓ tendência</em></div><div><span>TREINOS</span><b id="miniWorkouts">4/4</b><em>✓ meta</em></div><div><span>PROTEÍNA</span><b id="miniProtein">84%</b><em>atenção</em></div></div>
-    </article>
-
-    <article class="glass radar-card">
-      <div class="card-title"><span>RADAR DE EVOLUÇÃO</span><em>7 DIAS</em></div>
-      <div class="radar-wrap">
-        <svg viewBox="0 0 400 400">
-          <g class="gridlines"><polygon points="200,55 338,155 285,318 115,318 62,155"/><polygon points="200,90 305,166 265,290 135,290 95,166"/><polygon points="200,125 272,177 245,262 155,262 128,177"/><line x1="200" y1="200" x2="200" y2="55"/><line x1="200" y1="200" x2="338" y2="155"/><line x1="200" y1="200" x2="285" y2="318"/><line x1="200" y1="200" x2="115" y2="318"/><line x1="200" y1="200" x2="62" y2="155"/></g>
-          <polygon id="radarShape" class="radar-shape" points="200,72 315,163 268,294 132,294 82,161"/>
-          <circle cx="200" cy="72" r="5"/><circle cx="315" cy="163" r="5"/><circle cx="268" cy="294" r="5"/><circle cx="132" cy="294" r="5"/><circle cx="82" cy="161" r="5"/>
-        </svg>
-        <span class="lbl l1">TREINO <b id="rTreino">94</b></span><span class="lbl l2">NUTRIÇÃO <b id="rNutri">78</b></span><span class="lbl l3">RECUPERAÇÃO <b id="rRec">81</b></span><span class="lbl l4">CARDIO <b id="rCardio">85</b></span><span class="lbl l5">CONSISTÊNCIA <b id="rCons">92</b></span>
-      </div>
-    </article>
-
-    <article class="glass today-card">
-      <div class="card-title"><span>HOJE</span><em>CHECKLIST</em></div>
-      <div class="check"><div><b>Treino</b><small id="todayWorkoutLabel">Peito + tríceps</small></div><button class="toggle on" data-check="workout">✓</button></div>
-      <div class="check"><div><b>Água</b><small><span id="waterNow">2,6</span> / <span id="waterGoal">3,5</span> L</small></div><button class="plus" id="addWater">+ 300ml</button></div>
-      <div class="check"><div><b>Proteína</b><small><span id="proteinNow">142</span> / <span id="proteinGoal">180</span> g</small></div><button class="plus" id="addProtein">+ 20g</button></div>
-      <div class="check"><div><b>Passos</b><small>7.420 / 10.000</small></div><span class="progress-mini"><i style="width:74%"></i></span></div>
-    </article>
-
-    <article class="glass intelligence">
-      <div class="card-title"><span>Σ INTELLIGENCE</span><em>3 INSIGHTS</em></div>
-      <div class="insight hot"><span>RADAR DETECTOU</span><b>Força subindo enquanto o peso cai.</b><p>Boa preservação de performance durante a redução de peso.</p></div>
-      <div class="insight"><span>PONTO DE ATENÇÃO</span><b>Proteína abaixo da meta em 3 dias.</b><p>Ajustar consistência pode elevar seu score nesta semana.</p></div>
-      <div class="insight"><span>PROJEÇÃO</span><b id="projectionText">Meta estimada em ~7 semanas.</b><p>Projeção baseada na tendência atual.</p></div>
-    </article>
-  </div>
-</section>
-
-<section class="view" id="treino">
-  <div class="page-head"><div><span class="kicker">Σ TRAINING ENGINE</span><h1>TREINO INTELIGENTE.</h1><p>Escolha uma divisão ou deixe o Sigma sugerir uma estrutura com base no seu perfil.</p></div><button class="primary" id="generateWorkout">GERAR TREINO INTELIGENTE</button></div>
-
-  <div class="split-selector">
-    <button class="split active" data-split="upperlower"><b>Upper / Lower</b><span>4 dias</span><small>Equilíbrio entre volume e recuperação.</small></button>
-    <button class="split" data-split="pushpulllegs"><b>Push / Pull / Legs</b><span>5–6 dias</span><small>Maior frequência e volume semanal.</small></button>
-    <button class="split" data-split="abc"><b>ABC Clássico</b><span>3–5 dias</span><small>Simples e fácil de seguir.</small></button>
-    <button class="split" data-split="fullbody"><b>Full Body</b><span>3 dias</span><small>Ótimo para agenda curta.</small></button>
-  </div>
-
-  <div class="training-layout">
-    <div class="glass training-plan">
-      <div class="card-title"><span>PLANO DA SEMANA</span><em id="splitName">UPPER / LOWER</em></div>
-      <div id="workoutDays"></div>
-    </div>
-    <div class="glass coach">
-      <div class="coach-head"><span>Σ COACH</span><b>LEITURA DO PLANO</b></div>
-      <div id="coachText">
-        <h3>Foco atual: recomposição + perda de gordura.</h3>
-        <p>Volume moderado, exercícios compostos primeiro, faixa de repetições mista e cardio estrategicamente distribuído.</p>
-      </div>
-      <div class="coach-metrics"><div><span>VOLUME</span><b>MODERADO</b></div><div><span>INTENSIDADE</span><b>ALTA</b></div><div><span>RECUPERAÇÃO</span><b>48–72H</b></div></div>
+  <div class="hero-product glass">
+    <div class="product-top"><span>Σ SCORE</span><small>SEMANA ATUAL</small></div>
+    <div class="score-demo"><div class="ring"><strong>86</strong><small>/100</small></div><div><b>EVOLUÇÃO FAVORÁVEL</b><p>Força subindo, peso em queda e treino consistente.</p></div></div>
+    <div class="radar-mini">
+      <div><span>TREINO</span><b>94</b></div><div><span>NUTRIÇÃO</span><b>78</b></div><div><span>RECUPERAÇÃO</span><b>81</b></div><div><span>CONSISTÊNCIA</span><b>92</b></div>
     </div>
   </div>
 </section>
 
-<section class="view" id="nutricao">
-  <div class="page-head"><div><span class="kicker">Σ NUTRITION ENGINE</span><h1>NUTRIÇÃO QUE RESPONDE AO OBJETIVO.</h1><p>Metas calculadas a partir do perfil e um plano alimentar demonstrativo ajustável.</p></div><button class="primary" id="recalcNutrition">RECALCULAR METAS</button></div>
-
-  <div class="nutrition-top">
-    <article class="glass macro-card"><span>CALORIAS</span><strong id="calGoal">2.250</strong><small>kcal / dia</small><em>déficit moderado</em></article>
-    <article class="glass macro-card"><span>PROTEÍNA</span><strong id="protGoal">180</strong><small>g / dia</small><em>preservação muscular</em></article>
-    <article class="glass macro-card"><span>CARBO</span><strong id="carbGoal">220</strong><small>g / dia</small><em>energia para treino</em></article>
-    <article class="glass macro-card"><span>GORDURAS</span><strong id="fatGoal">70</strong><small>g / dia</small><em>faixa equilibrada</em></article>
-  </div>
-
-  <div class="nutrition-layout">
-    <div class="glass meal-plan">
-      <div class="card-title"><span>PLANO ALIMENTAR DO DIA</span><em>EXEMPLO ADAPTATIVO</em></div>
-      <div id="mealPlan"></div>
-    </div>
-    <div class="glass nutrition-assist">
-      <div class="card-title"><span>AJUSTE RÁPIDO</span><em>SIMULAÇÃO</em></div>
-      <label>Peso atual<input type="number" id="nWeight" value="97.4" step="0.1"><small>kg</small></label>
-      <label>Objetivo<select id="nGoal"><option value="loss">Perder gordura</option><option value="recomp">Recomposição</option><option value="gain">Ganhar massa</option></select></label>
-      <label>Atividade<select id="nActivity"><option value="1.45">Moderada</option><option value="1.6" selected>Alta</option><option value="1.75">Muito alta</option></select></label>
-      <button class="secondary" id="nutritionSim">SIMULAR</button>
-      <div class="note">* Protótipo educativo. Não substitui orientação de nutricionista ou médico.</div>
-    </div>
+<section class="public-section" id="como">
+  <div class="section-head"><span>01 • COMO FUNCIONA</span><h2>VOCÊ CONTA QUEM É.<br><em>O SIGMA MONTA O PONTO DE PARTIDA.</em></h2></div>
+  <div class="steps">
+    <article class="glass"><b>01</b><h3>PERFIL</h3><p>Objetivo, medidas, experiência, rotina, disponibilidade, preferências e contexto.</p></article>
+    <article class="glass"><b>02</b><h3>PLANO INICIAL</h3><p>Treino, metas nutricionais, hidratação, cardio e estratégia semanal organizados em um só lugar.</p></article>
+    <article class="glass"><b>03</b><h3>RADAR</h3><p>Os registros do dia alimentam o Σ Score e mostram onde a evolução está forte ou precisa de atenção.</p></article>
+    <article class="glass"><b>04</b><h3>AJUSTES</h3><p>Com histórico suficiente, o sistema identifica tendências e propõe ajustes finos para o próximo ciclo.</p></article>
   </div>
 </section>
 
-<section class="view" id="evolucao">
-  <div class="page-head"><div><span class="kicker">Σ PROGRESS</span><h1>EVOLUÇÃO EM CONTEXTO.</h1><p>Não é só o peso: acompanhe tendência, força, medidas e consistência.</p></div><button class="secondary" id="addCheckin">NOVO CHECK-IN</button></div>
-
-  <div class="progress-grid">
-    <article class="glass chart-card">
-      <div class="card-title"><span>PESO — 8 SEMANAS</span><em>↓ 6,6 KG</em></div>
-      <svg class="linechart" viewBox="0 0 800 300">
-        <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff174a" stop-opacity=".28"/><stop offset="100%" stop-color="#ff174a" stop-opacity="0"/></linearGradient></defs>
-        <g class="chartgrid"><line x1="50" y1="60" x2="760" y2="60"/><line x1="50" y1="130" x2="760" y2="130"/><line x1="50" y1="200" x2="760" y2="200"/><line x1="50" y1="270" x2="760" y2="270"/></g>
-        <path d="M50 54 L150 78 L250 104 L350 133 L450 160 L550 191 L650 220 L760 246 L760 270 L50 270 Z" fill="url(#area)"/>
-        <polyline points="50,54 150,78 250,104 350,133 450,160 550,191 650,220 760,246" fill="none" stroke="#ff174a" stroke-width="4"/>
-      </svg>
-    </article>
-    <article class="glass body-card">
-      <div class="card-title"><span>COMPOSIÇÃO</span><em>ÚLTIMO CHECK-IN</em></div>
-      <div class="body-visual">
-        <svg viewBox="0 0 220 420" class="body-svg"><circle cx="110" cy="48" r="32"/><path d="M78 88 Q110 70 142 88 L155 178 Q138 210 137 268 L154 388 L126 388 L110 282 L94 388 L66 388 L83 268 Q82 210 65 178 Z"/></svg>
-        <div class="measure m1"><span>PEITO</span><b>108 cm</b></div><div class="measure m2"><span>CINTURA</span><b>101 cm</b></div><div class="measure m3"><span>BRAÇO</span><b>39 cm</b></div><div class="measure m4"><span>COXA</span><b>62 cm</b></div>
-      </div>
-    </article>
-    <article class="glass compare-card">
-      <div class="card-title"><span>ANTES × AGORA</span><em>8 SEMANAS</em></div>
-      <div class="compare"><div><span>ANTES</span><b>104,0 kg</b><small>31% gordura*</small></div><i>→</i><div><span>AGORA</span><b>97,4 kg</b><small>tendência favorável</small></div></div>
-      <p>*Valor demonstrativo para o protótipo.</p>
-    </article>
-    <article class="glass strength-card">
-      <div class="card-title"><span>FORÇA</span><em>PRINCIPAIS MOVIMENTOS</em></div>
-      <div class="strength-row"><span>Supino</span><b>+8%</b><i style="width:82%"></i></div>
-      <div class="strength-row"><span>Agachamento</span><b>+5%</b><i style="width:70%"></i></div>
-      <div class="strength-row"><span>Remada</span><b>+11%</b><i style="width:90%"></i></div>
-    </article>
+<section class="public-section intelligence-show" id="insights">
+  <div class="section-head"><span>02 • Σ INTELLIGENCE</span><h2>NÃO É MAIS UMA PLANILHA<br>DE NÚMEROS.</h2></div>
+  <div class="intel-grid">
+    <article class="glass accent"><span>RADAR DETECTOU</span><h3>FORÇA ↑<br>PESO ↓</h3><p>Seu desempenho continua crescendo enquanto a tendência de peso segue descendente.</p><b>BOA PRESERVAÇÃO DE PERFORMANCE</b></article>
+    <article class="glass"><span>PONTO DE ATENÇÃO</span><h3>PROTEÍNA<br>IRREGULAR.</h3><p>Você ficou abaixo da meta em 3 dos últimos 7 dias.</p><b>PRIORIDADE PARA ESTA SEMANA →</b></article>
+    <article class="glass"><span>RECUPERAÇÃO</span><h3>SONO<br>EM QUEDA.</h3><p>O volume de treino subiu enquanto a média de sono caiu.</p><b>REVER CARGA DE RECUPERAÇÃO →</b></article>
   </div>
 </section>
 
-<section class="view" id="perfil">
-  <div class="page-head"><div><span class="kicker">Σ PROFILE</span><h1>SEU PERFIL MOVE O RADAR.</h1><p>Esses dados alimentam as recomendações demonstrativas do treino e da nutrição.</p></div><button class="primary" id="saveProfile">SALVAR PERFIL</button></div>
-
-  <div class="profile-layout">
-    <div class="glass profile-form">
-      <div class="form-section"><h3>DADOS BÁSICOS</h3>
-        <div class="fields">
-          <label>Nome<input id="pName" value="Leonardo"></label>
-          <label>Idade<input id="pAge" type="number" value="33"></label>
-          <label>Altura (cm)<input id="pHeight" type="number" value="180"></label>
-          <label>Peso atual (kg)<input id="pWeight" type="number" value="97.4" step="0.1"></label>
-          <label>Meta (kg)<input id="pTarget" type="number" value="90" step="0.1"></label>
-          <label>Sexo<select id="pSex"><option value="m" selected>Masculino</option><option value="f">Feminino</option></select></label>
-        </div>
-      </div>
-      <div class="form-section"><h3>OBJETIVO & ROTINA</h3>
-        <div class="fields">
-          <label>Objetivo<select id="pGoal"><option value="loss" selected>Perda de gordura + preservar massa</option><option value="recomp">Recomposição corporal</option><option value="gain">Hipertrofia</option></select></label>
-          <label>Dias de treino<select id="pDays"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
-          <label>Nível<select id="pLevel"><option>Iniciante</option><option selected>Intermediário</option><option>Avançado</option></select></label>
-          <label>Minutos por treino<select id="pMinutes"><option>45</option><option selected>60</option><option>75</option><option>90</option></select></label>
-          <label>Cardio / semana<select id="pCardio"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
-          <label>Prioridade muscular<select id="pPriority"><option selected>Peitoral + braços</option><option>Costas</option><option>Pernas</option><option>Ombros</option><option>Equilibrado</option></select></label>
-        </div>
-      </div>
-      <div class="form-section"><h3>RECUPERAÇÃO</h3>
-        <div class="fields">
-          <label>Sono médio (h)<input id="pSleep" type="number" value="7" step=".5"></label>
-          <label>Estresse<select id="pStress"><option>Baixo</option><option selected>Moderado</option><option>Alto</option></select></label>
-          <label>Passos / dia<input id="pSteps" type="number" value="8000"></label>
-          <label>Restrições / observações<input id="pNotes" value="Nenhuma informada"></label>
-        </div>
-      </div>
-    </div>
-    <div class="glass profile-summary">
-      <span>LEITURA DO PERFIL</span><h2 id="profileName">LEONARDO</h2><div class="profile-score">86<small>Σ SCORE</small></div>
-      <div class="summary-row"><span>IMC</span><b id="bmiValue">30,1</b></div>
-      <div class="summary-row"><span>Meta</span><b id="goalGap">-7,4 kg</b></div>
-      <div class="summary-row"><span>Estratégia</span><b id="strategyLabel">Upper / Lower</b></div>
-      <div class="summary-row"><span>Calorias alvo</span><b id="profileCalories">2.250 kcal</b></div>
-      <p>O protótipo usa esses dados para adaptar treino, metas nutricionais e leitura de evolução.</p>
-    </div>
+<section class="public-section product-section" id="produto">
+  <div class="section-head"><span>03 • UM SISTEMA</span><h2>TREINO + NUTRIÇÃO + EVOLUÇÃO<br><em>CONVERSANDO ENTRE SI.</em></h2></div>
+  <div class="product-cards">
+    <div class="feature glass"><span>TRAINING ENGINE</span><h3>Treino montado para a sua realidade.</h3><p>Dias disponíveis, experiência, objetivo, duração da sessão, equipamentos e prioridades musculares.</p><div class="fake-ui"><i></i><i></i><i></i><i></i></div></div>
+    <div class="feature glass"><span>NUTRITION ENGINE</span><h3>Metas que partem do seu contexto.</h3><p>Calorias, proteína, distribuição de refeições, água e sugestões alimentares ajustáveis.</p><div class="macro-row"><b>2.250<small>KCAL</small></b><b>180<small>PROT</small></b><b>220<small>CARB</small></b></div></div>
   </div>
+  <div class="cta glass"><div><span>COMECE PELO SEU PERFIL</span><h2>Seu primeiro Radar leva poucos minutos.</h2></div><button class="btn primary big" data-auth="signup">COMEÇAR AGORA</button></div>
 </section>
 </main>
-</div>
+<footer><div class="brand small"><span>Σ</span><div><b>SIGMA</b><small>RADAR</small></div></div><small>PROTO MVP • 2026</small></footer>
+</section>
 
-<div class="modal" id="exerciseModal">
-  <div class="modal-card glass">
-    <button class="close" id="closeExercise">×</button>
-    <div class="exercise-hero" id="modalVisual"></div>
-    <span class="kicker" id="modalGroup">PEITORAL</span>
-    <h2 id="modalName">Supino reto</h2>
-    <p id="modalDesc">Movimento composto para força e hipertrofia do peitoral.</p>
-    <div class="exercise-meta"><div><span>SÉRIES</span><b id="modalSets">4</b></div><div><span>REPS</span><b id="modalReps">8–10</b></div><div><span>DESCANSO</span><b>90s</b></div></div>
-    <div class="tip"><b>Σ DICA</b><p id="modalTip">Controle a descida e mantenha as escápulas estabilizadas.</p></div>
+<!-- AUTH -->
+<section class="overlay-page" id="authPage">
+  <button class="back-public" id="backPublic">← VOLTAR</button>
+  <div class="auth-shell">
+    <div class="auth-brand">
+      <div class="brand jumbo"><span>Σ</span><div><b>SIGMA</b><small>RADAR</small></div></div>
+      <h2>COMECE PELOS<br>SEUS DADOS.</h2>
+      <p>Depois do cadastro, o Sigma faz uma leitura inicial do seu perfil e gera o primeiro plano.</p>
+    </div>
+    <div class="auth-card glass">
+      <div class="auth-tabs"><button class="active" data-tab="signup">CRIAR CONTA</button><button data-tab="login">ENTRAR</button></div>
+      <form id="signupForm" class="auth-form">
+        <label>Nome<input id="signupName" required placeholder="Seu nome"></label>
+        <label>E-mail<input id="signupEmail" type="email" required placeholder="voce@email.com"></label>
+        <label>Senha<input id="signupPass" type="password" minlength="6" required placeholder="Mínimo 6 caracteres"></label>
+        <button class="btn primary big full">CRIAR MINHA CONTA</button>
+        <small>Protótipo: os dados ficam somente neste navegador.</small>
+      </form>
+      <form id="loginForm" class="auth-form hidden">
+        <label>E-mail<input id="loginEmail" type="email" required placeholder="voce@email.com"></label>
+        <label>Senha<input id="loginPass" type="password" required placeholder="Sua senha"></label>
+        <button class="btn primary big full">ENTRAR NO SIGMA</button>
+        <small id="loginError"></small>
+      </form>
+    </div>
   </div>
+</section>
+
+<!-- ONBOARDING -->
+<section class="overlay-page" id="onboardingPage">
+  <header class="onboard-head"><div class="brand small"><span>Σ</span><div><b>SIGMA</b><small>RADAR</small></div></div><div class="progress"><i id="onboardProgress"></i></div><span id="stepCounter">1 / 7</span></header>
+  <div class="onboard-wrap">
+    <div class="onboard-step active" data-step="1">
+      <span class="kicker">PASSO 01 • OBJETIVO</span><h1>O QUE VOCÊ QUER<br><em>CONQUISTAR?</em></h1><p>Essa escolha muda treino, nutrição e a forma como o Radar interpreta sua evolução.</p>
+      <div class="choice-grid goal-grid">
+        <button data-value="loss"><b>↓</b><strong>PERDER GORDURA</strong><small>Reduzir peso e preservar massa muscular.</small></button>
+        <button data-value="recomp"><b>↕</b><strong>RECOMPOSIÇÃO</strong><small>Reduzir gordura e melhorar massa magra.</small></button>
+        <button data-value="gain"><b>↑</b><strong>GANHAR MASSA</strong><small>Hipertrofia com progressão estruturada.</small></button>
+        <button data-value="fitness"><b>◎</b><strong>CONDICIONAMENTO</strong><small>Performance, cardio e qualidade de vida.</small></button>
+      </div>
+    </div>
+
+    <div class="onboard-step" data-step="2">
+      <span class="kicker">PASSO 02 • DADOS CORPORAIS</span><h1>SEU PONTO<br><em>DE PARTIDA.</em></h1>
+      <div class="form-grid">
+        <label>Idade<input id="obAge" type="number" value="33"></label><label>Sexo<select id="obSex"><option value="m">Masculino</option><option value="f">Feminino</option></select></label>
+        <label>Altura (cm)<input id="obHeight" type="number" value="180"></label><label>Peso atual (kg)<input id="obWeight" type="number" value="97.4" step=".1"></label>
+        <label>Peso-meta (kg)<input id="obTarget" type="number" value="90" step=".1"></label><label>Gordura corporal (%) <small>opcional</small><input id="obFat" type="number" placeholder="Ex.: 28"></label>
+      </div>
+    </div>
+
+    <div class="onboard-step" data-step="3">
+      <span class="kicker">PASSO 03 • TREINO</span><h1>COMO É SUA<br><em>ROTINA DE TREINO?</em></h1>
+      <div class="form-grid">
+        <label>Experiência<select id="obLevel"><option>Iniciante</option><option selected>Intermediário</option><option>Avançado</option></select></label>
+        <label>Dias disponíveis / semana<select id="obDays"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+        <label>Tempo por treino<select id="obMinutes"><option>40</option><option>50</option><option selected>60</option><option>75</option><option>90</option></select></label>
+        <label>Onde treina?<select id="obPlace"><option>Academia completa</option><option>Academia de condomínio</option><option>Casa</option></select></label>
+        <label>Prioridade muscular<select id="obPriority"><option>Equilibrado</option><option selected>Peitoral + braços</option><option>Costas</option><option>Pernas + glúteos</option><option>Ombros</option></select></label>
+        <label>Cardio atual / semana<select id="obCardio"><option>0</option><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+      </div>
+    </div>
+
+    <div class="onboard-step" data-step="4" id="medicationStep">
+      <span class="kicker">PASSO 04 • CONTEXTO DE EMAGRECIMENTO</span><h1>USA MEDICAÇÃO PARA<br><em>CONTROLE DE PESO?</em></h1>
+      <p>Essa informação pode mudar tolerância a refeições grandes, ingestão de proteína, hidratação e estratégia alimentar. O Sigma não prescreve nem altera medicamentos.</p>
+      <div class="choice-grid meds">
+        <button data-med="none"><strong>NÃO USO</strong><small>Sem medicamento para controle de peso.</small></button>
+        <button data-med="tirzepatide"><strong>TIRZEPATIDA</strong><small>Ex.: Mounjaro / Zepbound.</small></button>
+        <button data-med="semaglutide"><strong>SEMAGLUTIDA</strong><small>Ex.: Wegovy / Ozempic.</small></button>
+        <button data-med="other"><strong>OUTRO</strong><small>Informar no próximo campo.</small></button>
+      </div>
+      <div class="med-extra hidden" id="medExtra">
+        <div class="form-grid">
+          <label>Nome / dose <small>opcional</small><input id="obMedDetails" placeholder="Ex.: tirzepatida 2,5 mg semanal"></label>
+          <label>Como está seu apetite?<select id="obAppetite"><option>Normal</option><option selected>Menor que antes</option><option>Muito reduzido</option></select></label>
+          <label>Sente náusea / desconforto gastrointestinal?<select id="obGI"><option selected>Não</option><option>Às vezes</option><option>Frequentemente</option></select></label>
+          <label>Refeições grandes incomodam?<select id="obLargeMeals"><option selected>Não</option><option>Um pouco</option><option>Sim</option></select></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="onboard-step" data-step="5">
+      <span class="kicker">PASSO 05 • ALIMENTAÇÃO</span><h1>COMO VOCÊ PREFERE<br><em>COMER?</em></h1>
+      <div class="form-grid">
+        <label>Refeições por dia<select id="obMeals"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+        <label>Estilo alimentar<select id="obDiet"><option selected>Sem restrição específica</option><option>Baixo carboidrato</option><option>Vegetariano</option><option>Outro</option></select></label>
+        <label>Alimentos que não gosta<input id="obDislikes" placeholder="Ex.: fígado, brócolis..."></label>
+        <label>Restrições / alergias<input id="obRestrictions" placeholder="Ex.: lactose, glúten..."></label>
+        <label>Dificuldade principal<select id="obDietChallenge"><option>Fome</option><option selected>Organização</option><option>Doces</option><option>Beliscos</option><option>Comer fora</option><option>Baixo apetite</option></select></label>
+        <label>Água atual / dia<select id="obWater"><option value="1.5">~1,5 L</option><option value="2">~2 L</option><option value="2.5" selected>~2,5 L</option><option value="3">3 L ou mais</option></select></label>
+      </div>
+    </div>
+
+    <div class="onboard-step" data-step="6">
+      <span class="kicker">PASSO 06 • RECUPERAÇÃO</span><h1>O QUE ACONTECE<br><em>FORA DA ACADEMIA?</em></h1>
+      <div class="form-grid">
+        <label>Sono médio / noite<select id="obSleep"><option value="5">5h ou menos</option><option value="6">~6h</option><option value="7" selected>~7h</option><option value="8">8h ou mais</option></select></label>
+        <label>Qualidade do sono<select id="obSleepQuality"><option>Ruim</option><option selected>Regular</option><option>Boa</option><option>Excelente</option></select></label>
+        <label>Estresse<select id="obStress"><option>Baixo</option><option selected>Moderado</option><option>Alto</option></select></label>
+        <label>Passos / dia<input id="obSteps" type="number" value="8000"></label>
+        <label>Limitações físicas / dores<input id="obLimitations" placeholder="Se houver, descreva brevemente"></label>
+        <label>Observações importantes<input id="obNotes" placeholder="Qualquer contexto relevante"></label>
+      </div>
+    </div>
+
+    <div class="onboard-step" data-step="7">
+      <span class="kicker">PASSO 07 • CONFIRMAÇÃO</span><h1>PRONTO PARA GERAR<br><em>SEU PRIMEIRO RADAR?</em></h1>
+      <div class="review glass" id="reviewBox"></div>
+      <div class="safety-note">O Sigma Radar é uma ferramenta de organização e acompanhamento de fitness. Recomendações sobre saúde, condições clínicas ou medicamentos devem ser confirmadas com profissionais habilitados.</div>
+    </div>
+
+    <div class="onboard-actions"><button class="btn ghost hidden" id="prevStep">VOLTAR</button><button class="btn primary big" id="nextStep">CONTINUAR →</button></div>
+  </div>
+</section>
+
+<!-- ANALYSIS -->
+<section class="overlay-page analysis-page" id="analysisPage">
+  <div class="analysis-core">
+    <div class="sigma-orbit"><span>Σ</span></div>
+    <span class="kicker">SIGMA ENGINE</span><h1>CONSTRUINDO SEU<br><em>PLANO INICIAL.</em></h1>
+    <div class="analysis-list"><span>✓ Perfil corporal interpretado</span><span>✓ Estrutura de treino selecionada</span><span>✓ Metas nutricionais estimadas</span><span>✓ Recuperação e rotina consideradas</span><span id="medAnalysis">✓ Contexto alimentar considerado</span></div>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="appArea">
+<header class="app-top">
+  <div class="brand small"><span>Σ</span><div><b>SIGMA</b><small>RADAR</small></div></div>
+  <div class="app-status"><i></i> RADAR ATIVO</div>
+  <button class="user-chip" id="userChip">LG</button>
+</header>
+<div class="app-shell">
+  <aside class="sidebar">
+    <button class="nav active" data-view="dashboard">◫<b>Dashboard</b></button>
+    <button class="nav" data-view="training">⌁<b>Treino</b></button>
+    <button class="nav" data-view="nutrition">◉<b>Nutrição</b></button>
+    <button class="nav" data-view="progressView">↗<b>Evolução</b></button>
+    <button class="nav" data-view="profileView">◎<b>Perfil</b></button>
+    <button class="nav logout" id="logoutBtn">↪<b>Sair</b></button>
+  </aside>
+
+  <div class="workspace">
+    <section class="app-view active" id="dashboard">
+      <div class="app-heading"><div><span class="kicker">Σ PERFORMANCE INTELLIGENCE</span><h1 id="helloName">SEU RADAR DE HOJE.</h1><p>O plano inicial já foi construído a partir das suas respostas.</p></div><span class="pill">PLANO INICIAL</span></div>
+      <div class="dashboard-grid">
+        <article class="glass score-card">
+          <div class="card-head"><span>Σ SCORE INICIAL</span><small>BASELINE</small></div>
+          <div class="score-body"><div class="main-ring" id="mainRing"><strong id="scoreValue">82</strong><small>/100</small></div><div><span class="green-label">EVOLUÇÃO PRONTA PARA COMEÇAR</span><h3 id="mainInsight">Seu plano prioriza consistência.</h3><p id="mainInsightText">Complete seus primeiros registros para o Radar começar a comparar tendência e resposta.</p></div></div>
+          <div class="metric-strip"><div><span>TREINO</span><b id="scoreTraining">88</b></div><div><span>NUTRIÇÃO</span><b id="scoreNutrition">80</b></div><div><span>RECUPERAÇÃO</span><b id="scoreRecovery">76</b></div><div><span>CONSISTÊNCIA</span><b>—</b></div></div>
+        </article>
+
+        <article class="glass focus-card">
+          <div class="card-head"><span>FOCO DE HOJE</span><small>DAY 01</small></div>
+          <h2 id="todayFocus">UPPER A</h2><p id="todayFocusDesc">Peito + costas + braços</p>
+          <button class="btn primary full" data-jump="training">ABRIR TREINO →</button>
+          <div class="daily-row"><span>Água</span><b id="dailyWater">0 / 3,4 L</b></div><div class="daily-row"><span>Proteína</span><b id="dailyProtein">0 / 195 g</b></div>
+        </article>
+
+        <article class="glass insight-panel">
+          <div class="card-head"><span>Σ INTELLIGENCE</span><small>LEITURA INICIAL</small></div>
+          <div class="dash-insight"><span>ESTRATÉGIA</span><b id="strategyInsight">Déficit moderado + musculação estruturada.</b><p>Primeiro objetivo: criar uma linha de base de 7 dias.</p></div>
+          <div class="dash-insight" id="medInsightBox"><span>CONTEXTO ALIMENTAR</span><b id="medInsightTitle">Distribuição padrão de refeições.</b><p id="medInsightText">Ajustaremos conforme fome, tolerância e registros.</p></div>
+          <div class="dash-insight"><span>PRIMEIRO CHECKPOINT</span><b>Após 7 dias de registros.</b><p>O Sigma terá dados suficientes para a primeira comparação.</p></div>
+        </article>
+
+        <article class="glass plan-summary">
+          <div class="card-head"><span>SEU PLANO INICIAL</span><small id="planType">UPPER / LOWER</small></div>
+          <div class="plan-row"><span>Musculação</span><b id="planDays">4x / semana</b></div>
+          <div class="plan-row"><span>Cardio</span><b id="planCardio">3x / semana</b></div>
+          <div class="plan-row"><span>Calorias</span><b id="planCalories">2.300 kcal</b></div>
+          <div class="plan-row"><span>Proteína</span><b id="planProtein">195 g</b></div>
+          <div class="plan-row"><span>Água</span><b id="planWater">3,4 L</b></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="app-view" id="training">
+      <div class="app-heading"><div><span class="kicker">Σ TRAINING ENGINE</span><h1>SEU TREINO INICIAL.</h1><p>Estrutura escolhida a partir de dias disponíveis, nível, objetivo e prioridade muscular.</p></div><button class="btn ghost" id="changeSplit">VER OUTRAS DIVISÕES</button></div>
+      <div class="training-summary glass"><div><span>DIVISÃO</span><b id="trainSplit">UPPER / LOWER</b></div><div><span>SESSÕES</span><b id="trainSessions">4 / semana</b></div><div><span>DURAÇÃO</span><b id="trainDuration">~60 min</b></div><div><span>FOCO</span><b id="trainPriority">Peitoral + braços</b></div></div>
+      <div id="trainingDays" class="training-days"></div>
+    </section>
+
+    <section class="app-view" id="nutrition">
+      <div class="app-heading"><div><span class="kicker">Σ NUTRITION ENGINE</span><h1>SEU PLANO NUTRICIONAL.</h1><p>Metas iniciais estimadas para teste do conceito. Ajustes reais devem respeitar acompanhamento profissional quando necessário.</p></div><button class="btn ghost" id="nutritionSettings">AJUSTAR PREFERÊNCIAS</button></div>
+      <div class="macro-grid"><article class="glass"><span>CALORIAS</span><b id="nutCal">2.300</b><small>kcal / dia</small></article><article class="glass"><span>PROTEÍNA</span><b id="nutProt">195</b><small>g / dia</small></article><article class="glass"><span>CARBOIDRATOS</span><b id="nutCarb">230</b><small>g / dia</small></article><article class="glass"><span>GORDURAS</span><b id="nutFat">65</b><small>g / dia</small></article></div>
+      <div class="nutrition-grid">
+        <article class="glass meal-panel"><div class="card-head"><span>EXEMPLO DE DISTRIBUIÇÃO</span><small id="mealMode">4 REFEIÇÕES</small></div><div id="mealList"></div></article>
+        <article class="glass nutrition-notes"><div class="card-head"><span>Σ LEITURA</span><small>INICIAL</small></div><div id="nutritionRead"></div><div class="medical-note">Informações de medicamentos servem apenas para contextualizar tolerância alimentar e rotina. O Sigma não orienta dose, troca ou suspensão.</div></article>
+      </div>
+    </section>
+
+    <section class="app-view" id="progressView">
+      <div class="app-heading"><div><span class="kicker">Σ PROGRESS</span><h1>EVOLUÇÃO COMEÇA COM BASELINE.</h1><p>Você acabou de criar o plano. Os gráficos ganharão histórico conforme os check-ins.</p></div><button class="btn primary" id="newCheckin">FAZER CHECK-IN</button></div>
+      <div class="baseline-grid"><article class="glass"><span>PESO INICIAL</span><b id="baseWeight">97,4 kg</b><small>Hoje</small></article><article class="glass"><span>META</span><b id="baseTarget">90,0 kg</b><small id="baseGap">-7,4 kg</small></article><article class="glass"><span>IMC INICIAL</span><b id="baseBmi">30,1</b><small>Apenas indicador de referência</small></article><article class="glass"><span>CHECK-INS</span><b>0</b><small>Comece pelo primeiro registro</small></article></div>
+      <article class="glass empty-chart"><div class="chart-placeholder"><span>↗</span><h3>SEU HISTÓRICO VAI APARECER AQUI.</h3><p>Peso, medidas, desempenho e consistência serão comparados ao longo das semanas.</p></div></article>
+    </section>
+
+    <section class="app-view" id="profileView">
+      <div class="app-heading"><div><span class="kicker">Σ PROFILE</span><h1>SEU PERFIL.</h1><p>É a base usada pelo plano inicial.</p></div><button class="btn primary" id="editProfile">EDITAR DADOS</button></div>
+      <div id="profileCards" class="profile-cards"></div>
+    </section>
+  </div>
+</div>
+</section>
+
+<!-- EXERCISE MODAL -->
+<div class="modal" id="exerciseModal">
+ <div class="modal-card glass">
+   <button class="modal-close" id="modalClose">×</button>
+   <div class="exercise-art">
+      <div class="body-figure"><div class="head"></div><div class="torso"></div><div class="arm a"></div><div class="arm b"></div><div class="leg a"></div><div class="leg b"></div></div>
+      <span id="artMuscle">PEITORAL</span>
+   </div>
+   <span class="kicker" id="exGroup">PEITORAL</span><h2 id="exName">Supino reto</h2><p id="exDesc">Movimento composto.</p>
+   <div class="ex-metrics"><div><span>SÉRIES</span><b id="exSets">4</b></div><div><span>REPS</span><b id="exReps">8–10</b></div><div><span>DESCANSO</span><b>60–90s</b></div></div>
+   <div class="exercise-copy"><b>EXECUÇÃO</b><p id="exExecution"></p><b>ERRO COMUM</b><p id="exError"></p><b class="sigma-tip">Σ DICA</b><p id="exTip"></p></div>
+ </div>
 </div>
 
 <script src="app.js"></script>

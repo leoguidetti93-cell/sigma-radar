@@ -1,8 +1,0 @@
-/* ===== SUPORTE TELEGRAM ===== */
-.telegram-support{position:fixed;right:20px;bottom:20px;z-index:80;height:54px;width:54px;display:flex;align-items:center;overflow:hidden;border-radius:999px;color:white;text-decoration:none;background:linear-gradient(135deg,var(--red),var(--red2));border:1px solid rgba(255,255,255,.12);box-shadow:0 14px 35px rgba(241,44,76,.28);transition:width .25s ease,transform .2s ease,box-shadow .2s ease}.telegram-support:hover{width:228px;transform:translateY(-3px);box-shadow:0 18px 45px rgba(241,44,76,.38)}.telegram-support-icon{min-width:54px;height:54px;display:grid;place-items:center;font-size:23px;font-weight:900}.telegram-support-text{white-space:nowrap;opacity:0;transform:translateX(8px);transition:.2s ease;font-size:12px;font-weight:900;letter-spacing:.2px;padding-right:18px}.telegram-support:hover .telegram-support-text{opacity:1;transform:none}@media(max-width:720px){.telegram-support{right:14px;bottom:82px}.telegram-support:hover{width:54px}.telegram-support-text{display:none}}
-
-/* RADAR TEMPORAL 1 MIN — CORREÇÃO DE RENDERIZAÇÃO */
-#temporal .heat-shell{max-height:calc(100vh - 210px);overflow:auto;padding:4px 4px 10px}
-#temporal .heat-grid{width:max-content}
-#temporal .h-label{position:sticky;left:0;z-index:4;background:#111d27;border-radius:3px}
-#temporal .m-label{height:16px;font-size:7px}

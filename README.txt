@@ -1,5 +1,1 @@
-SIGMA RADAR — MVP CONCEITO
-Arquivos estáticos para GitHub Pages.
-Cadastro/login/onboarding usam localStorage apenas para teste.
-Próxima fase aprovada: substituir autenticação e persistência por Supabase.
-Não requer Render.
+SIGMA RADAR V3 — conceito estático para GitHub Pages. Imagens de demonstração carregadas remotamente do Pexels; antes da produção, substituir por biblioteca própria/licenciada. Dados do conceito ficam apenas em memória do navegador.

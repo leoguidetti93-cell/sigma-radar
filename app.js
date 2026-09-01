@@ -2,7 +2,7 @@ const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 let sb=null, session=null;
 const S={mode:'signup',p:{},q:0,days:[],foods:[],customFoods:[],filter:'all',selected:new Map(),plan:null,ex:new Set(),mealsDone:new Set(),water:0,history:[],currentDate:'',dayStatus:'in_progress',steps:0,bodyHistory:[],loadHistory:[],editingMealKey:null};
 const DAYS=['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
-const POSES=['coach-guiding.png','coach-checkin.png','coach-checkin.png','coach-checkin.png','coach-guiding.png','coach-guiding.png','coach-checkin.png','coach-checkin.png','coach-analysis.png','coach-analysis.png','coach-thinking.png','coach-thinking.png','coach-hydration.png','coach-checkin.png','coach-celebrate.png'];
+const POSES=['coach-guiding.jpg','coach-checkin.jpg','coach-checkin.jpg','coach-checkin.jpg','coach-guiding.jpg','coach-guiding.jpg','coach-checkin.jpg','coach-checkin.jpg','coach-analysis.jpg','coach-analysis.jpg','coach-thinking.jpg','coach-thinking.jpg','coach-hydration.jpg','coach-checkin.jpg','coach-celebrate.jpg'];
 const Q=[
  ['sex','Para começar: qual é o seu sexo?','opts',[['masculino','Masculino'],['feminino','Feminino'],['outro','Prefiro não informar']]],
  ['age','Qual é a sua idade?','number'],['height_cm','E sua altura em centímetros?','number'],['current_weight_kg','Qual é seu peso atual?','number'],
@@ -177,6 +177,55 @@ async function saveEvolution(){
  }catch(e){console.error('saveEvolution',e);toast('Não foi possível salvar a evolução: '+(e?.message||e))}
 }
 function renderMonthly(){if(!$('#monthMetrics'))return;const [y,m]=S.currentDate.split('-').map(Number),label=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(y,m-1,1));$('#monthLabel').textContent=label.toUpperCase();const days=S.history.filter(x=>x.log_date?.startsWith(`${y}-${String(m).padStart(2,'0')}`)&&x.status==='completed'),b=S.bodyHistory.filter(x=>x.log_date?.startsWith(`${y}-${String(m).padStart(2,'0')}`)).slice().reverse(),loads=S.loadHistory.filter(x=>x.log_date?.startsWith(`${y}-${String(m).padStart(2,'0')}`));const avg=(arr,k)=>arr.length?Math.round(arr.reduce((a,x)=>a+(+x[k]||0),0)/arr.length):null,firstW=b.find(x=>x.weight_kg)?.weight_kg,lastW=[...b].reverse().find(x=>x.weight_kg)?.weight_kg,delta=firstW&&lastW?(lastW-firstW):null;$('#monthMetrics').innerHTML=`<article><span>DIAS CONCLUÍDOS</span><b>${days.length}</b></article><article><span>ADERÊNCIA MÉDIA</span><b>${avg(days,'adherence_pct')??'—'}${days.length?'%':''}</b></article><article><span>PESO NO MÊS</span><b>${delta===null?'—':(delta>0?'+':'')+delta.toFixed(1)+' kg'}</b></article><article><span>CARGAS REGISTRADAS</span><b>${loads.length}</b></article>`;$('#monthTitle').textContent=days.length>=5?'Seu mês já tem uma história.':'Ainda estamos construindo o mês.';$('#monthEvolution').textContent=delta===null?'Sem comparação de peso suficiente — isso não prejudica as demais análises.':`Variação de peso registrada: ${delta>0?'+':''}${delta.toFixed(1)} kg.`;$('#monthHighlight').textContent=days.length?`Você concluiu ${days.length} dia(s) com aderência média de ${avg(days,'adherence_pct')}%.`:'Conclua os dias que puder; o Sigma trabalha apenas com registros reais.';$('#monthNext').textContent='O próximo plano deve considerar tendência de peso, medidas, passos, aderência e cargas disponíveis — sem tratar campos ausentes como zero.'}
+
+
+function openResetDays(){
+ const start=S.currentDate||localDate();
+ $('#resetStart').value=start;$('#resetEnd').value=start;
+ $('#resetRoutine').checked=true;$('#resetBody').checked=false;$('#resetLoads').checked=false;$('#resetCoach').checked=true;$('#resetConfirmCheck').checked=false;
+ $('#resetDaysModal').classList.add('open');
+}
+function closeResetDays(){$('#resetDaysModal').classList.remove('open')}
+async function oldestUserLogDate(){
+ const tables=['daily_logs','meal_logs','exercise_logs','body_logs','load_logs'];let dates=[];
+ for(const t of tables){const {data}=await sb.from(t).select('log_date').eq('user_id',session.user.id).order('log_date',{ascending:true}).limit(1);if(data?.[0]?.log_date)dates.push(data[0].log_date)}
+ return dates.sort()[0]||localDate();
+}
+async function prepareResetAll(){
+ $('#resetStart').value=await oldestUserLogDate();$('#resetEnd').value=localDate();
+ $('#resetRoutine').checked=true;$('#resetBody').checked=true;$('#resetLoads').checked=true;$('#resetCoach').checked=true;$('#resetConfirmCheck').checked=false;
+ toast('Período completo selecionado. Marque a confirmação para apagar.');
+}
+async function deleteRange(table,start,end,dateCol='log_date'){
+ let q=sb.from(table).delete().eq('user_id',session.user.id);
+ if(start)q=q.gte(dateCol,start);if(end)q=q.lte(dateCol,end);
+ const {error}=await q;if(error)throw new Error(`${table}: ${error.message}`);
+}
+async function resetSelectedDays(){
+ if(!$('#resetConfirmCheck').checked)return toast('Confirme que entendeu a exclusão.');
+ const start=$('#resetStart').value,end=$('#resetEnd').value;
+ if(!start||!end)return toast('Selecione o período.');
+ if(start>end)return toast('A data inicial não pode ser posterior à final.');
+ if(!$('#resetRoutine').checked&&!$('#resetBody').checked&&!$('#resetLoads').checked&&!$('#resetCoach').checked)return toast('Escolha ao menos um tipo de registro.');
+ const btn=$('#resetDaysModal .danger');const old=btn.textContent;btn.disabled=true;btn.textContent='LIMPANDO...';
+ try{
+  if($('#resetRoutine').checked){await deleteRange('meal_logs',start,end);await deleteRange('exercise_logs',start,end);await deleteRange('daily_logs',start,end);}
+  if($('#resetBody').checked)await deleteRange('body_logs',start,end);
+  if($('#resetLoads').checked)await deleteRange('load_logs',start,end);
+  if($('#resetCoach').checked){
+   const from=`${start}T00:00:00`;const to=`${end}T23:59:59.999999`;
+   const {error}=await sb.from('coach_actions').delete().eq('user_id',session.user.id).gte('created_at',from).lte('created_at',to);if(error)throw error;
+  }
+  // Reviews are derived from daily history; removing them avoids stale summaries after a reset.
+  if($('#resetRoutine').checked){const {error}=await sb.from('weekly_reviews').delete().eq('user_id',session.user.id);if(error)throw error;}
+  closeResetDays();
+  S.ex=new Set();S.mealsDone=new Set();S.water=0;S.steps=0;S.history=[];
+  await Promise.all([loadEvolutionData(),loadDayData(S.currentDate||localDate())]);
+  renderApp();
+  toast('Registros selecionados foram resetados ✓');
+ }catch(e){console.error('resetSelectedDays',e);toast('Não foi possível resetar: '+(e?.message||e))}
+ finally{btn.disabled=false;btn.textContent=old}
+}
 
 async function logout(){if(sb)await sb.auth.signOut();session=null;show('landing')}function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2500)}
 

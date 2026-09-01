@@ -1,28 +1,23 @@
-SIGMA RADAR Fit — SUPABASE READY
+SIGMA RADAR Fit v1.2 — Σ COACH + SUPABASE + IA READY
 
-ESTA VERSÃO JÁ FOI PREPARADA PARA:
-- Supabase Auth: cadastro, login, sessão e logout.
-- Dados isolados por usuário com Row Level Security (RLS).
-- Perfil e onboarding salvos no banco.
-- Registros diários de treino, alimentação, hidratação e Σ Score.
-- Histórico semanal.
-- Ações executáveis do Σ Coach, como reduzir calorias, aumentar hidratação e registrar novo peso.
-- Entrevista em uma pergunta por vez: aparece → responde → some → próxima.
-- Número de refeições respeita a escolha da entrevista.
-- Motor de calorias revisado: perda de gordura recebe déficit inicial e proteína alta; GLP-1 informado é usado apenas como contexto de apetite/tolerância e para evitar meta inicial excessiva, nunca para orientar dose.
-- Biblioteca de 50+ alimentos com macros.
-- Criar refeição com nome, horário, quantidades e totais.
-- Biblioteca de imagens/poses do Σ Coach em assets/coach/.
+PRINCIPAIS ALTERAÇÕES
+- Entrevista: uma pergunta por vez, sem rolagem de conversa.
+- Σ Coach: biblioteca visual separada em PNG e aplicada por contexto.
+- Concluir Meu Dia: sempre visível, mesmo com treino/refeições/água pendentes.
+- Conclusão do dia salva o resultado real e abre automaticamente o próximo dia.
+- Seletor de data para preencher dias anteriores e depois seguir em sequência.
+- Alimentação: 440 alimentos (55 por categoria) + pesquisa + macros + porções.
+- + Incluir alimento: cadastra alimento personalizado e salva no Supabase por usuário.
+- Criar refeição: nome, horário, alimentos e macros.
+- Score mede aderência ao plano, não simplesmente ingestão baixa.
+- Σ Coach: preparado para IA real via Supabase Edge Function `coach`.
+- IA recebe perfil, plano, dia, refeições, treino e histórico; pode sugerir ações que o usuário confirma.
+- Ações já preparadas: ajustar calorias, hidratação, refeição/compensação e registrar peso.
+- Banco: nova migration `supabase/update_v2.sql`.
 
-PARA ATIVAR O SUPABASE (FAREMOS JUNTOS):
-1. Criar o projeto.
-2. SQL Editor → executar supabase/schema.sql.
-3. Authentication → configurar confirmação de e-mail conforme desejado.
-4. Copiar Project URL e a chave anon/publishable.
-5. Colar em config.js.
-6. Subir os arquivos no GitHub Pages.
+SUPABASE
+O config.js já contém o Project URL e a Publishable Key configurados anteriormente.
+Depois de subir no GitHub, execute `supabase/update_v2.sql` e configure a Edge Function conforme `docs/CONFIGURACAO_V12.md`.
 
-SEGURANÇA:
-Nunca use service_role no navegador. O frontend usa apenas anon/publishable key + RLS.
-
-CNAME já está configurado para www.sigmaradar.com.br
+IMPORTANTE
+A OPENAI_API_KEY fica SOMENTE como secret da Edge Function. Nunca no frontend/GitHub.

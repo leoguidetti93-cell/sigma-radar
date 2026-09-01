@@ -55,7 +55,46 @@ function ans(v,l){let q=Q[S.q];S.p[q[0]]=v;$('#chat').classList.add('fadeIntervi
 
 function signals(){const g=(S.p.goal_text||'').toLowerCase(),m=(S.p.medications_text||'').toLowerCase();return{loss:/perd|emagrec|gordura|secar|defin/.test(g),gain:/ganhar massa|hipertrof|massa muscular/.test(g),glp1:/mounjaro|tirzep|semaglut|wegovy|ozempic/.test(m)}}
 function makePlan(){let w=parseFloat(String(S.p.current_weight_kg).replace(',','.'))||90,h=+S.p.height_cm||175,a=+S.p.age||30,sexAdj=S.p.sex==='feminino'?-161:5,bmr=10*w+6.25*h-5*a+sexAdj,days=(S.p.training_days||[]).length||3,activity=days>=5?1.55:days>=3?1.45:1.35,tdee=bmr*activity,sg=signals(),cal=tdee;if(sg.loss&&sg.gain)cal-=600;else if(sg.loss)cal-=650;else if(sg.gain)cal+=250;cal=Math.round(cal/50)*50;if(sg.loss&&sg.glp1)cal=Math.min(cal,w>=90?2050:1900);cal=Math.max(cal,S.p.sex==='feminino'?1400:1600);let prot=Math.round(w*2),fat=Math.round(w*.65),carb=Math.max(80,Math.round((cal-prot*4-fat*9)/4)),water=Math.max(2.2,w*.035),count=+S.p.meals_per_day||4;let names=count===3?['Café da manhã','Almoço','Jantar']:count===4?['Café da manhã','Almoço','Lanche','Jantar']:count===5?['Café da manhã','Lanche da manhã','Almoço','Lanche / pré-treino','Jantar']:['Café da manhã','Lanche da manhã','Almoço','Lanche da tarde','Jantar','Ceia'];let times=count===3?['08:00','13:00','20:00']:count===4?['08:00','12:30','16:30','20:30']:count===5?['08:00','11:00','14:00','17:30','20:30']:['07:30','10:30','13:00','16:00','19:00','21:30'];let mealFoods=[['Ovos','Pão integral','Banana'],['Iogurte proteico','Aveia','Morango'],['Peito de frango','Arroz','Feijão','Salada'],['Whey','Banana'],['Tilápia','Batata','Brócolis'],['Cottage','Maçã']];let meals=names.map((n,i)=>({key:'meal_'+i,name:n,time:times[i],target:Math.round(cal/count),foods:mealFoods[i]||mealFoods.at(-1)}));let exercises=EXBASE.map((e,i)=>({key:'ex_'+i,name:e[0],scheme:e[1]}));let reason=sg.loss?`Déficit inicial moderado para perda de gordura, com proteína alta para preservar massa magra${sg.glp1?'. A medicação informada foi usada apenas como contexto de apetite/tolerância, não como orientação de dose':''}.`:'Meta inicial calculada a partir do gasto estimado e objetivo informado.';return{cal,prot,fat,carb,water,count,meals,exercises,reason}}
-async function build(){show('building');S.plan=makePlan();$$('#checks span').forEach((x,i)=>setTimeout(()=>{x.textContent='✓ '+x.textContent.slice(2);x.style.color='#1f7a5a'},300+i*270));setTimeout(()=>$('#buildText').textContent='Criando refeições, treino e calibrando o Σ Score...',900);await upsertProfile({...S.p,id:session.user.id,onboarding_complete:true,calorie_target:S.plan.cal,protein_target:S.plan.prot,carbs_target:S.plan.carb,fat_target:S.plan.fat,water_target_l:S.plan.water,score:70});S.p={...S.p,onboarding_complete:true,calorie_target:S.plan.cal,protein_target:S.plan.prot,carbs_target:S.plan.carb,fat_target:S.plan.fat,water_target_l:S.plan.water,score:70};setTimeout(()=>{show('app');renderApp()},2100)}
+async function build(){
+  show('building');
+  S.plan=makePlan();
+  $$('#checks span').forEach((x,i)=>setTimeout(()=>{x.textContent='✓ '+x.textContent.slice(2);x.style.color='#1f7a5a'},300+i*270));
+  setTimeout(()=>$('#buildText').textContent='Criando refeições, treino e calibrando o Σ Score...',900);
+  try{
+    const cleanProfile={
+      id:session.user.id,
+      name:S.p.name,
+      sex:S.p.sex||null,
+      age:S.p.age?Number(S.p.age):null,
+      height_cm:S.p.height_cm?Number(String(S.p.height_cm).replace(',','.')):null,
+      current_weight_kg:S.p.current_weight_kg?Number(String(S.p.current_weight_kg).replace(',','.')):null,
+      target_weight_kg:S.p.target_weight_kg?Number(String(S.p.target_weight_kg).replace(',','.')):null,
+      goal_text:S.p.goal_text||null,
+      training_days:Array.isArray(S.p.training_days)?S.p.training_days:[],
+      minutes_per_session:S.p.minutes_per_session?Number(S.p.minutes_per_session):null,
+      experience:S.p.experience||null,
+      medications_text:S.p.medications_text||null,
+      supplements_text:S.p.supplements_text||null,
+      meals_per_day:S.p.meals_per_day?Number(S.p.meals_per_day):4,
+      current_water_l:S.p.current_water_l?Number(S.p.current_water_l):0,
+      sleep_hours:S.p.sleep_hours?Number(S.p.sleep_hours):null,
+      onboarding_complete:true,
+      calorie_target:S.plan.cal,
+      protein_target:S.plan.prot,
+      carbs_target:S.plan.carb,
+      fat_target:S.plan.fat,
+      water_target_l:S.plan.water,
+      score:70
+    };
+    await upsertProfile(cleanProfile);
+    S.p={...S.p,...cleanProfile};
+    setTimeout(()=>{show('app');renderApp()},900);
+  }catch(err){
+    console.error('SIGMA build plan error',err);
+    $('#buildText').innerHTML='Não consegui salvar o plano no banco.<br><b>'+String(err.message||err)+'</b>';
+    const retry=document.createElement('button');retry.textContent='TENTAR NOVAMENTE';retry.style.marginTop='16px';retry.onclick=build;document.querySelector('.building').appendChild(retry);
+  }
+}
 
 async function loadAppData(){S.plan=makePlan();S.plan.cal=S.p.calorie_target||S.plan.cal;S.plan.prot=S.p.protein_target||S.plan.prot;S.plan.carb=S.p.carbs_target||S.plan.carb;S.plan.fat=S.p.fat_target||S.plan.fat;S.plan.water=S.p.water_target_l||S.plan.water;const {data:ex}=await sb.from('exercise_logs').select('*').eq('user_id',session.user.id).eq('log_date',TODAY());S.ex=new Set((ex||[]).filter(x=>x.completed).map(x=>x.exercise_key));const {data:ml}=await sb.from('meal_logs').select('*').eq('user_id',session.user.id).eq('log_date',TODAY());S.mealsDone=new Set((ml||[]).filter(x=>x.completed).map(x=>x.meal_key));const {data:dl}=await sb.from('daily_logs').select('*').eq('user_id',session.user.id).eq('log_date',TODAY()).maybeSingle();S.water=dl?.water_l||0;const {data:h}=await sb.from('daily_logs').select('*').eq('user_id',session.user.id).order('log_date',{ascending:false}).limit(7);S.history=h||[]}
 function renderApp(){let first=(S.p.name||'Atleta').split(' ')[0];$('#hello').textContent='Olá, '+first+'.';$('#cal').textContent=S.plan.cal.toLocaleString('pt-BR');$('#prot').textContent=S.plan.prot+' g';$('#carb').textContent=S.plan.carb+' g';$('#fat').textContent=S.plan.fat+' g';$('#calorieReason').textContent=S.plan.reason;$('#waterGoal').textContent='meta: '+S.plan.water.toFixed(1).replace('.',',')+' L';renderEx();renderMeals();renderWater();renderHist();progress()}

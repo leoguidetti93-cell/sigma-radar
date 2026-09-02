@@ -1,3 +1,4 @@
-SIGMA RADAR FIT — V1.3.2 DEFINITIVO
-Suba todos os arquivos para a raiz do GitHub Pages.
-Veja docs/CONFIGURACAO_DEFINITIVO.md.
+SIGMA RADAR Fit V1.4.2
+Pacote completo para publicação.
+Sem novo SQL. Sem alteração da Edge Function.
+Veja docs/ATUALIZACAO_V14_2.md.

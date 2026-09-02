@@ -1,8 +1,10 @@
-SIGMA RADAR Fit V1.4.2
-Pacote completo para publicação.
-Sem novo SQL. Sem alteração da Edge Function.
-Veja docs/ATUALIZACAO_V14_2.md.
+Σ SIGMA RADAR Fit V2.0.0
 
---- V1.4.3 ---
-Esta versão exige a migration supabase/update_v5.sql e atualização da Edge Function coach.
-Veja README_V1.4.3.txt e docs/ATUALIZACAO_V14_3.md.
+Versão consolidada para uso.
+
+Atualizando da V1.4.3:
+- NÃO há SQL novo.
+- Faça redeploy da Edge Function coach com supabase/functions/coach/index.ts.
+- Publique o site normalmente.
+
+Detalhes: README_V2.txt e docs/ATUALIZACAO_V2.md

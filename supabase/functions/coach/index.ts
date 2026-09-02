@@ -52,7 +52,7 @@ Quando uma única aprovação precisa aplicar várias mudanças coerentes juntas
 Se a solicitação do usuário for ambígua ou faltar uma informação necessária, converse e pergunte em vez de inventar uma ação.
 Se não precisar alterar nada, proposal deve ser null.
 
-Responda SOMENTE JSON válido no formato:
+IMPORTANTE: devolva o objeto JSON diretamente. Nunca coloque o JSON inteiro como texto dentro do campo message.\nResponda SOMENTE JSON válido no formato:
 {"message":"texto em HTML simples, sem markdown","proposal":null OU {"type":"...","title":"...","confirm_text":"...","payload":{...}}}`;
 
 function extractText(resp: any) {
@@ -127,10 +127,35 @@ Deno.serve(async (req) => {
     if (!r.ok) throw new Error(`OpenAI ${r.status}: ${await r.text()}`);
     const raw = await r.json();
     let text = extractText(raw).trim();
-    text = text.replace(/^```json\s*/i, "").replace(/```$/i, "").trim();
-    let result;
-    try { result = JSON.parse(text); }
-    catch { result = { message: text || "Não consegui interpretar essa situação agora.", proposal: null }; }
+
+    function parseCoachResult(value: unknown): any | null {
+      if (value && typeof value === "object") return value;
+      if (typeof value !== "string") return null;
+      const clean = value.replace(/^```json\s*/i, "").replace(/```$/i, "").trim();
+      const candidates = [clean];
+      const first = clean.indexOf("{");
+      const last = clean.lastIndexOf("}");
+      if (first >= 0 && last > first) candidates.push(clean.slice(first, last + 1));
+      for (const candidate of candidates) {
+        try {
+          const parsed = JSON.parse(candidate);
+          if (typeof parsed === "string") return parseCoachResult(parsed);
+          if (parsed && typeof parsed === "object") return parsed;
+        } catch (_) {}
+      }
+      return null;
+    }
+
+    let result = parseCoachResult(text);
+    // Alguns modelos podem devolver o JSON inteiro escapado dentro de `message`.
+    // Desembrulhamos antes de responder ao frontend para nunca exibir JSON bruto ao usuário.
+    if (result && typeof result.message === "string") {
+      const nested = parseCoachResult(result.message);
+      if (nested && ("message" in nested || "proposal" in nested)) result = { ...result, ...nested };
+    }
+    if (!result) result = { message: "Não consegui estruturar essa resposta agora. Tente formular o pedido novamente.", proposal: null };
+    if (typeof result.message !== "string") result.message = "Entendi seu pedido.";
+    if (!("proposal" in result)) result.proposal = null;
     return new Response(JSON.stringify(result), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     return new Response(JSON.stringify({ error: String((e as any)?.message || e) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });

@@ -73,3 +73,10 @@
 .activityCard{grid-template-columns:1fr auto}.activityCard p{line-height:1.45}.emptyActivities{color:var(--muted);font-size:10px;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:14px}
 .activitiesRows{display:grid;gap:8px;margin:16px 0}.activityEditRow{display:grid;grid-template-columns:1.5fr 90px 90px 1.2fr auto;gap:7px;align-items:center}.activityEditRow input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:white}.activitiesEditor>p{color:var(--muted);font-size:11px;line-height:1.5}
 @media(max-width:850px){.routineActivitiesHead{display:grid;grid-template-columns:1fr}.routineActivitiesHead button{width:100%}.activityEditRow{grid-template-columns:1fr 1fr}.activityEditRow input:first-child,.activityEditRow input:nth-child(4),.activityEditRow button{grid-column:1/-1}}
+
+/* V2.1.2 — registro explícito de ausência na academia */
+.gymAbsenceBtn{margin-top:12px;border-color:#c97979;color:#8a2f2f;background:#fff8f7}
+.workoutAbsentCard{display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid #d9b4ad;background:#fff8f5}
+.workoutAbsentCard h3{margin:5px 0}.workoutAbsentCard p{margin:0;max-width:760px}
+.absenceMuted{opacity:.48}
+@media(max-width:700px){.workoutAbsentCard{align-items:flex-start;flex-direction:column}.workoutAbsentCard button{width:100%}}

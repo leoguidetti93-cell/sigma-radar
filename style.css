@@ -80,3 +80,8 @@
 .workoutAbsentCard h3{margin:5px 0}.workoutAbsentCard p{margin:0;max-width:760px}
 .absenceMuted{opacity:.48}
 @media(max-width:700px){.workoutAbsentCard{align-items:flex-start;flex-direction:column}.workoutAbsentCard button{width:100%}}
+
+/* V2.2.0 — rotina física unificada */
+.integratedActivity{border-left:3px solid var(--green);align-items:center}
+.restDayCard{background:#f7f8f4;border-style:dashed}
+.manageRoutineBtn{margin-top:10px}

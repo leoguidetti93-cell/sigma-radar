@@ -37,6 +37,12 @@ PLANEJAMENTO
 
 REGRAS IMPORTANTES
 - Nunca altere, recomende iniciar, suspender ou mudar dose de medicamentos. Medicamentos são apenas contexto.
+- ESCOPO TEMPORAL É OBRIGATÓRIO: se o usuário disser "definitivamente", "daqui pra frente", "em todo meu plano", "não coloque mais", "sempre troque" ou equivalente, não trate como ajuste só do dia atual.
+- Para substituição permanente de alimento, use replace_food_permanently com payload {from,to}. Explique que valerá para os próximos dias.
+- Para pedido explicitamente limitado a hoje, use adjust_meal.
+- Mudanças estruturais de objetivo/perfil devem usar replan_profile e preservar todo o histórico anterior.
+- Durante a semana, considere Radars/recomendações anteriores presentes no contexto como memória ativa: reconheça melhora/piora e priorize gargalos já identificados.
+
 - Não diagnostique doenças. Questões clínicas importantes devem ser encaminhadas a profissional de saúde.
 - Não premie simplesmente comer menos. Priorize aderência, proteína, treino, recuperação, hidratação e consistência.
 - Dados ausentes são desconhecidos, nunca zero.
@@ -73,6 +79,8 @@ TIPOS DE PROPOSTA EXECUTÁVEIS
 14) update_other_activities: {text?:string,activities:[{name:string,frequency_per_week?:number,duration_min?:number,preferred_days?:string[],notes?:string}]}
 15) reprogram_schedule: {days:[{date:"YYYY-MM-DD",exercises:[{exercise_name:string,sets:number,reps:string,rest?:number,target_load?:number}],activities:[{name:string,duration_min?:number,notes?:string}]}]}
 16) batch_actions: {actions:[{type:string,title:string,confirm_text:string,payload:object}, ...]}
+17) replace_food_permanently: {from:string,to:string}
+18) replan_profile: {fields:object,reason?:string}
 
 Quando uma única aprovação precisa aplicar várias mudanças coerentes juntas, use batch_actions.
 Se você disser no texto que recalculou calorias E macros, inclua obrigatoriamente uma ação set_nutrition_plan com TODOS os quatro valores; não diga que alterou uma meta que não está no proposal.
@@ -117,7 +125,7 @@ Deno.serve(async (req) => {
     const iso = (d: Date) => d.toISOString().slice(0,10);
     const fromD = new Date(anchor); fromD.setUTCDate(fromD.getUTCDate()-7);
     const toD = new Date(anchor); toD.setUTCDate(toD.getUTCDate()+10);
-    const [profileRes, dayRes, mealsRes, exRes, activityRes, histRes, beverageRes, beverageHistRes, workoutRes, nearbyWorkoutsRes, bodyRes, loadRes, conversationRes, coachActionsRes] = await Promise.all([
+    const [profileRes, dayRes, mealsRes, exRes, activityRes, histRes, beverageRes, beverageHistRes, workoutRes, nearbyWorkoutsRes, bodyRes, loadRes, conversationRes, coachActionsRes, weeklyReviewsRes] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
       supabase.from("daily_logs").select("*").eq("user_id", user.id).eq("log_date", currentDate).maybeSingle(),
       supabase.from("meal_logs").select("*").eq("user_id", user.id).eq("log_date", currentDate).order("meal_time"),
@@ -132,6 +140,7 @@ Deno.serve(async (req) => {
       supabase.from("load_logs").select("*").eq("user_id", user.id).order("log_date", { ascending: false }).limit(40),
       supabase.from("coach_messages").select("role,content,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(18),
       supabase.from("coach_actions").select("action_type,payload,status,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
+      supabase.from("weekly_reviews").select("*").eq("user_id", user.id).order("week_start", { ascending: false }).limit(4),
     ]);
 
     const recentConversation = (conversationRes.data || []).slice().reverse();
@@ -164,6 +173,7 @@ Deno.serve(async (req) => {
       recent_load_logs: loadRes.data || [],
       recent_days: histRes.data || [],
       recent_actions: coachActionsRes.data || [],
+      recent_weekly_reviews: weeklyReviewsRes.data || [],
       recent_conversation: recentConversation,
       review_mode: body.review_mode || null,
       review_context: body.review_context || null,
@@ -222,3 +232,4 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: String((e as any)?.message || e) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });
+

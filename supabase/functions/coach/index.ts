@@ -46,6 +46,12 @@ REGRAS IMPORTANTES
 - Para alimentos, você pode usar nomes aproximados; o site fará busca inteligente na biblioteca.
 - Água, chá e suco natural contam na métrica comportamental de hidratação do Sigma. Refrigerante zero, refrigerante comum, suco industrializado, cerveja, outras bebidas alcoólicas e outras bebidas ficam em “além da hidratação”.
 
+
+MODO DE FECHAMENTO DO RADAR:
+Se o contexto contiver review_mode = "weekly" ou "monthly", não proponha alterações executáveis. Analise TODOS os fatores disponíveis em review_context de forma integrada: treino e volume, atividades, alimentação, hidratação e bebidas, ausências e seus motivos, passos, peso/medidas, cargas, sono informado, aderência e padrões do período. Ausência por DESCANSO não deve ser interpretada da mesma forma que PREGUIÇA ou SEM TEMPO. Dados ausentes continuam desconhecidos, nunca zero. Procure relações úteis e realistas, sem inventar causalidade.
+Nesse modo responda SOMENTE JSON válido neste formato:
+{"message":"resumo breve","proposal":null,"review":{"summary":"síntese do período","keep":"o que manter","increase":"o que aumentar/melhorar","reduce":"o que reduzir/reorganizar","next":"recomendação realista para o próximo período"}}
+
 TIPOS DE PROPOSTA EXECUTÁVEIS
 1) set_nutrition_plan: {calories:number, protein_g:number, carbs_g:number, fat_g:number}
 2) adjust_calories: {calories:number}
@@ -73,7 +79,7 @@ Se o usuário mencionar novas atividades que pratica e pedir reprogramação, no
 Se não precisar alterar nada, proposal deve ser null.
 
 IMPORTANTE: devolva o objeto JSON diretamente. Nunca coloque o JSON inteiro como texto dentro do campo message.
-Responda SOMENTE JSON válido no formato:
+Fora do modo de fechamento do Radar, responda SOMENTE JSON válido no formato:
 {"message":"texto em HTML simples, sem markdown","proposal":null OU {"type":"...","title":"...","confirm_text":"...","payload":{...}}}`;
 
 function extractText(resp: any) {
@@ -127,6 +133,16 @@ Deno.serve(async (req) => {
     ]);
 
     const recentConversation = (conversationRes.data || []).slice().reverse();
+    let periodMealLogs: any[] = [], periodExerciseLogs: any[] = [], periodDailyLogs: any[] = [];
+    if (body.review_mode && body.review_context?.start && body.review_context?.end) {
+      const rs = body.review_context.start, re = body.review_context.end;
+      const [pm, pe, pd] = await Promise.all([
+        supabase.from("meal_logs").select("*").eq("user_id", user.id).gte("log_date", rs).lte("log_date", re).order("log_date"),
+        supabase.from("exercise_logs").select("*").eq("user_id", user.id).gte("log_date", rs).lte("log_date", re).order("log_date"),
+        supabase.from("daily_logs").select("*").eq("user_id", user.id).gte("log_date", rs).lte("log_date", re).order("log_date"),
+      ]);
+      periodMealLogs = pm.data || []; periodExerciseLogs = pe.data || []; periodDailyLogs = pd.data || [];
+    }
     const context = {
       user_message: body.message,
       current_date: currentDate,
@@ -147,6 +163,11 @@ Deno.serve(async (req) => {
       recent_days: histRes.data || [],
       recent_actions: coachActionsRes.data || [],
       recent_conversation: recentConversation,
+      review_mode: body.review_mode || null,
+      review_context: body.review_context || null,
+      period_meal_logs: periodMealLogs,
+      period_exercise_logs: periodExerciseLogs,
+      period_daily_logs: periodDailyLogs,
     };
 
     await supabase.from("coach_messages").insert({ user_id: user.id, role: "user", content: String(body.message || ""), metadata: { current_date: currentDate } });

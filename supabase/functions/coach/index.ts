@@ -40,7 +40,8 @@ REGRAS IMPORTANTES
 - ESCOPO TEMPORAL É OBRIGATÓRIO: se o usuário disser "definitivamente", "daqui pra frente", "em todo meu plano", "não coloque mais", "sempre troque" ou equivalente, não trate como ajuste só do dia atual.
 - Para substituição permanente de alimento, use replace_food_permanently com payload {from,to}. Explique que valerá para os próximos dias.
 - Para pedido explicitamente limitado a hoje, use adjust_meal.
-- Mudanças estruturais de objetivo/perfil devem usar replan_profile e preservar todo o histórico anterior.
+- Mudanças estruturais de objetivo/perfil devem usar replan_profile e preservar todo o histórico anterior. Ao replanejar, recalcule de verdade metas nutricionais/macros e planejamento futuro; não apenas salve campos do perfil.
+- Sono informado no perfil é o estado habitual, não a meta. Considere idade, rotina de treino, atividades, objetivo e recuperação. A meta inteligente de sono fica em geral entre 7 e 9 h para adultos e deve ser contextualizada. Use os registros recentes de sono para interpretar recuperação; ausência de registro é desconhecida, nunca zero.
 - Durante a semana, considere Radars/recomendações anteriores presentes no contexto como memória ativa: reconheça melhora/piora e priorize gargalos já identificados.
 
 - Não diagnostique doenças. Questões clínicas importantes devem ser encaminhadas a profissional de saúde.
@@ -125,7 +126,7 @@ Deno.serve(async (req) => {
     const iso = (d: Date) => d.toISOString().slice(0,10);
     const fromD = new Date(anchor); fromD.setUTCDate(fromD.getUTCDate()-7);
     const toD = new Date(anchor); toD.setUTCDate(toD.getUTCDate()+10);
-    const [profileRes, dayRes, mealsRes, exRes, activityRes, histRes, beverageRes, beverageHistRes, workoutRes, nearbyWorkoutsRes, bodyRes, loadRes, conversationRes, coachActionsRes, weeklyReviewsRes] = await Promise.all([
+    const [profileRes, dayRes, mealsRes, exRes, activityRes, histRes, beverageRes, beverageHistRes, workoutRes, nearbyWorkoutsRes, bodyRes, loadRes, conversationRes, coachActionsRes, weeklyReviewsRes, sleepRes] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
       supabase.from("daily_logs").select("*").eq("user_id", user.id).eq("log_date", currentDate).maybeSingle(),
       supabase.from("meal_logs").select("*").eq("user_id", user.id).eq("log_date", currentDate).order("meal_time"),
@@ -141,6 +142,7 @@ Deno.serve(async (req) => {
       supabase.from("coach_messages").select("role,content,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(18),
       supabase.from("coach_actions").select("action_type,payload,status,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
       supabase.from("weekly_reviews").select("*").eq("user_id", user.id).order("week_start", { ascending: false }).limit(4),
+      supabase.from("sleep_logs").select("*").eq("user_id", user.id).order("log_date", { ascending: false }).limit(21),
     ]);
 
     const recentConversation = (conversationRes.data || []).slice().reverse();
@@ -171,6 +173,7 @@ Deno.serve(async (req) => {
       recent_beverage_logs: beverageHistRes.data || [],
       recent_body_logs: bodyRes.data || [],
       recent_load_logs: loadRes.data || [],
+      recent_sleep_logs: sleepRes.data || [],
       recent_days: histRes.data || [],
       recent_actions: coachActionsRes.data || [],
       recent_weekly_reviews: weeklyReviewsRes.data || [],

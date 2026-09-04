@@ -114,3 +114,27 @@
 #sleepTodayHours{font-size:28px;text-align:center;margin:14px 0}
 @media(max-width:900px){.areas{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.areas{grid-template-columns:repeat(2,1fr)}.areas article:last-child{grid-column:1/-1}.areas article{padding:13px}.areaHead h3{font-size:10px}.activityDynamicFields{grid-template-columns:1fr}.foodCaptureChoices{grid-template-columns:1fr}.exerciseHelpPlaceholder{min-height:220px;padding:22px}}
+
+/* V4.2 — Home desktop 5 cards; telefone em coluna */
+@media(min-width:901px){.areas.four{grid-template-columns:repeat(5,minmax(0,1fr))}.areas.four article{padding:14px}.areas.four .tinyAction{padding:7px 8px;font-size:8px}}
+@media(max-width:600px){.areas,.areas.four{grid-template-columns:1fr!important}.areas article:last-child{grid-column:auto!important}}
+
+/* V4.2 — Incluir alimento responsivo */
+@media(max-width:600px){
+ #customFoodModal{padding:10px;align-items:center;overflow:hidden}
+ #customFoodModal .customFoodCard{width:min(560px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 18px 22px}
+ #customFoodModal .customFoodCard h2{font-size:28px;margin:6px 0}
+ #customFoodModal .customFoodCard>p{margin:6px 0 10px}
+ #customFoodModal .customFoodForm{margin:10px 0;gap:7px}
+ #customFoodModal .customFoodForm input,#customFoodModal .customFoodForm select{padding:12px}
+ #customFoodModal .foodCaptureChoices{margin:8px 0}
+ #customFoodModal .big.full{position:sticky;bottom:0;z-index:2;box-shadow:0 -8px 18px var(--paper);margin-top:8px}
+}
+.nutritionPhotoHint{display:block;color:var(--muted);margin:2px 0 6px;letter-spacing:0;font-size:9px}
+
+/* V4.2 — tutoriais visuais */
+.exerciseHelpPlaceholder.hasTutorial{display:block;min-height:0;padding:0;border:0;background:transparent;overflow:hidden}
+.exerciseHelpPlaceholder.hasTutorial img{display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--line)}
+.exerciseHelpTips{margin-top:14px;background:#f3f7f4;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.exerciseHelpTips:empty{display:none}.exerciseHelpTips p{color:var(--ink);line-height:1.55;font-size:11px;margin:7px 0}.exerciseHelpTips .exerciseSafety{color:var(--muted);font-size:9px}
+@media(max-width:600px){.exerciseHelpCard{padding:18px}.exerciseHelpCard h2{padding-right:36px}.exerciseHelpTips{padding:12px}.exerciseHelpPlaceholder.hasTutorial img{border-radius:12px}}

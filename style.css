@@ -153,3 +153,6 @@
  .liveCoachCard{padding:14px}.liveCoachTips article{grid-template-columns:30px 1fr}.liveCoachIcon{font-size:21px}
 }
 @media(max-width:600px){.finishSummary{grid-template-columns:1fr}.liveCoachActions button{flex:1}.modalCard,.customFoodCard,.finishCard,.confirmCard{max-height:calc(100dvh - 16px);width:calc(100vw - 16px)}}
+/* V5.1 — Coach Intelligence */
+.mealSkipped{opacity:.72;border-style:dashed!important}.mealSkipped h3{color:#6b756f}.mealSkipBtn{white-space:nowrap}.workoutFeedbackCard{max-width:560px}.workoutFeedbackCard>img{width:92px;height:92px;object-fit:contain}.workoutFeelingGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:18px 0}.workoutFeelingGrid button{min-height:48px}.workoutFeelingGrid button:last-child{grid-column:1/-1}
+@media(max-width:600px){.mealButtons{flex-wrap:wrap;justify-content:flex-end}.mealSkipBtn{font-size:10px}.workoutFeelingGrid{grid-template-columns:1fr}.workoutFeelingGrid button:last-child{grid-column:auto}}

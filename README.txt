@@ -11,3 +11,4 @@ Detalhes: README_V2.txt e docs/ATUALIZACAO_V2.md
 
 ATUALIZAÇÃO MAIS RECENTE: V5.0.0
 Leia README_V5.0.0_COACH_AO_VIVO_COSTAS.txt antes de instalar.
+V5.1.0

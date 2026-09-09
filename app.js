@@ -22,30 +22,69 @@ const Q=[
  ['finish',p=>`Perfeito. Seu objetivo ficou registrado como <b>“${p.goal_text||'—'}”</b>.<br><br>Agora eu já tenho um bom ponto de partida. Vou montar seu primeiro plano.`,'opts',[['go','MONTAR MEU PLANO →']]]
 ];
 const EXERCISE_LIBRARY=[
-['Rosca direta','Bíceps','bíceps, braquial','barra/halteres','gym'],['Rosca simultânea','Bíceps','bíceps','halteres','any'],['Rosca direta na polia','Bíceps','bíceps','polia','gym'],['Rosca concentrada','Bíceps','bíceps','halter','any'],['Rosca inclinada','Bíceps','bíceps','halteres/banco','gym'],['Rosca spider','Bíceps','bíceps','halteres/banco','gym'],['Rosca alternada','Bíceps','bíceps','halteres','any'],['Chin up','Bíceps','bíceps, costas','barra fixa','any'],['Rosca Scott','Bíceps','bíceps','banco Scott','gym'],['Rosca martelo','Bíceps','braquial, antebraço, bíceps','halteres','any'],['Rosca arrastada','Bíceps','bíceps','barra','gym'],['Rosca Zottman','Bíceps','bíceps, antebraço','halteres','any'],
-['Tríceps corda','Tríceps','tríceps','polia','gym'],['Tríceps francês','Tríceps','tríceps','halter/polia','any'],['Tríceps barra reta/W','Tríceps','tríceps','polia','gym'],['Supino fechado','Tríceps','tríceps, peitoral','barra/banco','gym'],['Tríceps invertido','Tríceps','tríceps','polia','gym'],['Paralelas','Tríceps','tríceps, peitoral','paralelas','any'],['Flexão diamante','Tríceps','tríceps, peitoral','peso corporal','any'],['Tríceps banco','Tríceps','tríceps','banco','any'],['Tríceps coice','Tríceps','tríceps','halter','any'],['Rosca testa','Tríceps','tríceps','barra/halteres','gym'],
-['Supino reto','Peitoral','peitoral, tríceps, deltoide anterior','barra/banco','gym'],['Supino inclinado','Peitoral','peitoral superior, tríceps, deltoide anterior','barra/halteres','gym'],['Supino declinado','Peitoral','peitoral, tríceps','barra/banco','gym'],['Peck Deck','Peitoral','peitoral','máquina','gym'],['Pullover com halter','Peitoral','peitoral, dorsal','halter/banco','any'],['Supino máquina','Peitoral','peitoral, tríceps','máquina','gym'],['Crucifixo','Peitoral','peitoral','halteres','any'],['Flexão de braço','Peitoral','peitoral, tríceps, deltoide anterior','peso corporal','any'],['Crossover','Peitoral','peitoral','polia','gym'],
-['Desenvolvimento com barra','Ombros','deltoides, tríceps','barra','gym'],['Desenvolvimento com halteres','Ombros','deltoides, tríceps','halteres','any'],['Desenvolvimento Arnold','Ombros','deltoides, tríceps','halteres','any'],['Elevação lateral','Ombros','deltoide lateral','halteres','any'],['Elevação unilateral na polia','Ombros','deltoide lateral','polia','gym'],['Elevação frontal','Ombros','deltoide anterior','halteres/barra','any'],['Remada alta','Ombros','deltoide lateral, trapézio','barra/polia','gym'],['Voador invertido','Ombros','deltoide posterior, costas','máquina/halteres','gym'],
-['Barra fixa','Costas','latíssimo, romboides, bíceps','barra fixa','any'],['Cavalinho','Costas','dorsais, romboides, trapézio, bíceps','barra/máquina','gym'],['Face pull','Costas','deltoide posterior, romboides, trapézio','polia/corda','gym'],['Pull down','Costas','latíssimo, redondo maior','polia','gym'],['Pulley / puxada alta','Costas','latíssimo, redondo maior, bíceps','polia','gym'],['Puxada neutra','Costas','latíssimo, romboides, bíceps','polia','gym'],['Remada baixa','Costas','dorsais, romboides, bíceps','polia','gym'],['Remada curvada','Costas','dorsais, romboides, trapézio, bíceps','barra','gym'],['Serrote','Costas','dorsais, romboides, bíceps','halter','any'],
-['Rosca punho','Antebraço','flexores do antebraço','barra/halter','any'],['Rosca punho invertida','Antebraço','extensores do antebraço','barra/halter','any'],['Suspensão na barra','Antebraço','antebraço, pegada','barra fixa','any'],['Rosca inversa','Antebraço','antebraço, braquial','barra','gym'],
-['Cadeira extensora','Pernas','quadríceps','máquina','gym'],['Mesa/cadeira flexora','Pernas','posteriores de coxa','máquina','gym'],['Cadeira adutora','Pernas','adutores','máquina','gym'],['Cadeira abdutora','Pernas','glúteo médio, abdutores','máquina','gym'],['Agachamento livre','Pernas','quadríceps, glúteos, posteriores','barra/peso corporal','any'],['Agachamento Hack','Pernas','quadríceps, glúteos','máquina','gym'],['Leg press','Pernas','quadríceps, glúteos','máquina','gym'],['Levantamento terra','Pernas','posteriores, glúteos, costas','barra','gym'],['Panturrilha em pé','Pernas','panturrilhas','máquina/peso corporal','any'],['Panturrilha sentada','Pernas','panturrilhas','máquina','gym'],['Afundo / passada','Pernas','quadríceps, glúteos','halteres/peso corporal','any'],['Agachamento búlgaro','Pernas','quadríceps, glúteos','halteres/banco','any'],['Stiff / RDL','Pernas','posteriores, glúteos','barra/halteres','any'],['Elevação pélvica / Hip thrust','Pernas','glúteos, posteriores','barra/banco','any']
-,
+['Rosca direta','Bíceps','bíceps, braquial','barra/halteres','gym'],
+['Rosca 21','Bíceps','bíceps, braquial','barra/halteres','any'],
+['Rosca concentrada','Bíceps','bíceps','halter','any'],
+['Rosca inclinada','Bíceps','bíceps','halteres/banco','gym'],
+['Rosca alternada','Bíceps','bíceps','halteres','any'],
+['Chin up','Bíceps','bíceps, costas','barra fixa','any'],
+['Rosca Scott','Bíceps','bíceps','banco Scott','gym'],
+['Rosca martelo','Bíceps','braquial, antebraço, bíceps','halteres','any'],
+['Rosca Zottman','Bíceps','bíceps, antebraço','halteres','any'],
+['Tríceps corda','Tríceps','tríceps','polia','gym'],
+['Tríceps francês','Tríceps','tríceps','halter/polia','any'],
+['Tríceps barra reta/W','Tríceps','tríceps','polia','gym'],
+['Supino fechado','Tríceps','tríceps, peitoral','barra/banco','gym'],
+['Tríceps invertido','Tríceps','tríceps','polia','gym'],
+['Paralelas','Tríceps','tríceps, peitoral','paralelas','any'],
+['Flexão diamante','Tríceps','tríceps, peitoral','peso corporal','any'],
+['Tríceps banco','Tríceps','tríceps','banco','any'],
+['Tríceps coice','Tríceps','tríceps','halter','any'],
+['Rosca testa','Tríceps','tríceps','barra/halteres','gym'],
+['Supino reto','Peitoral','peitoral, tríceps, deltoide anterior','barra/banco','gym'],
+['Supino inclinado','Peitoral','peitoral superior, tríceps, deltoide anterior','barra/halteres','gym'],
+['Supino declinado','Peitoral','peitoral, tríceps','barra/banco','gym'],
+['Peck Deck','Peitoral','peitoral','máquina','gym'],
+['Pullover com halter','Peitoral','peitoral, dorsal','halter/banco','any'],
+['Supino máquina','Peitoral','peitoral, tríceps','máquina','gym'],
+['Crucifixo','Peitoral','peitoral','halteres','any'],
+['Flexão de braço','Peitoral','peitoral, tríceps, deltoide anterior','peso corporal','any'],
+['Crossover','Peitoral','peitoral','polia','gym'],
+['Desenvolvimento com barra','Ombros','deltoides, tríceps','barra','gym'],
+['Desenvolvimento com halteres','Ombros','deltoides, tríceps','halteres','any'],
+['Elevação lateral','Ombros','deltoide lateral','halteres','any'],
+['Elevação unilateral na polia','Ombros','deltoide lateral','polia','gym'],
+['Elevação frontal','Ombros','deltoide anterior','halteres/barra','any'],
+['Remada alta','Ombros','deltoide lateral, trapézio','barra/polia','gym'],
+['Voador invertido','Ombros','deltoide posterior, costas','máquina/halteres','gym'],
+['Barra fixa','Costas','latíssimo, romboides, bíceps','barra fixa','any'],
+['Cavalinho','Costas','dorsais, romboides, trapézio, bíceps','barra/máquina','gym'],
+['Face pull','Costas','deltoide posterior, romboides, trapézio','polia/corda','gym'],
+['Pull down','Costas','latíssimo, redondo maior','polia','gym'],
+['Pulley / puxada alta','Costas','latíssimo, redondo maior, bíceps','polia','gym'],
+['Puxada neutra','Costas','latíssimo, romboides, bíceps','polia','gym'],
+['Remada baixa','Costas','dorsais, romboides, bíceps','polia','gym'],
+['Remada curvada','Costas','dorsais, romboides, trapézio, bíceps','barra','gym'],
+['Serrote','Costas','dorsais, romboides, bíceps','halter','any'],
+['Rosca punho','Antebraço','flexores do antebraço','barra/halter','any'],
+['Suspensão na barra','Antebraço','antebraço, pegada','barra fixa','any'],
+['Rosca inversa','Antebraço','antebraço, braquial','barra','gym'],
+['Cadeira extensora','Pernas','quadríceps','máquina','gym'],
+['Mesa/cadeira flexora','Pernas','posteriores de coxa','máquina','gym'],
+['Cadeira adutora','Pernas','adutores','máquina','gym'],
+['Cadeira abdutora','Pernas','glúteo médio, abdutores','máquina','gym'],
+['Agachamento livre','Pernas','quadríceps, glúteos, posteriores','barra/peso corporal','any'],
+['Agachamento Hack','Pernas','quadríceps, glúteos','máquina','gym'],
+['Leg press','Pernas','quadríceps, glúteos','máquina','gym'],
+['Levantamento terra','Pernas','posteriores, glúteos, costas','barra','gym'],
+['Panturrilha em pé','Pernas','panturrilhas','máquina/peso corporal','any'],
+['Panturrilha sentada','Pernas','panturrilhas','máquina','gym'],
+['Afundo / passada','Pernas','quadríceps, glúteos','halteres/peso corporal','any'],
+['Stiff / RDL','Pernas','posteriores, glúteos','barra/halteres','any'],
+['Elevação pélvica / Hip thrust','Pernas','glúteos, posteriores','barra/banco','any'],
 ['Supino reto com halteres','Peitoral','peitoral, tríceps, deltoide anterior','halteres/banco','gym'],
 ['Supino inclinado com halteres','Peitoral','peitoral superior, tríceps','halteres/banco','gym'],
 ['Elevação lateral na polia','Ombros','deltoide lateral','polia','gym'],
-['Elevação lateral máquina','Ombros','deltoide lateral','máquina','gym'],
-['Crucifixo inverso máquina','Ombros','deltoide posterior','máquina','gym'],
-['Rosca martelo na corda','Bíceps','braquial, bíceps','polia','gym'],
-['Rosca Bayesian','Bíceps','bíceps','polia','gym'],
-['Tríceps testa na polia','Tríceps','tríceps','polia','gym'],
-['Tríceps francês unilateral','Tríceps','tríceps','halter/polia','any'],
-['Agachamento hack','Pernas','quadríceps, glúteos','máquina','gym'],
-['Agachamento búlgaro','Pernas','quadríceps, glúteos','halteres','any'],
-['Leg press horizontal','Pernas','quadríceps, glúteos','máquina','gym'],
-['Cadeira flexora','Pernas','posteriores de coxa','máquina','gym'],
-['Stiff com halteres','Pernas','posteriores, glúteos','halteres','any'],
-['Elevação pélvica máquina','Pernas','glúteos','máquina','gym'],
-['Panturrilha no leg press','Pernas','panturrilhas','máquina','gym'],
 ['Caminhada','Atividade','cardiorrespiratório','livre','any'],
 ['Esteira','Atividade','cardiorrespiratório','esteira','gym'],
 ['Corrida','Atividade','cardiorrespiratório','livre/esteira','any'],
@@ -55,8 +94,8 @@ const EXERCISE_LIBRARY=[
 ['Funcional','Atividade','corpo inteiro','variado','any'],
 ['CrossFit','Atividade','corpo inteiro','box/equipamentos','any'],
 ['Yoga / Pilates','Atividade','mobilidade, core','colchonete','any'],
-['Sauna','Atividade','recuperação/rotina','sauna','gym']].map((x,i)=>({id:'lib_'+i,name:x[0],group:x[1],muscles:x[2],equipment:x[3],environment:x[4]}));
-const EXBASE=[['Supino reto','4 × 8–10'],['Pulley / puxada alta','4 × 8–12'],['Remada baixa','3 × 10–12'],['Desenvolvimento com halteres','3 × 8–10'],['Elevação lateral','3 × 12–15'],['Tríceps corda','3 × 10–12']];
+['Sauna','Atividade','recuperação/rotina','sauna','gym']
+];
 
 function localDate(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
 function dateAdd(date,days){const [y,m,d]=date.split('-').map(Number),x=new Date(y,m-1,d);x.setDate(x.getDate()+days);return localDate(x)}
@@ -129,7 +168,7 @@ function workoutTemplates(profile){
 
 function adaptExercisesToEnvironment(list,profile){
  const loc=slugText(profile.training_location||''),eq=slugText(profile.equipment_text||''),gym=/gym|academia|full_gym|small_gym/.test(loc)||/academia completa/.test(eq);if(gym)return list;
- const repl={'Leg press':'Agachamento livre','Supino máquina':'Flexão de braço','Pulley / puxada alta':'Barra fixa','Mesa/cadeira flexora':'Stiff / RDL','Agachamento Hack':'Agachamento búlgaro','Remada baixa':'Serrote','Cadeira extensora':'Afundo / passada','Peck Deck':'Crucifixo','Pull down':'Barra fixa','Cadeira abdutora':'Agachamento búlgaro','Panturrilha sentada':'Panturrilha em pé','Tríceps corda':'Flexão diamante','Face pull':'Voador invertido'};
+ const repl={'Leg press':'Agachamento livre','Supino máquina':'Flexão de braço','Pulley / puxada alta':'Barra fixa','Mesa/cadeira flexora':'Stiff / RDL','Agachamento Hack':'Agachamento livre','Remada baixa':'Serrote','Cadeira extensora':'Afundo / passada','Peck Deck':'Crucifixo','Pull down':'Barra fixa','Cadeira abdutora':'Afundo / passada','Panturrilha sentada':'Panturrilha em pé','Tríceps corda':'Flexão diamante','Face pull':'Voador invertido'};
  return list.map(e=>{const n=repl[e.name];if(!n)return e;const lib=EXERCISE_LIBRARY.find(x=>x.name===n)||{};return{...e,name:n,group:lib.group||e.group,muscles:lib.muscles||e.muscles,equipment:lib.equipment||e.equipment}})
 }
 

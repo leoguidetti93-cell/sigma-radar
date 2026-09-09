@@ -95,7 +95,7 @@ const EXERCISE_LIBRARY=[
 ['CrossFit','Atividade','corpo inteiro','box/equipamentos','any'],
 ['Yoga / Pilates','Atividade','mobilidade, core','colchonete','any'],
 ['Sauna','Atividade','recuperação/rotina','sauna','gym']
-];
+].map(([name,group,muscles,equipment,environment],i)=>({id:`sigma_ex_${i}`,name,group,muscles,equipment,environment}));
 
 function localDate(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
 function dateAdd(date,days){const [y,m,d]=date.split('-').map(Number),x=new Date(y,m-1,d);x.setDate(x.getDate()+days);return localDate(x)}

@@ -16,6 +16,9 @@ INTELIGÊNCIA V5.1 — ENTENDA A INTENÇÃO, NÃO PALAVRAS-CHAVE
 - Se uma mudança de hoje afetar coerência/recuperação dos próximos treinos, analise nearby_workout_plans e prefira propor a reorganização da semana inteira. Explique brevemente o impacto.
 - Se a intenção estiver clara mas faltar um detalhe não essencial, use uma suposição conservadora. Pergunte somente se a informação for indispensável.
 - Nunca responda que “não conseguiu estruturar” só porque a intenção não encaixou literalmente em um tipo. Converse normalmente e use proposal:null se não houver executor adequado.
+
+- REGRA DE EMBALAGEM/PORÇÃO FIXA: custom_foods com fixed_portion=true são unidades indivisíveis para reorganização automática. Nunca proponha 80 ml de uma embalagem cadastrada como 250 ml fixa, nem meia barrinha/unidade fixa. Use a porção-base inteira (ou múltiplos inteiros somente se fizer sentido) e ajuste os demais alimentos fracionáveis para equilibrar calorias e macros.
+- Ao reorganizar refeições após uma refeição pulada ou alterações manuais, preserve alimentos de porção fixa e redistribua preferencialmente alimentos fracionáveis.
 - custom_foods são alimentos cadastrados pelo próprio usuário. Quando ele disser que tem YoPRO, Hydro Protein, Pro Force ou outro item, procure primeiro ali e nos meal_logs. Não invente macros.
 - Se o usuário pedir para incorporar alimentos que já possui ao cardápio de forma recorrente, use incorporate_foods quando isso puder ser feito preservando metas; explique que o sistema os priorizará em lanches/ceia e recalculará as porções.
 - Observe padrões em recent_meal_logs, recent_actions, workout_feedback e hidratação. Repetição pode justificar uma sugestão, nunca uma alteração automática.
@@ -164,7 +167,7 @@ Deno.serve(async (req) => {
       supabase.from("coach_actions").select("action_type,payload,status,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
       supabase.from("weekly_reviews").select("*").eq("user_id", user.id).order("week_start", { ascending: false }).limit(4),
       supabase.from("sleep_logs").select("*").eq("user_id", user.id).order("log_date", { ascending: false }).limit(21),
-      supabase.from("custom_foods").select("name,category,portion_label,kcal,protein_g,carbs_g,fat_g").eq("user_id", user.id).order("created_at", { ascending: false }).limit(120),
+      supabase.from("custom_foods").select("name,category,portion_label,kcal,protein_g,carbs_g,fat_g,fixed_portion").eq("user_id", user.id).order("created_at", { ascending: false }).limit(120),
       supabase.from("nutrition_plan_rules").select("*").eq("user_id", user.id).eq("active", true).order("created_at", { ascending: false }).limit(80),
       supabase.from("meal_logs").select("log_date,meal_key,meal_name,meal_time,foods,completed,skipped,kcal,protein_g,carbs_g,fat_g").eq("user_id", user.id).order("log_date", { ascending: false }).limit(240),
       supabase.from("workout_feedback").select("*").eq("user_id", user.id).order("log_date", { ascending: false }).limit(30),

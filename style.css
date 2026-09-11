@@ -171,3 +171,15 @@
 
 /* V5.3 */
 .editFood{border:1px solid #b8d7ca;background:#fff;color:#17664f;border-radius:9px;padding:7px 8px;font-size:10px;font-weight:800}.activityCard .exerciseInfo{padding-right:88px}.activityCard .exerciseActions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px}.activityCard .check{align-self:center}
+
+/* V5.4 */
+.customFoodCard{max-height:calc(100vh - 32px);overflow:auto;overscroll-behavior:contain}
+.myFoodsCard{width:min(720px,94vw)}.myFoodsList{display:grid;gap:8px;margin:16px 0;max-height:55vh;overflow:auto}
+.myFoodRow{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px}
+.myFoodRow small{display:block;color:var(--muted);margin-top:4px}.myFoodRow>div:last-child{display:flex;gap:6px}
+.fastingInterview{width:min(680px,100%)}.fastingFields{margin-top:12px;padding:12px;background:#f4f7f5;border:1px solid var(--line);border-radius:12px}.fastingFields>div{display:flex;gap:10px}.fastingFields label{display:flex;flex-direction:column;gap:5px;flex:1;font-size:10px}.fastingFields input{padding:10px;border:1px solid var(--line);border-radius:9px}
+.profileFastingWindow{grid-column:1/-1;grid-template-columns:1fr 1fr;gap:8px}.profileFastingWindow label{display:flex;flex-direction:column;gap:5px;font-size:9px}.profileFastingWindow input{width:100%;box-sizing:border-box}
+.profileFastDays{grid-column:1/-1;gap:6px;flex-wrap:wrap}.profileFastDays button{background:#fff;color:var(--green);border:1px solid var(--line);padding:9px 11px}.profileFastDays button.selected{background:var(--green);color:#fff}
+.fastingDayCard{border:1px dashed #93b9aa!important;background:#edf6f1!important;padding:24px!important}.fastingDayCard b{color:var(--green)}.fastingDayCard p{margin-top:8px;color:var(--muted)}
+.shareStoryButton{margin-top:8px}.shareDayCard img{max-height:180px}.foodTopActions{flex-wrap:wrap}
+@media(max-width:700px){.myFoodRow{align-items:flex-start;flex-direction:column}.myFoodRow>div:last-child{width:100%}.profileFastingWindow{grid-template-columns:1fr}.fastingFields>div{flex-direction:column}}

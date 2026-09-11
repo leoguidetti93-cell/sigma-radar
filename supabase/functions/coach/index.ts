@@ -23,7 +23,7 @@ INTELIGÊNCIA V5.1 — ENTENDA A INTENÇÃO, NÃO PALAVRAS-CHAVE
 - Se o usuário pedir para incorporar alimentos que já possui ao cardápio de forma recorrente, use incorporate_foods quando isso puder ser feito preservando metas; explique que o sistema os priorizará em lanches/ceia e recalculará as porções.
 - Observe padrões em recent_meal_logs, recent_actions, workout_feedback e hidratação. Repetição pode justificar uma sugestão, nunca uma alteração automática.
 - Refeição skipped=true significa explicitamente NÃO REALIZADA; completed=false e skipped=false continua sendo desconhecida/pendente.
-- Respeite profile.food_preferences.diet_style em toda geração/reorganização alimentar: classic prioriza alimentos cotidianos e simples; complete usa toda a variedade; vegetarian exclui carnes/peixes; vegan exclui ingredientes de origem animal. profile.food_preferences.avoid_foods é bloqueio explícito: não proponha esses alimentos.
+- Respeite profile.food_preferences.diet_style em toda geração/reorganização alimentar: classic prioriza alimentos cotidianos e simples; complete usa toda a variedade; vegetarian exclui carnes/peixes; vegan exclui ingredientes de origem animal. profile.food_preferences.avoid_foods é bloqueio explícito: não proponha esses alimentos. Um custom_food com contains_animal_products=true também é incompatível com vegan, mesmo que o usuário costume consumi-lo fora desse estilo. Preferência recorrente nunca pode furar uma restrição de dieta.
 - Atividades planejadas têm o mesmo estado operacional de exercícios: concluída, skipped=true (não fiz) ou desconhecida. Inclua-as na leitura de aderência do treino. Sauna é RECUPERAÇÃO COMPLEMENTAR: registre e considere como contexto de recuperação/relaxamento, nunca como equivalente a musculação/cardio nem como prova de queima de gordura.
 - Ao interpretar o resumo do treino, use exercícios + atividades do plano vigente do dia, inclusive quando o usuário reprogramou o treino no mesmo dia.
 - Feedback pós-treino é percepção do usuário. Cansaço isolado não exige replanejamento; repetição + sono/carga/aderência pode justificar análise. Dor não deve ser diagnosticada.
@@ -170,7 +170,7 @@ Deno.serve(async (req) => {
       supabase.from("coach_actions").select("action_type,payload,status,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
       supabase.from("weekly_reviews").select("*").eq("user_id", user.id).order("week_start", { ascending: false }).limit(4),
       supabase.from("sleep_logs").select("*").eq("user_id", user.id).order("log_date", { ascending: false }).limit(21),
-      supabase.from("custom_foods").select("name,category,portion_label,kcal,protein_g,carbs_g,fat_g,fixed_portion").eq("user_id", user.id).order("created_at", { ascending: false }).limit(120),
+      supabase.from("custom_foods").select("name,category,portion_label,kcal,protein_g,carbs_g,fat_g,fixed_portion,contains_animal_products").eq("user_id", user.id).order("created_at", { ascending: false }).limit(120),
       supabase.from("nutrition_plan_rules").select("*").eq("user_id", user.id).eq("active", true).order("created_at", { ascending: false }).limit(80),
       supabase.from("meal_logs").select("log_date,meal_key,meal_name,meal_time,foods,completed,skipped,kcal,protein_g,carbs_g,fat_g").eq("user_id", user.id).order("log_date", { ascending: false }).limit(240),
       supabase.from("workout_feedback").select("*").eq("user_id", user.id).order("log_date", { ascending: false }).limit(30),

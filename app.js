@@ -728,7 +728,7 @@ async function buildDayStoryCanvas(){const m=metrics(),c=document.createElement(
  storyText(x,formatDate(S.currentDate),285,548,22,'600','left','#d9eee7');
  storyText(x,Math.round(m.score),250,910,108,'bold','center','#ffffff');
  const vals=[Math.round(m.t),Math.round(m.f),Math.round(m.w)],centers=[196,456,716];
- vals.forEach((v,i)=>{x.save();x.fillStyle='rgba(5,31,25,.94)';x.beginPath();x.arc(centers[i],1250,78,0,Math.PI*2);x.fill();x.restore();storyText(x,`${v}%`,centers[i],1250,42,'bold','center','#ffffff')});
+ vals.forEach((v,i)=>{storyText(x,`${v}%`,centers[i],1250,42,'bold','center','#ffffff')});
  return c}
 async function shareDayStory(){try{const c=await buildDayStoryCanvas(),blob=await new Promise(r=>c.toBlob(r,'image/png'));await shareFile(blob,`Sigma_Radar_Dia_${S.currentDate}.png`,'Meu dia no Sigma Radar Fit')}catch(e){console.error(e);toast('Não consegui gerar o Story: '+(e?.message||e))}}
 function openShareDayModal(){$('#shareDayModal').classList.add('open')}

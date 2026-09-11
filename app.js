@@ -728,13 +728,83 @@ async function buildDayStoryCanvas(){const m=metrics(),c=document.createElement(
  storyText(x,formatDate(S.currentDate),285,548,22,'600','left','#d9eee7');
  storyText(x,Math.round(m.score),250,910,108,'bold','center','#ffffff');
  const vals=[Math.round(m.t),Math.round(m.f),Math.round(m.w)],centers=[196,456,716];
- vals.forEach((v,i)=>{storyText(x,`${v}%`,centers[i],1250,42,'bold','center','#ffffff')});
+ vals.forEach((v,i)=>{storyText(x,`${v}`,centers[i],1250,42,'bold','center','#ffffff')});
  return c}
 async function shareDayStory(){try{const c=await buildDayStoryCanvas(),blob=await new Promise(r=>c.toBlob(r,'image/png'));await shareFile(blob,`Sigma_Radar_Dia_${S.currentDate}.png`,'Meu dia no Sigma Radar Fit')}catch(e){console.error(e);toast('Não consegui gerar o Story: '+(e?.message||e))}}
 function openShareDayModal(){$('#shareDayModal').classList.add('open')}
 function closeShareDayModal(){$('#shareDayModal').classList.remove('open')}
 async function finishAndShare(){closeShareDayModal();await shareDayStory()}
 async function nextDayFromShare(){closeShareDayModal();await selectDay(dateAdd(S.currentDate,1))}
+
+
+let progressReportDays=30;
+function openProgressDownload(){progressReportDays=30;$$('#progressDownloadModal [data-days]').forEach(b=>b.classList.toggle('selected',+b.dataset.days===30));$('#progressDownloadModal').classList.add('open')}
+function closeProgressDownload(){$('#progressDownloadModal').classList.remove('open')}
+function selectProgressRange(btn,days){progressReportDays=days;$$('#progressDownloadModal [data-days]').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected')}
+function reportAvg(rows,key){const vals=(rows||[]).map(x=>+x[key]).filter(Number.isFinite);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null}
+function reportSeries(rows,key){return (rows||[]).filter(x=>x.log_date&&x[key]!==null&&x[key]!==undefined&&Number.isFinite(+x[key])).map(x=>({date:x.log_date,value:+x[key]})).sort((a,b)=>a.date.localeCompare(b.date))}
+function reportFirstLast(series){return series.length?{first:series[0].value,last:series[series.length-1].value,delta:series[series.length-1].value-series[0].value}:null}
+function reportFmt(n,d=1){return n===null||n===undefined||!Number.isFinite(+n)?'—':(+n).toFixed(d).replace('.',',')}
+function reportWrap(ctx,text,x,y,maxWidth,lineHeight,maxLines=99){const words=String(text||'').split(/\s+/),lines=[];let line='';for(const w of words){const t=line?line+' '+w:w;if(ctx.measureText(t).width>maxWidth&&line){lines.push(line);line=w}else line=t}if(line)lines.push(line);const use=lines.slice(0,maxLines);use.forEach((l,i)=>ctx.fillText(l,x,y+i*lineHeight));return y+use.length*lineHeight}
+function reportCard(ctx,x,y,w,h,label,value,sub=''){ctx.fillStyle='#ffffff';ctx.strokeStyle='#d9e0da';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,22);ctx.fill();ctx.stroke();ctx.fillStyle='#5d7068';ctx.font='bold 18px Arial';ctx.fillText(label.toUpperCase(),x+22,y+34);ctx.fillStyle='#123b32';ctx.font='bold 38px Arial';ctx.fillText(value,x+22,y+78);if(sub){ctx.fillStyle='#73817c';ctx.font='17px Arial';ctx.fillText(sub,x+22,y+106)}}
+function reportPage(title,subtitle,pageNo){const c=document.createElement('canvas');c.width=1240;c.height=1754;const x=c.getContext('2d');x.fillStyle='#f7f2e8';x.fillRect(0,0,c.width,c.height);x.fillStyle='#0d3b32';x.fillRect(0,0,c.width,175);x.fillStyle='#fff';x.font='bold 46px Arial';x.fillText('Σ SIGMA RADAR Fit',62,68);x.font='bold 28px Arial';x.fillText(title,62,122);x.fillStyle='#5a6d66';x.font='19px Arial';x.fillText(subtitle,62,218);x.fillStyle='#0d3b32';x.fillRect(0,1662,c.width,92);x.fillStyle='#fff';x.font='18px Arial';x.fillText('Seu objetivo. Seu plano. Sua evolução.  •  sigmaradar.com.br',62,1710);x.textAlign='right';x.fillText(`Página ${pageNo}`,1170,1710);x.textAlign='left';return{c,x}}
+function drawReportChart(ctx,x,y,w,h,title,series,unit='',digits=1){ctx.fillStyle='#fff';ctx.strokeStyle='#d9e0da';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,22);ctx.fill();ctx.stroke();ctx.fillStyle='#153d35';ctx.font='bold 23px Arial';ctx.fillText(title,x+24,y+38);if(!series||series.length<2){ctx.fillStyle='#718079';ctx.font='20px Arial';ctx.fillText('Dados insuficientes para gerar o gráfico.',x+24,y+88);return}
+ const vals=series.map(p=>p.value),min0=Math.min(...vals),max0=Math.max(...vals),pad=Math.max((max0-min0)*.18,unit==='kg'?0.5:1),min=min0-pad,max=max0+pad,px=x+68,py=y+76,pw=w-100,ph=h-125;
+ ctx.strokeStyle='#dfe7e1';ctx.lineWidth=1;for(let i=0;i<=4;i++){const yy=py+ph*i/4;ctx.beginPath();ctx.moveTo(px,yy);ctx.lineTo(px+pw,yy);ctx.stroke();const val=max-(max-min)*i/4;ctx.fillStyle='#718079';ctx.font='14px Arial';ctx.textAlign='right';ctx.fillText(`${val.toFixed(digits).replace('.',',')}${unit}`,px-10,yy+5)}
+ ctx.textAlign='left';ctx.strokeStyle='#1f7a5a';ctx.lineWidth=5;ctx.beginPath();series.forEach((p,i)=>{const xx=px+pw*(i/(series.length-1)),yy=py+ph*(1-(p.value-min)/(max-min));i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)});ctx.stroke();
+ ctx.fillStyle='#1f7a5a';series.forEach((p,i)=>{if(i===0||i===series.length-1||i===Math.floor(series.length/2)){const xx=px+pw*(i/(series.length-1)),yy=py+ph*(1-(p.value-min)/(max-min));ctx.beginPath();ctx.arc(xx,yy,7,0,Math.PI*2);ctx.fill()}});
+ ctx.fillStyle='#718079';ctx.font='14px Arial';ctx.textAlign='left';ctx.fillText(formatDate(series[0].date),px,py+ph+28);ctx.textAlign='right';ctx.fillText(formatDate(series[series.length-1].date),px+pw,py+ph+28);ctx.textAlign='left'
+}
+function progressCoachReading(data){const bits=[],att=[];const goal=normName(S.p.goal_text||'');
+ if(data.weightFL){const d=data.weightFL.delta;if((/perder|emagrecer|gordura/.test(goal)&&d<-.2)||(/ganhar|massa|hipertrof/.test(goal)&&d>.2))bits.push(`O peso caminhou na direção do objetivo (${d>0?'+':''}${reportFmt(d)} kg no período).`);else if(Math.abs(d)>=.2)bits.push(`O peso variou ${d>0?'+':''}${reportFmt(d)} kg no período; vale interpretar junto da composição corporal e da aderência.`);else bits.push('O peso ficou relativamente estável no período.')}
+ if(data.fatFL){const d=data.fatFL.delta;if(d<-.2)bits.push(`A gordura corporal registrada caiu ${reportFmt(Math.abs(d))} p.p.`);else if(d>.2)att.push(`A gordura corporal registrada subiu ${reportFmt(d)} p.p.; acompanhe a tendência antes de concluir algo.`)}
+ if(data.leanFL){const d=data.leanFL.delta;if(d>.1)bits.push(`A massa magra/muscular registrada evoluiu ${d>0?'+':''}${reportFmt(d)} ${data.leanUnit}.`);else if(d<-.1)att.push(`A massa magra/muscular registrada caiu ${reportFmt(Math.abs(d))} ${data.leanUnit}; recuperação, proteína e treino merecem atenção.`)}
+ if(data.scoreAvg!==null){if(data.scoreAvg>=85)bits.push(`A consistência foi alta, com Σ Score médio de ${Math.round(data.scoreAvg)}.`);else if(data.scoreAvg<70)att.push(`O Σ Score médio ficou em ${Math.round(data.scoreAvg)}; priorize poucas mudanças sustentáveis em vez de tentar compensar tudo de uma vez.`)}
+ if(data.sleepAvg!==null&&data.sleepTarget&&data.sleepAvg<data.sleepTarget*.9)att.push(`Sono médio de ${reportFmt(data.sleepAvg)} h ficou abaixo da referência de ${reportFmt(data.sleepTarget)} h.`)
+ if(data.hydAvg!==null&&data.hydAvg<80)att.push(`Aderência média de hidratação ficou em ${Math.round(data.hydAvg)}%.`)
+ if(!bits.length)bits.push('Ainda há poucos sinais consolidados; mantenha registros consistentes para tornar a leitura mais precisa.')
+ return{advance:bits.slice(0,3).join(' '),attention:att.length?att.slice(0,3).join(' '):'Nenhum ponto crítico aparece com força nos registros disponíveis. Continue acompanhando tendência, recuperação e aderência.'}
+}
+function buildProgressReportData(days){const end=localDate(),start=dateAdd(end,-(days-1)),inRange=x=>x.log_date>=start&&x.log_date<=end;
+ const daily=(S.history||[]).filter(inRange).filter(x=>x.status==='completed').sort((a,b)=>a.log_date.localeCompare(b.log_date)),body=(S.bodyHistory||[]).filter(inRange).sort((a,b)=>a.log_date.localeCompare(b.log_date)),sleep=(S.sleepHistory||[]).filter(inRange),acts=(S.activityHistory||[]).filter(inRange).filter(x=>x.completed),weight=reportSeries(body,'weight_kg'),fat=reportSeries(body,'body_fat_pct'),leanKg=reportSeries(body,'lean_mass_kg'),leanPct=reportSeries(body,'lean_mass_pct'),lean=leanKg.length>=2?leanKg:leanPct,leanUnit=leanKg.length>=2?'kg':'p.p.',stepVals=body.map(x=>+x.steps).filter(v=>Number.isFinite(v)&&v>=0);
+ const scoreAvg=reportAvg(daily,'score'),trainAvg=reportAvg(daily,'training_pct'),foodAvg=reportAvg(daily,'nutrition_pct'),hydAvg=reportAvg(daily,'hydration_pct'),sleepVals=sleep.map(x=>+x.hours).filter(Number.isFinite),sleepAvg=sleepVals.length?sleepVals.reduce((a,b)=>a+b,0)/sleepVals.length:null,sleepTarget=sleep.length?reportAvg(sleep,'target_hours')||smartSleepTarget():smartSleepTarget(),stepsAvg=stepVals.length?stepVals.reduce((a,b)=>a+b,0)/stepVals.length:null;
+ const out={days,start,end,daily,body,sleep,acts,weight,fat,lean,leanUnit,weightFL:reportFirstLast(weight),fatFL:reportFirstLast(fat),leanFL:reportFirstLast(lean),scoreAvg,trainAvg,foodAvg,hydAvg,sleepAvg,sleepTarget,stepsAvg,completed:daily.length};
+ out.reading=progressCoachReading(out);return out
+}
+function makeProgressPdf(data){const pages=[];
+ let p=reportPage('RELATÓRIO DE PROGRESSO',`${S.p.name||'Atleta'} • últimos ${data.days} dias • ${formatDate(data.start)} a ${formatDate(data.end)}`,1),x=p.x;
+ x.fillStyle='#153d35';x.font='bold 31px Arial';x.fillText('Visão geral do período',62,285);
+ reportCard(x,62,320,255,125,'Σ Score médio',data.scoreAvg===null?'—':Math.round(data.scoreAvg),`${data.completed} dias concluídos`);
+ reportCard(x,332,320,255,125,'Treino',data.trainAvg===null?'—':Math.round(data.trainAvg)+'%','aderência média');
+ reportCard(x,602,320,255,125,'Alimentação',data.foodAvg===null?'—':Math.round(data.foodAvg)+'%','aderência média');
+ reportCard(x,872,320,305,125,'Hidratação',data.hydAvg===null?'—':Math.round(data.hydAvg)+'%','aderência média');
+ reportCard(x,62,470,355,125,'Peso',data.weightFL?`${reportFmt(data.weightFL.first)} → ${reportFmt(data.weightFL.last)} kg`:'—',data.weightFL?`${data.weightFL.delta>0?'+':''}${reportFmt(data.weightFL.delta)} kg`:'dados insuficientes');
+ reportCard(x,442,470,355,125,'Sono médio',data.sleepAvg===null?'—':`${reportFmt(data.sleepAvg)} h`,data.sleepAvg===null?'dados insuficientes':`referência ${reportFmt(data.sleepTarget)} h`);
+ reportCard(x,822,470,355,125,'Passos médios',data.stepsAvg===null?'—':Math.round(data.stepsAvg).toLocaleString('pt-BR'),data.stepsAvg===null?'dados insuficientes':(S.p.steps_goal?`meta ${Number(S.p.steps_goal).toLocaleString('pt-BR')}`:'média dos registros'));
+ x.fillStyle='#153d35';x.font='bold 27px Arial';x.fillText('Σ Coach • leitura do progresso',62,665);
+ x.fillStyle='#fff';x.strokeStyle='#d9e0da';x.beginPath();x.roundRect(62,695,1115,390,24);x.fill();x.stroke();
+ x.fillStyle='#1f7a5a';x.font='bold 20px Arial';x.fillText('PRINCIPAIS AVANÇOS',88,745);x.fillStyle='#294a42';x.font='20px Arial';reportWrap(x,data.reading.advance,88,785,1045,31,6);
+ x.fillStyle='#b27833';x.font='bold 20px Arial';x.fillText('PONTOS DE ATENÇÃO',88,930);x.fillStyle='#294a42';x.font='20px Arial';reportWrap(x,data.reading.attention,88,970,1045,31,5);
+ x.fillStyle='#153d35';x.font='bold 27px Arial';x.fillText('Contexto do período',62,1155);
+ const ctxLines=[`Atividades concluídas: ${data.acts.length}`,`Jejum configurado: ${fastingLabel(S.p)}`,`Objetivo atual: ${S.p.goal_text||'Não informado'}`,`Peso-alvo: ${S.p.target_weight_kg?Number(S.p.target_weight_kg).toFixed(1).replace('.',',')+' kg':'Não informado'}`];
+ x.fillStyle='#526b63';x.font='20px Arial';ctxLines.forEach((t,i)=>x.fillText('• '+t,82,1200+i*42));
+ x.fillStyle='#77837e';x.font='16px Arial';reportWrap(x,'Este relatório resume os registros informados no Sigma Radar. Medidas corporais dependem da consistência e do método de medição utilizado; variações isoladas devem ser interpretadas como tendência, não como diagnóstico.',62,1420,1115,25,5);
+ pages.push(p.c);
+ p=reportPage('EVOLUÇÃO CORPORAL',`Gráficos disponíveis conforme os dados registrados • últimos ${data.days} dias`,2);x=p.x;
+ drawReportChart(x,62,280,1115,390,'Peso corporal',data.weight,' kg',1);
+ drawReportChart(x,62,700,1115,390,'Gordura corporal',data.fat,'%',1);
+ drawReportChart(x,62,1120,1115,390,data.leanUnit==='kg'?'Massa magra / muscular':'Massa magra / muscular (%)',data.lean,data.leanUnit==='kg'?' kg':'%',1);
+ pages.push(p.c);
+ p=reportPage('CONSISTÊNCIA E ROTINA',`Aderência diária registrada • últimos ${data.days} dias`,3);x=p.x;
+ const seriesFor=k=>data.daily.map(d=>({date:d.log_date,value:+d[k]||0}));
+ drawReportChart(x,62,280,1115,360,'Σ Score',data.daily.map(d=>({date:d.log_date,value:+d.score||0})),'',0);
+ drawReportChart(x,62,675,1115,360,'Treino',seriesFor('training_pct'),'%',0);
+ drawReportChart(x,62,1070,1115,360,'Alimentação',seriesFor('nutrition_pct'),'%',0);
+ x.fillStyle='#526b63';x.font='19px Arial';x.fillText(`Hidratação média: ${data.hydAvg===null?'—':Math.round(data.hydAvg)+'%'}  •  Sono médio: ${data.sleepAvg===null?'—':reportFmt(data.sleepAvg)+' h'}  •  Atividades concluídas: ${data.acts.length}`,62,1505);
+ pages.push(p.c);
+ return canvasesToPdfBlob(pages,.92)
+}
+async function downloadProgressReport(){try{const days=progressReportDays||30;const data=buildProgressReportData(days);const pdf=makeProgressPdf(data);closeProgressDownload();downloadBlob(pdf,`Sigma_Radar_Progresso_${days}d_${localDate()}.pdf`);toast(`Relatório de ${days} dias gerado ✓`)}catch(e){console.error(e);toast('Não consegui gerar o relatório: '+(e?.message||e))}}
 
 async function logout(){if(sb)await sb.auth.signOut();session=null;show('landing')}function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2500)}
 

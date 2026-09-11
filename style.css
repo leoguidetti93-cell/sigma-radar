@@ -183,3 +183,5 @@
 .fastingDayCard{border:1px dashed #93b9aa!important;background:#edf6f1!important;padding:24px!important}.fastingDayCard b{color:var(--green)}.fastingDayCard p{margin-top:8px;color:var(--muted)}
 .shareStoryButton{margin-top:8px}.shareDayCard img{max-height:180px}.foodTopActions{flex-wrap:wrap}
 @media(max-width:700px){.myFoodRow{align-items:flex-start;flex-direction:column}.myFoodRow>div:last-child{width:100%}.profileFastingWindow{grid-template-columns:1fr}.fastingFields>div{flex-direction:column}}
+
+.progressDownloadCard{max-width:620px}.progressRangeButtons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.progressRangeButtons button{background:#fff;color:var(--green);border:1px solid var(--line)}.progressRangeButtons button.selected{background:var(--green);color:#fff}.progressReportPreview{display:flex;flex-direction:column;gap:6px;background:#f4f8f5;border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 16px}.progressReportPreview span{color:#65746e;line-height:1.5}@media(max-width:600px){.progressRangeButtons{grid-template-columns:1fr}}

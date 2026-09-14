@@ -190,3 +190,8 @@
 .energyCards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 14px}.energyCards article{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px}.energyCards small{display:block;color:var(--green);font-size:8px;letter-spacing:.12em;margin-bottom:8px}.energyCards span{display:block;font-size:10px;font-weight:800}.energyCards b{display:block;font-size:27px;margin:7px 0}.energyCards p{margin:0;color:var(--muted);font-size:10px}.energyBalance{background:var(--mint)!important;border-color:#c6dfd3!important}
 @media(max-width:900px){.energyCards{grid-template-columns:1fr 1fr}.energyCards article:last-child{grid-column:1/-1}}
 @media(max-width:600px){.energyCards{grid-template-columns:1fr}.energyCards article:last-child{grid-column:auto}}
+
+/* V5.6.0 • Radar closing responsivo */
+.radarClosingModal{overflow:hidden}
+.radarClosingCard{max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+@media(max-width:600px){.radarClosingModal{padding:8px;align-items:center}.radarClosingCard{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);padding:18px 16px 20px;border-radius:22px}.radarClosingCard img{height:135px;max-width:68%}.radarClosingCard h2{font-size:28px;line-height:1.05;margin:10px 0}.radarClosingCard>p{font-size:15px;line-height:1.45;margin:10px 0}.radarCloseSteps{margin:12px 0;gap:6px}.radarCloseSteps span{padding:9px 10px}.radarPulse{width:230px;height:230px;top:70px}}

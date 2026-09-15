@@ -831,3 +831,37 @@ async function downloadProgressReport(){try{const days=progressReportDays||30;co
 async function logout(){if(sb)await sb.auth.signOut();session=null;show('landing')}function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2500)}
 
 (async()=>{initSupabase();S.currentDate=localDate();await loadFoods();if(sb){const {data}=await sb.auth.getSession();if(data.session){session=data.session;await loadProfileAndEnter(data.session.user)}}})();
+
+/* V5.7.0 • Σ Coach visão: análise de prato por foto */
+function mealPhotoEscape(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openMealPhotoCapture(){const input=$('#mealPhotoInput');if(!input)return;$('#mealPhotoStatus').innerHTML='';input.click()}
+function closeMealPhotoReview(){$('#mealPhotoModal')?.classList.remove('open')}
+async function mealPhotoDataUrl(file){
+ const raw=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)});
+ return await new Promise(resolve=>{const img=new Image();img.onload=()=>{try{const max=1600,scale=Math.min(1,max/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height)),w=Math.max(1,Math.round((img.naturalWidth||img.width)*scale)),h=Math.max(1,Math.round((img.naturalHeight||img.height)*scale)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',.84))}catch(_){resolve(raw)}};img.onerror=()=>resolve(raw);img.src=raw})
+}
+function mealPhotoLibraryMatch(name){
+ const q=normName(name);if(!q)return null;let best=null,bestScore=0;
+ const qt=new Set(q.split(' ').filter(x=>x.length>2));
+ for(const f of S.foods||[]){const n=normName(f.name);let score=0;if(n===q)score=1;else if(n.includes(q)||q.includes(n))score=.9;else{const nt=new Set(n.split(' ').filter(x=>x.length>2)),inter=[...qt].filter(x=>nt.has(x)).length,den=Math.max(qt.size,nt.size,1);score=inter/den;if(inter>=2)score+=.12}if(score>bestScore){best=f;bestScore=score}}
+ return bestScore>=.52?{food:best,score:Math.min(1,bestScore)}:null
+}
+function buildMealPhotoDraft(raw){
+ const amount=Math.max(1,+raw.estimated_amount||100),unit=String(raw.unit||'g').toLowerCase()==='ml'?'ml':'g',match=mealPhotoLibraryMatch(raw.name);
+ if(match){const pi=portionInfo(match.food.portion,match.food.cat==='drink'?'ml':'g');if(pi.unit===unit){const item=foodItemFromLib(match.food,amount);item.fixed_portion=false;return{raw,item,displayName:match.food.name,amount,unit,matchName:match.food.name,matchScore:match.score,source:'library'}}}
+ const item={name:String(raw.name||'Alimento identificado'),grams:amount,baseAmount:amount,unit,kcal:+raw.kcal||0,p:+raw.protein_g||0,c:+raw.carbs_g||0,f:+raw.fat_g||0,portion:`${amount} ${unit}`,fixed_portion:false};
+ return{raw,item,displayName:item.name,amount,unit,matchName:null,matchScore:0,source:'estimate'}
+}
+async function analyzeMealPhoto(input){
+ const file=input.files?.[0];if(!file)return;const status=$('#mealPhotoStatus');status.innerHTML='<b>Σ Coach está analisando o prato…</b><small>Identificando alimentos e estimando porções.</small>';
+ try{const image=await mealPhotoDataUrl(file),{data,error}=await sb.functions.invoke('meal-photo',{body:{image}});if(error)throw error;const a=data?.analysis||data;if(!a?.foods?.length)throw new Error(a?.notes||'Não consegui identificar alimentos suficientes nesta foto.');S.mealPhotoDraft=a.foods.map(buildMealPhotoDraft);S.mealPhotoNotes=a.notes||'';S.mealPhotoConfidence=+a.overall_confidence||0;renderMealPhotoReview();$('#mealPhotoModal').classList.add('open');status.innerHTML='<b>Análise concluída ✓</b><small>Revise a estimativa antes de salvar a refeição.</small>'}catch(e){console.error('meal-photo',e);const detail=String(e?.message||e||'').replace(/<[^>]*>/g,'').slice(0,160);status.innerHTML=`<b>Não consegui analisar esta foto.</b><small>${detail||'Tente outra foto, com o prato inteiro e boa iluminação.'}</small>`}finally{input.value=''}
+}
+function mealPhotoDraftTotals(){let kcal=0,p=0,c=0,f=0;for(const d of S.mealPhotoDraft||[]){const z=itemTotals(d.item);kcal+=z.kcal;p+=z.p;c+=z.c;f+=z.f}return{kcal,p,c,f}}
+function renderMealPhotoReview(){
+ const el=$('#mealPhotoReview');if(!el)return;el.innerHTML=(S.mealPhotoDraft||[]).map((d,i)=>{const z=itemTotals(d.item),conf=Math.round((+d.raw?.confidence||0)*100);return `<div class="mealPhotoRow"><div><input value="${mealPhotoEscape(d.displayName)}" onchange="updateMealPhotoName(${i},this.value)"><small class="photoFoodMeta">${d.source==='library'?`<span class="photoMatch">✓ Encontrado na biblioteca Sigma</span>`:`<span class="photoEstimate">≈ Valores estimados pela IA</span>`}${d.raw?.preparation?` • ${mealPhotoEscape(d.raw.preparation)}`:''}${conf?` • confiança ${conf}%`:''}<br>${Math.round(z.kcal)} kcal • P ${z.p.toFixed(1)} • C ${z.c.toFixed(1)} • G ${z.f.toFixed(1)}</small></div><div class="photoAmount"><input type="number" min="1" step="5" value="${Math.round(d.amount)}" onchange="updateMealPhotoAmount(${i},this.value)"><span>${d.unit}</span></div><button class="photoRemove" onclick="removeMealPhotoItem(${i})">×</button></div>`}).join('');
+ const t=mealPhotoDraftTotals(),confidence=Math.round((S.mealPhotoConfidence||0)*100);$('#mealPhotoSummary').innerHTML=`<div><b>Estimativa do prato</b><small>${S.mealPhotoNotes?mealPhotoEscape(S.mealPhotoNotes):'Confira as quantidades antes de confirmar.'}${confidence?` • confiança geral ${confidence}%`:''}</small></div><div><b>${Math.round(t.kcal)} kcal</b><small>P ${t.p.toFixed(1)} • C ${t.c.toFixed(1)} • G ${t.f.toFixed(1)}</small></div>`
+}
+function updateMealPhotoName(i,value){const d=S.mealPhotoDraft?.[i];if(!d)return;const raw={...d.raw,name:value,estimated_amount:d.amount,unit:d.unit};S.mealPhotoDraft[i]=buildMealPhotoDraft(raw);renderMealPhotoReview()}
+function updateMealPhotoAmount(i,value){const d=S.mealPhotoDraft?.[i];if(!d)return;const amount=Math.max(1,+value||1);d.amount=amount;d.item.grams=amount;if(d.source==='estimate')d.item.baseAmount=Math.max(1,+d.raw.estimated_amount||d.item.baseAmount||amount);renderMealPhotoReview()}
+function removeMealPhotoItem(i){S.mealPhotoDraft?.splice(i,1);renderMealPhotoReview()}
+function confirmMealPhoto(){const m=S.plan.meals.find(x=>x.key===S.editingMealKey);if(!m)return closeMealPhotoReview();const items=(S.mealPhotoDraft||[]).map(d=>({...d.item}));if(!items.length)return toast('Nenhum alimento para incluir.');m.foodItems.push(...items);closeMealPhotoReview();renderEditMealItems();$('#mealPhotoStatus').innerHTML=`<b>${items.length} alimento(s) incluído(s) na edição ✓</b><small>Confira e toque em SALVAR ALTERAÇÕES para registrar a refeição.</small>`;S.mealPhotoDraft=[];toast('Estimativa adicionada à refeição ✓')}

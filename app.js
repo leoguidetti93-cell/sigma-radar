@@ -841,17 +841,34 @@ async function mealPhotoDataUrl(file){
  const raw=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)});
  return await new Promise(resolve=>{const img=new Image();img.onload=()=>{try{const max=1600,scale=Math.min(1,max/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height)),w=Math.max(1,Math.round((img.naturalWidth||img.width)*scale)),h=Math.max(1,Math.round((img.naturalHeight||img.height)*scale)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',.84))}catch(_){resolve(raw)}};img.onerror=()=>resolve(raw);img.src=raw})
 }
-function mealPhotoLibraryMatch(name){
- const q=normName(name);if(!q)return null;let best=null,bestScore=0;
- const qt=new Set(q.split(' ').filter(x=>x.length>2));
- for(const f of S.foods||[]){const n=normName(f.name);let score=0;if(n===q)score=1;else if(n.includes(q)||q.includes(n))score=.9;else{const nt=new Set(n.split(' ').filter(x=>x.length>2)),inter=[...qt].filter(x=>nt.has(x)).length,den=Math.max(qt.size,nt.size,1);score=inter/den;if(inter>=2)score+=.12}if(score>bestScore){best=f;bestScore=score}}
- return bestScore>=.52?{food:best,score:Math.min(1,bestScore)}:null
+function mealPhotoFoodAliases(food){return[food?.name,...(Array.isArray(food?.aliases)?food.aliases:[]),...(Array.isArray(food?.mealPhotoAliases)?food.mealPhotoAliases:[])].map(x=>String(x||'').trim()).filter(Boolean)}
+function mealPhotoMatchScore(query,target,raw){
+ const q=normName(query),t=normName(target);if(!q||!t)return 0; if(q===t)return 1;
+ let score=0; if(t.includes(q)||q.includes(t))score=Math.max(score,.88-Math.min(.12,Math.abs(t.length-q.length)*.004));
+ const qt=q.split(' ').filter(x=>x.length>2),tt=t.split(' ').filter(x=>x.length>2),inter=qt.filter(x=>tt.includes(x));
+ if(inter.length){const ratio=inter.length/Math.max(qt.length,tt.length,1);score=Math.max(score,ratio+(inter.length>=2 ? .18 : .05));
+  const prepWords=['grelhado','cozido','refogado','assado','integral','vermelho','cabotia','cabotiá','pure','puree','tomate','frango','arroz','abobora','abóbora'];
+  score+=inter.filter(x=>prepWords.includes(x)).length*.04
+ }
+ const role=String(raw?.ingredient_role||'').toLowerCase();
+ if(role==='garnish' && /pera|maca|maçã|banana|mamao|mamão|uva|melancia/.test(t))score-=.18;
+ if(String(raw?.preparation||'') && t.includes(normName(raw.preparation).split(' ')[0]||''))score+=.05;
+ return Math.max(0,Math.min(1,score))
+}
+function mealPhotoLibraryMatch(raw){
+ const data=typeof raw==='string'?{name:raw}:raw||{},queries=[data.match_name,data.name,...(Array.isArray(data.candidate_names)?data.candidate_names:[])].map(x=>String(x||'').trim()).filter(Boolean),seen=new Set();
+ let best=null,bestScore=0,bestAlias='';
+ for(const q of queries){const nq=normName(q);if(!nq||seen.has(nq))continue;seen.add(nq);
+  for(const f of S.foods||[]){for(const alias of mealPhotoFoodAliases(f)){const score=mealPhotoMatchScore(q,alias,data);if(score>bestScore){best=f;bestScore=score;bestAlias=alias}}}
+ }
+ return bestScore>=.56?{food:best,score:Math.min(1,bestScore),alias:bestAlias}:null
 }
 function buildMealPhotoDraft(raw){
- const amount=Math.max(1,+raw.estimated_amount||100),unit=String(raw.unit||'g').toLowerCase()==='ml'?'ml':'g',match=mealPhotoLibraryMatch(raw.name);
- if(match){const pi=portionInfo(match.food.portion,match.food.cat==='drink'?'ml':'g');if(pi.unit===unit){const item=foodItemFromLib(match.food,amount);item.fixed_portion=false;return{raw,item,displayName:match.food.name,amount,unit,matchName:match.food.name,matchScore:match.score,source:'library'}}}
- const item={name:String(raw.name||'Alimento identificado'),grams:amount,baseAmount:amount,unit,kcal:+raw.kcal||0,p:+raw.protein_g||0,c:+raw.carbs_g||0,f:+raw.fat_g||0,portion:`${amount} ${unit}`,fixed_portion:false};
- return{raw,item,displayName:item.name,amount,unit,matchName:null,matchScore:0,source:'estimate'}
+ const amount=Math.max(1,+raw.estimated_amount||100),unit=String(raw.unit||'g').toLowerCase()==='ml'?'ml':'g',match=mealPhotoLibraryMatch(raw);
+ if(match){const pi=portionInfo(match.food.portion,match.food.cat==='drink'?'ml':'g');if(pi.unit===unit){const item=foodItemFromLib(match.food,amount);item.fixed_portion=false;return{raw,item,displayName:match.food.name,amount,unit,matchName:match.food.name,matchScore:match.score,matchAlias:match.alias,source:'library'}}}
+ const display=String(raw.match_name||raw.name||'Alimento identificado');
+ const item={name:display,grams:amount,baseAmount:amount,unit,kcal:+raw.kcal||0,p:+raw.protein_g||0,c:+raw.carbs_g||0,f:+raw.fat_g||0,portion:`${amount} ${unit}`,fixed_portion:false};
+ return{raw,item,displayName:item.name,amount,unit,matchName:null,matchScore:0,matchAlias:null,source:'estimate'}
 }
 async function analyzeMealPhoto(input){
  const file=input.files?.[0];if(!file)return;const status=$('#mealPhotoStatus');status.innerHTML='<b>Σ Coach está analisando o prato…</b><small>Identificando alimentos e estimando porções.</small>';
@@ -859,8 +876,8 @@ async function analyzeMealPhoto(input){
 }
 function mealPhotoDraftTotals(){let kcal=0,p=0,c=0,f=0;for(const d of S.mealPhotoDraft||[]){const z=itemTotals(d.item);kcal+=z.kcal;p+=z.p;c+=z.c;f+=z.f}return{kcal,p,c,f}}
 function renderMealPhotoReview(){
- const el=$('#mealPhotoReview');if(!el)return;el.innerHTML=(S.mealPhotoDraft||[]).map((d,i)=>{const z=itemTotals(d.item),conf=Math.round((+d.raw?.confidence||0)*100);return `<div class="mealPhotoRow"><div><input value="${mealPhotoEscape(d.displayName)}" onchange="updateMealPhotoName(${i},this.value)"><small class="photoFoodMeta">${d.source==='library'?`<span class="photoMatch">✓ Encontrado na biblioteca Sigma</span>`:`<span class="photoEstimate">≈ Valores estimados pela IA</span>`}${d.raw?.preparation?` • ${mealPhotoEscape(d.raw.preparation)}`:''}${conf?` • confiança ${conf}%`:''}<br>${Math.round(z.kcal)} kcal • P ${z.p.toFixed(1)} • C ${z.c.toFixed(1)} • G ${z.f.toFixed(1)}</small></div><div class="photoAmount"><input type="number" min="1" step="5" value="${Math.round(d.amount)}" onchange="updateMealPhotoAmount(${i},this.value)"><span>${d.unit}</span></div><button class="photoRemove" onclick="removeMealPhotoItem(${i})">×</button></div>`}).join('');
- const t=mealPhotoDraftTotals(),confidence=Math.round((S.mealPhotoConfidence||0)*100);$('#mealPhotoSummary').innerHTML=`<div><b>Estimativa do prato</b><small>${S.mealPhotoNotes?mealPhotoEscape(S.mealPhotoNotes):'Confira as quantidades antes de confirmar.'}${confidence?` • confiança geral ${confidence}%`:''}</small></div><div><b>${Math.round(t.kcal)} kcal</b><small>P ${t.p.toFixed(1)} • C ${t.c.toFixed(1)} • G ${t.f.toFixed(1)}</small></div>`
+ const el=$('#mealPhotoReview');if(!el)return;el.innerHTML=(S.mealPhotoDraft||[]).map((d,i)=>{const z=itemTotals(d.item),conf=Math.round((+d.raw?.confidence||0)*100),confirm=d.raw?.needs_confirmation,alts=Array.isArray(d.raw?.candidate_names)&&d.raw.candidate_names.length?`<br>possíveis: ${mealPhotoEscape(d.raw.candidate_names.join(' • '))}`:'',visual=d.raw?.visual_description?`<br>${mealPhotoEscape(d.raw.visual_description)}`:'';return `<div class="mealPhotoRow"><div><input value="${mealPhotoEscape(d.displayName)}" onchange="updateMealPhotoName(${i},this.value)"><small class="photoFoodMeta">${d.source==='library'?`<span class="photoMatch">✓ Encontrado na biblioteca Sigma</span>`:`<span class="photoEstimate">≈ Valores estimados pela IA</span>`}${d.raw?.preparation?` • ${mealPhotoEscape(d.raw.preparation)}`:''}${d.raw?.ingredient_role?` • ${mealPhotoEscape(d.raw.ingredient_role)}`:''}${conf?` • confiança ${conf}%`:''}${confirm?` • confirmar item`:''}${alts}${visual}<br>${Math.round(z.kcal)} kcal • P ${z.p.toFixed(1)} • C ${z.c.toFixed(1)} • G ${z.f.toFixed(1)}</small></div><div class="photoAmount"><input type="number" min="1" step="5" value="${Math.round(d.amount)}" onchange="updateMealPhotoAmount(${i},this.value)"><span>${d.unit}</span></div><button class="photoRemove" onclick="removeMealPhotoItem(${i})">×</button></div>`}).join('');
+ const t=mealPhotoDraftTotals(),confidence=Math.round((S.mealPhotoConfidence||0)*100),needsReview=(S.mealPhotoDraft||[]).filter(x=>x.raw?.needs_confirmation).length;$('#mealPhotoSummary').innerHTML=`<div><b>Estimativa do prato</b><small>${S.mealPhotoNotes?mealPhotoEscape(S.mealPhotoNotes):'Confira as quantidades antes de confirmar.'}${confidence?` • confiança geral ${confidence}%`:''}${needsReview?` • ${needsReview} item(ns) para confirmar`:''}</small></div><div><b>${Math.round(t.kcal)} kcal</b><small>P ${t.p.toFixed(1)} • C ${t.c.toFixed(1)} • G ${t.f.toFixed(1)}</small></div>`
 }
 function updateMealPhotoName(i,value){const d=S.mealPhotoDraft?.[i];if(!d)return;const raw={...d.raw,name:value,estimated_amount:d.amount,unit:d.unit};S.mealPhotoDraft[i]=buildMealPhotoDraft(raw);renderMealPhotoReview()}
 function updateMealPhotoAmount(i,value){const d=S.mealPhotoDraft?.[i];if(!d)return;const amount=Math.max(1,+value||1);d.amount=amount;d.item.grams=amount;if(d.source==='estimate')d.item.baseAmount=Math.max(1,+d.raw.estimated_amount||d.item.baseAmount||amount);renderMealPhotoReview()}

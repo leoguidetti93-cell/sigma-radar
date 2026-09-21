@@ -3,8 +3,20 @@ const cors={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"au
 Deno.serve(async(req)=>{
  if(req.method==="OPTIONS")return new Response("ok",{headers:cors});
  try{
-  const {image}=await req.json(); if(!image)throw new Error("Imagem não enviada");
+  const body=await req.json(); const {image}=body||{}; if(!image)throw new Error("Imagem não enviada");
   const key=Deno.env.get("OPENAI_API_KEY"); if(!key)throw new Error("OPENAI_API_KEY não configurada");
+  if(body?.mode==="rerank"){
+   const foods=Array.isArray(body.foods)?body.foods.slice(0,12):[];
+   const compact=foods.map((x:any)=>({index:Number(x.index),detected:x.detected||{},candidates:Array.isArray(x.candidates)?x.candidates.slice(0,5):[]}));
+   const prompt=`Você é a segunda etapa do reconhecimento nutricional do Σ Coach. A primeira visão já descreveu os itens de uma foto e o sistema encontrou até 5 candidatos reais da biblioteca Sigma para cada item. Use A FOTO + descrição visual + preparação + candidatos para escolher o candidato MAIS COERENTE. Não force correspondência se nenhum candidato fizer sentido.
+Retorne SOMENTE JSON puro: {"selections":[{"index":0,"chosen_name":"nome EXATO de um candidato ou null","confidence":0.82,"reason":"motivo curto"}]}
+Regras: chosen_name deve copiar EXATAMENTE um nome listado em candidates; se houver ambiguidade relevante ou nenhum candidato combinar visualmente, use null; considere forma, textura, cor, contexto de prato salgado/doce e método de preparo; não escolha fruta para cubos de carne/frango/queijo; preparações específicas compatíveis (refogado, frito, assado, grelhado, purê) têm prioridade sobre versões genéricas; não mude quantidades nesta etapa.
+
+CANDIDATOS:
+${JSON.stringify(compact)}`;
+   const r=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{"Authorization":`Bearer ${key}`,"Content-Type":"application/json"},body:JSON.stringify({model:"gpt-5.6-luna",input:[{role:"user",content:[{type:"input_text",text:prompt},{type:"input_image",image_url:image}]}],reasoning:{effort:"low"},max_output_tokens:900})});
+   if(!r.ok)throw new Error(await r.text());const out=await r.json();const text=out.output_text||out.output?.flatMap((x:any)=>x.content||[]).map((x:any)=>x.text||"").join("")||"";const clean=text.replace(/^```json\s*/i,"").replace(/```$/," ").trim();const parsed=JSON.parse(clean);const selections=(Array.isArray(parsed?.selections)?parsed.selections:[]).map((x:any)=>({index:Number(x.index),chosen_name:x.chosen_name==null?null:String(x.chosen_name).slice(0,120),confidence:Math.max(0,Math.min(1,Number(x.confidence)||0)),reason:String(x.reason||"").slice(0,180)}));return new Response(JSON.stringify({selections}),{headers:{...cors,"Content-Type":"application/json"}})
+  }
   const prompt=`Você é o módulo de visão nutricional do Σ Coach. Analise UMA foto de um prato/refeição.
 Faça internamente em 2 etapas: (1) leitura visual honesta do que aparece; (2) tradução disso para alimentos comuns no Brasil.
 Não trate a estimativa como pesagem real.

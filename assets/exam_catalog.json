@@ -1,0 +1,1259 @@
+[
+  {
+    "key": "glicemia_jejum",
+    "name": "Glicemia de jejum",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "glicose de jejum",
+      "glicemia"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "hba1c",
+    "name": "Hemoglobina glicada (HbA1c)",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "%",
+    "aliases": [
+      "a1c",
+      "hemoglobina glicada"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "insulina_jejum",
+    "name": "Insulina de jejum",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "µUI/mL",
+    "aliases": [
+      "insulina basal"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "homa_ir",
+    "name": "HOMA-IR",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "índice",
+    "aliases": [
+      "homa ir"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "c_peptideo",
+    "name": "Peptídeo C",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "ng/mL",
+    "aliases": [
+      "c-peptideo",
+      "c peptide"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "frutosamina",
+    "name": "Frutosamina",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "µmol/L",
+    "aliases": [],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "acido_urico",
+    "name": "Ácido úrico",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "uricemia"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "lactato",
+    "name": "Lactato",
+    "category": "Metabolismo e glicemia",
+    "default_unit": "mmol/L",
+    "aliases": [
+      "ácido lático"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "colesterol_total",
+    "name": "Colesterol total",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "colesterol"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "hdl",
+    "name": "HDL colesterol",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "hdl-c",
+      "colesterol hdl"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "ldl",
+    "name": "LDL colesterol",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "ldl-c",
+      "colesterol ldl"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "vldl",
+    "name": "VLDL colesterol",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "vldl-c"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "nao_hdl",
+    "name": "Colesterol não-HDL",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "não hdl",
+      "non-hdl"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "triglicerides",
+    "name": "Triglicerídeos",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "triglicerides",
+      "tg"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "apoa1",
+    "name": "Apolipoproteína A1",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "apo a1",
+      "apoa-1"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "apob",
+    "name": "Apolipoproteína B",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "apo b",
+      "apob"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "lpa",
+    "name": "Lipoproteína(a)",
+    "category": "Perfil lipídico",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "lp(a)",
+      "lipoproteina a"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "tsh",
+    "name": "TSH",
+    "category": "Tireoide",
+    "default_unit": "µUI/mL",
+    "aliases": [
+      "tireotrofina"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "t4_livre",
+    "name": "T4 livre",
+    "category": "Tireoide",
+    "default_unit": "ng/dL",
+    "aliases": [
+      "ft4",
+      "tiroxina livre"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "t4_total",
+    "name": "T4 total",
+    "category": "Tireoide",
+    "default_unit": "µg/dL",
+    "aliases": [
+      "tiroxina total"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "t3_livre",
+    "name": "T3 livre",
+    "category": "Tireoide",
+    "default_unit": "pg/mL",
+    "aliases": [
+      "ft3",
+      "triiodotironina livre"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "t3_total",
+    "name": "T3 total",
+    "category": "Tireoide",
+    "default_unit": "ng/dL",
+    "aliases": [
+      "triiodotironina total"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "t3_reverso",
+    "name": "T3 reverso",
+    "category": "Tireoide",
+    "default_unit": "ng/dL",
+    "aliases": [
+      "reverse t3",
+      "rt3"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "anti_tpo",
+    "name": "Anti-TPO",
+    "category": "Tireoide",
+    "default_unit": "UI/mL",
+    "aliases": [
+      "anticorpo antitireoperoxidase"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "anti_tg",
+    "name": "Anti-tireoglobulina",
+    "category": "Tireoide",
+    "default_unit": "UI/mL",
+    "aliases": [
+      "anti tg",
+      "anticorpo antitireoglobulina"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "trab",
+    "name": "TRAb",
+    "category": "Tireoide",
+    "default_unit": "UI/L",
+    "aliases": [
+      "anticorpo receptor tsh"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "testosterona_total",
+    "name": "Testosterona total",
+    "category": "Hormônios",
+    "default_unit": "ng/dL",
+    "aliases": [
+      "testosterona"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "testosterona_livre",
+    "name": "Testosterona livre",
+    "category": "Hormônios",
+    "default_unit": "ng/dL",
+    "aliases": [
+      "testo livre",
+      "free testosterone"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "shbg",
+    "name": "SHBG",
+    "category": "Hormônios",
+    "default_unit": "nmol/L",
+    "aliases": [
+      "globulina ligadora hormônios sexuais"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "estradiol",
+    "name": "Estradiol (E2)",
+    "category": "Hormônios",
+    "default_unit": "pg/mL",
+    "aliases": [
+      "e2"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "lh",
+    "name": "LH",
+    "category": "Hormônios",
+    "default_unit": "mUI/mL",
+    "aliases": [
+      "hormônio luteinizante"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "fsh",
+    "name": "FSH",
+    "category": "Hormônios",
+    "default_unit": "mUI/mL",
+    "aliases": [
+      "hormônio folículo estimulante"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "prolactina",
+    "name": "Prolactina",
+    "category": "Hormônios",
+    "default_unit": "ng/mL",
+    "aliases": [],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "progesterona",
+    "name": "Progesterona",
+    "category": "Hormônios",
+    "default_unit": "ng/mL",
+    "aliases": [],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "dhea_s",
+    "name": "DHEA-S",
+    "category": "Hormônios",
+    "default_unit": "µg/dL",
+    "aliases": [
+      "sulfato de dhea"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "dht",
+    "name": "DHT",
+    "category": "Hormônios",
+    "default_unit": "ng/dL",
+    "aliases": [
+      "di-hidrotestosterona"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "cortisol_manha",
+    "name": "Cortisol - manhã",
+    "category": "Hormônios",
+    "default_unit": "µg/dL",
+    "aliases": [
+      "cortisol matinal"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "cortisol_noite",
+    "name": "Cortisol - noite",
+    "category": "Hormônios",
+    "default_unit": "µg/dL",
+    "aliases": [
+      "cortisol noturno"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "acth",
+    "name": "ACTH",
+    "category": "Hormônios",
+    "default_unit": "pg/mL",
+    "aliases": [
+      "corticotrofina"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "igf1",
+    "name": "IGF-1",
+    "category": "Hormônios",
+    "default_unit": "ng/mL",
+    "aliases": [
+      "somatomedina c"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "gh",
+    "name": "GH",
+    "category": "Hormônios",
+    "default_unit": "ng/mL",
+    "aliases": [
+      "hormônio do crescimento"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "hemacias",
+    "name": "Hemácias",
+    "category": "Hemograma",
+    "default_unit": "milhões/µL",
+    "aliases": [
+      "eritrócitos"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "hemoglobina",
+    "name": "Hemoglobina",
+    "category": "Hemograma",
+    "default_unit": "g/dL",
+    "aliases": [
+      "hb"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "hematocrito",
+    "name": "Hematócrito",
+    "category": "Hemograma",
+    "default_unit": "%",
+    "aliases": [
+      "ht"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vcm",
+    "name": "VCM",
+    "category": "Hemograma",
+    "default_unit": "fL",
+    "aliases": [
+      "volume corpuscular médio"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "hcm",
+    "name": "HCM",
+    "category": "Hemograma",
+    "default_unit": "pg",
+    "aliases": [
+      "hemoglobina corpuscular média"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "chcm",
+    "name": "CHCM",
+    "category": "Hemograma",
+    "default_unit": "g/dL",
+    "aliases": [
+      "concentração hemoglobina corpuscular"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "rdw",
+    "name": "RDW",
+    "category": "Hemograma",
+    "default_unit": "%",
+    "aliases": [
+      "amplitude distribuição hemácias"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "leucocitos",
+    "name": "Leucócitos",
+    "category": "Hemograma",
+    "default_unit": "/µL",
+    "aliases": [
+      "wbc"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "neutrofilos",
+    "name": "Neutrófilos",
+    "category": "Hemograma",
+    "default_unit": "/µL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "linfocitos",
+    "name": "Linfócitos",
+    "category": "Hemograma",
+    "default_unit": "/µL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "monocitos",
+    "name": "Monócitos",
+    "category": "Hemograma",
+    "default_unit": "/µL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "eosinofilos",
+    "name": "Eosinófilos",
+    "category": "Hemograma",
+    "default_unit": "/µL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "basofilos",
+    "name": "Basófilos",
+    "category": "Hemograma",
+    "default_unit": "/µL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "plaquetas",
+    "name": "Plaquetas",
+    "category": "Hemograma",
+    "default_unit": "mil/µL",
+    "aliases": [
+      "plt"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vpm",
+    "name": "VPM",
+    "category": "Hemograma",
+    "default_unit": "fL",
+    "aliases": [
+      "mpv",
+      "volume plaquetário médio"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ferritina",
+    "name": "Ferritina",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "ng/mL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ferro_serico",
+    "name": "Ferro sérico",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "µg/dL",
+    "aliases": [
+      "ferro"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "transferrina",
+    "name": "Transferrina",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ctlf",
+    "name": "Capacidade total de ligação do ferro (CTLF/TIBC)",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "µg/dL",
+    "aliases": [
+      "tibc",
+      "ctlf"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "saturacao_transferrina",
+    "name": "Saturação de transferrina",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "%",
+    "aliases": [
+      "sat transferrina"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vitamina_b12",
+    "name": "Vitamina B12",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "pg/mL",
+    "aliases": [
+      "cobalamina"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "folato",
+    "name": "Folato / Ácido fólico",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "ng/mL",
+    "aliases": [
+      "ácido fólico"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "homocisteina",
+    "name": "Homocisteína",
+    "category": "Ferro e vitaminas hematológicas",
+    "default_unit": "µmol/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "creatinina",
+    "name": "Creatinina",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ureia",
+    "name": "Ureia",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "bun"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "egfr",
+    "name": "TFG estimada (eGFR)",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mL/min/1,73m²",
+    "aliases": [
+      "tfg",
+      "filtração glomerular"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "cistatina_c",
+    "name": "Cistatina C",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mg/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "sodio",
+    "name": "Sódio",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mEq/L",
+    "aliases": [
+      "na"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "potassio",
+    "name": "Potássio",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mEq/L",
+    "aliases": [
+      "k"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "cloro",
+    "name": "Cloro",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mEq/L",
+    "aliases": [
+      "cloreto"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "bicarbonato",
+    "name": "Bicarbonato",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mEq/L",
+    "aliases": [
+      "co2 total"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "calcio_total",
+    "name": "Cálcio total",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "cálcio"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "calcio_ionico",
+    "name": "Cálcio iônico",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mmol/L",
+    "aliases": [
+      "cálcio ionizado"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "fosforo",
+    "name": "Fósforo",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "fosfato"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "magnesio",
+    "name": "Magnésio",
+    "category": "Rim e eletrólitos",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "mg"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "tgo_ast",
+    "name": "TGO / AST",
+    "category": "Fígado e proteínas",
+    "default_unit": "U/L",
+    "aliases": [
+      "ast",
+      "tgo"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "tgp_alt",
+    "name": "TGP / ALT",
+    "category": "Fígado e proteínas",
+    "default_unit": "U/L",
+    "aliases": [
+      "alt",
+      "tgp"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ggt",
+    "name": "Gama GT (GGT)",
+    "category": "Fígado e proteínas",
+    "default_unit": "U/L",
+    "aliases": [
+      "gama gt"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "fosfatase_alcalina",
+    "name": "Fosfatase alcalina",
+    "category": "Fígado e proteínas",
+    "default_unit": "U/L",
+    "aliases": [
+      "fa"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "bilirrubina_total",
+    "name": "Bilirrubina total",
+    "category": "Fígado e proteínas",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "bilirrubina_direta",
+    "name": "Bilirrubina direta",
+    "category": "Fígado e proteínas",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "bilirrubina_indireta",
+    "name": "Bilirrubina indireta",
+    "category": "Fígado e proteínas",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "albumina",
+    "name": "Albumina",
+    "category": "Fígado e proteínas",
+    "default_unit": "g/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "proteinas_totais",
+    "name": "Proteínas totais",
+    "category": "Fígado e proteínas",
+    "default_unit": "g/dL",
+    "aliases": [
+      "proteina total"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "globulinas",
+    "name": "Globulinas",
+    "category": "Fígado e proteínas",
+    "default_unit": "g/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "relacao_ag",
+    "name": "Relação albumina/globulina",
+    "category": "Fígado e proteínas",
+    "default_unit": "índice",
+    "aliases": [
+      "a/g"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "amilase",
+    "name": "Amilase",
+    "category": "Pâncreas e digestivo",
+    "default_unit": "U/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "lipase",
+    "name": "Lipase",
+    "category": "Pâncreas e digestivo",
+    "default_unit": "U/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "elastase_fecal",
+    "name": "Elastase fecal",
+    "category": "Pâncreas e digestivo",
+    "default_unit": "µg/g",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "pcr",
+    "name": "Proteína C reativa (PCR)",
+    "category": "Inflamação e imunidade",
+    "default_unit": "mg/L",
+    "aliases": [
+      "crp"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "pcr_us",
+    "name": "PCR ultrassensível",
+    "category": "Inflamação e imunidade",
+    "default_unit": "mg/L",
+    "aliases": [
+      "hs-crp",
+      "pcr us"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vhs",
+    "name": "VHS",
+    "category": "Inflamação e imunidade",
+    "default_unit": "mm/h",
+    "aliases": [
+      "velocidade hemossedimentação"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "fibrinogenio",
+    "name": "Fibrinogênio",
+    "category": "Inflamação e imunidade",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "fan",
+    "name": "FAN",
+    "category": "Inflamação e imunidade",
+    "default_unit": "título",
+    "aliases": [
+      "ana"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "igA",
+    "name": "Imunoglobulina A (IgA)",
+    "category": "Inflamação e imunidade",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "igG",
+    "name": "Imunoglobulina G (IgG)",
+    "category": "Inflamação e imunidade",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "igM",
+    "name": "Imunoglobulina M (IgM)",
+    "category": "Inflamação e imunidade",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vitamina_d",
+    "name": "Vitamina D - 25(OH)D",
+    "category": "Vitaminas e minerais",
+    "default_unit": "ng/mL",
+    "aliases": [
+      "25-oh vitamina d",
+      "25 hydroxy d"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vitamina_a",
+    "name": "Vitamina A / Retinol",
+    "category": "Vitaminas e minerais",
+    "default_unit": "µg/dL",
+    "aliases": [
+      "retinol"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vitamina_e",
+    "name": "Vitamina E / Alfa-tocoferol",
+    "category": "Vitaminas e minerais",
+    "default_unit": "mg/L",
+    "aliases": [
+      "alfa tocoferol"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vitamina_b1",
+    "name": "Vitamina B1 / Tiamina",
+    "category": "Vitaminas e minerais",
+    "default_unit": "µg/L",
+    "aliases": [
+      "tiamina"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vitamina_b6",
+    "name": "Vitamina B6 / Piridoxina",
+    "category": "Vitaminas e minerais",
+    "default_unit": "µg/L",
+    "aliases": [
+      "piridoxina"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "vitamina_c",
+    "name": "Vitamina C",
+    "category": "Vitaminas e minerais",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "ácido ascórbico"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "zinco",
+    "name": "Zinco",
+    "category": "Vitaminas e minerais",
+    "default_unit": "µg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "cobre",
+    "name": "Cobre",
+    "category": "Vitaminas e minerais",
+    "default_unit": "µg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "selenio",
+    "name": "Selênio",
+    "category": "Vitaminas e minerais",
+    "default_unit": "µg/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ck",
+    "name": "CK / CPK",
+    "category": "Músculo e performance",
+    "default_unit": "U/L",
+    "aliases": [
+      "creatinoquinase",
+      "creatina quinase"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "ldh",
+    "name": "LDH",
+    "category": "Músculo e performance",
+    "default_unit": "U/L",
+    "aliases": [
+      "desidrogenase lática"
+    ],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "mioglobina",
+    "name": "Mioglobina",
+    "category": "Músculo e performance",
+    "default_unit": "ng/mL",
+    "aliases": [],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "aldolase",
+    "name": "Aldolase",
+    "category": "Músculo e performance",
+    "default_unit": "U/L",
+    "aliases": [],
+    "fit_relevance": "high"
+  },
+  {
+    "key": "tp",
+    "name": "Tempo de protrombina (TP)",
+    "category": "Coagulação",
+    "default_unit": "s",
+    "aliases": [
+      "pt"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "inr",
+    "name": "INR",
+    "category": "Coagulação",
+    "default_unit": "índice",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ttpa",
+    "name": "TTPa",
+    "category": "Coagulação",
+    "default_unit": "s",
+    "aliases": [
+      "aptt"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "d_dimero",
+    "name": "D-dímero",
+    "category": "Coagulação",
+    "default_unit": "ng/mL",
+    "aliases": [
+      "d dimero"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "troponina_i",
+    "name": "Troponina I",
+    "category": "Cardiovascular",
+    "default_unit": "ng/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "troponina_t",
+    "name": "Troponina T",
+    "category": "Cardiovascular",
+    "default_unit": "ng/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "bnp",
+    "name": "BNP",
+    "category": "Cardiovascular",
+    "default_unit": "pg/mL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "nt_probnp",
+    "name": "NT-proBNP",
+    "category": "Cardiovascular",
+    "default_unit": "pg/mL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "densidade_urinaria",
+    "name": "Densidade urinária",
+    "category": "Urina e hidratação",
+    "default_unit": "índice",
+    "aliases": [
+      "densidade urina"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "ph_urina",
+    "name": "pH urinário",
+    "category": "Urina e hidratação",
+    "default_unit": "pH",
+    "aliases": [
+      "ph urina"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "proteina_urina",
+    "name": "Proteína urinária",
+    "category": "Urina e hidratação",
+    "default_unit": "mg/dL",
+    "aliases": [
+      "proteinúria"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "microalbuminuria",
+    "name": "Microalbuminúria",
+    "category": "Urina e hidratação",
+    "default_unit": "mg/g",
+    "aliases": [
+      "albumina urinária"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "creatinina_urina",
+    "name": "Creatinina urinária",
+    "category": "Urina e hidratação",
+    "default_unit": "mg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "sodio_urina",
+    "name": "Sódio urinário",
+    "category": "Urina e hidratação",
+    "default_unit": "mEq/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "potassio_urina",
+    "name": "Potássio urinário",
+    "category": "Urina e hidratação",
+    "default_unit": "mEq/L",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "psa_total",
+    "name": "PSA total",
+    "category": "Outros marcadores úteis",
+    "default_unit": "ng/mL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "psa_livre",
+    "name": "PSA livre",
+    "category": "Outros marcadores úteis",
+    "default_unit": "ng/mL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "beta_hcg",
+    "name": "Beta-hCG",
+    "category": "Outros marcadores úteis",
+    "default_unit": "mUI/mL",
+    "aliases": [
+      "hcg"
+    ],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "cortisol_salivar",
+    "name": "Cortisol salivar",
+    "category": "Outros marcadores úteis",
+    "default_unit": "µg/dL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "leptina",
+    "name": "Leptina",
+    "category": "Outros marcadores úteis",
+    "default_unit": "ng/mL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  },
+  {
+    "key": "adiponectina",
+    "name": "Adiponectina",
+    "category": "Outros marcadores úteis",
+    "default_unit": "µg/mL",
+    "aliases": [],
+    "fit_relevance": "medium"
+  }
+]

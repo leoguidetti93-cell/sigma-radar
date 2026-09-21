@@ -37,6 +37,17 @@ INTELIGÊNCIA V5.5 — ENTENDA A INTENÇÃO, NÃO PALAVRAS-CHAVE
 - Ao interpretar o resumo do treino, use exercícios + atividades do plano vigente do dia, inclusive quando o usuário reprogramou o treino no mesmo dia.
 - Feedback pós-treino é percepção do usuário. Cansaço isolado não exige replanejamento; repetição + sono/carga/aderência pode justificar análise. Dor não deve ser diagnosticada.
 
+SAÚDE V6.0 — CONTEXTO CLÍNICO SEM DIAGNÓSTICO
+- Você recebe health_records com exames, medicações, suplementos, dores/sintomas, terapias e procedimentos cadastrados pelo próprio usuário. Use isso para contextualizar treino, alimentação, recuperação, hidratação e metas, nunca para substituir médico, nutricionista ou outro profissional.
+- Resultados laboratoriais são dados, não diagnósticos. Quando houver ref_min/ref_max informados pelo laboratório, você pode descrever se o valor está acima/abaixo/dentro daquela referência específica e observar tendência ao longo das datas. Não invente faixa de referência universal e não conclua doença, deficiência, hipogonadismo, diabetes, disfunção tireoidiana ou qualquer diagnóstico.
+- NUNCA mande iniciar, interromper, trocar ou ajustar dose/frequência de medicamento. Também não prescreva hormônios, medicamentos ou suplementos terapêuticos. Se a pergunta envolver ajuste de prescrição, explique que isso deve ser definido pelo profissional responsável.
+- Medicações ativas podem mudar contexto de apetite, tolerância alimentar, energia, hidratação e treino; considere o que o usuário registrou, mas não atribua causalidade clínica sem evidência.
+- Suplementos ativos entram no contexto nutricional/rotina. Não conte automaticamente calorias/macros de um suplemento apenas pelo nome se os valores nutricionais não estiverem disponíveis no plano/alimento cadastrado.
+- Dor/sintoma ativo deve deixar recomendações de treino mais conservadoras na região relacionada. Pergunte sobre evolução apenas quando indispensável. Não diagnostique lesão. Se o usuário relatar sinais potencialmente urgentes (ex.: dor no peito, falta de ar importante, desmaio, déficit neurológico súbito, reação alérgica grave), priorize orientação de atendimento imediato em vez de otimização fitness.
+- Restrições/liberação de exercício registradas em procedimentos ou terapias têm prioridade sobre sugestões de treino. Nunca contrarie uma restrição profissional cadastrada.
+- Use tendências (datas diferentes) em vez de supervalorizar um resultado isolado. Diferencie claramente fato registrado, leitura do laboratório e hipótese geral.
+- structured health_records são mais atuais e específicos que os antigos campos livres medications_text/supplements_text quando houver conflito.
+
 
 REGRA DE PERSONALIZAÇÃO V2.2:
 - Ao alterar um treino de um dia, analise AUTOMATICAMENTE o impacto no restante da semana. Se houver sobreposição/recuperação comprometida, proponha a reorganização semanal já na primeira resposta. Atividades complementares (esteira, cardio, sauna etc.) não ocupam automaticamente o dia inteiro: combine com musculação quando tempo e recuperação permitirem; se reduzir duração planejada, explique por quê.
@@ -163,7 +174,7 @@ Deno.serve(async (req) => {
     const iso = (d: Date) => d.toISOString().slice(0,10);
     const fromD = new Date(anchor); fromD.setUTCDate(fromD.getUTCDate()-7);
     const toD = new Date(anchor); toD.setUTCDate(toD.getUTCDate()+10);
-    const [profileRes, dayRes, mealsRes, exRes, activityRes, histRes, beverageRes, beverageHistRes, workoutRes, nearbyWorkoutsRes, bodyRes, loadRes, conversationRes, coachActionsRes, weeklyReviewsRes, sleepRes, customFoodsRes, nutritionRulesRes, recentMealsRes, feedbackRes] = await Promise.all([
+    const [profileRes, dayRes, mealsRes, exRes, activityRes, histRes, beverageRes, beverageHistRes, workoutRes, nearbyWorkoutsRes, bodyRes, loadRes, conversationRes, coachActionsRes, weeklyReviewsRes, sleepRes, customFoodsRes, nutritionRulesRes, recentMealsRes, feedbackRes, healthExamsRes, healthMedsRes, healthSuppsRes, healthSymptomsRes, healthTherapiesRes, healthProceduresRes] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
       supabase.from("daily_logs").select("*").eq("user_id", user.id).eq("log_date", currentDate).maybeSingle(),
       supabase.from("meal_logs").select("*").eq("user_id", user.id).eq("log_date", currentDate).order("meal_time"),
@@ -184,6 +195,12 @@ Deno.serve(async (req) => {
       supabase.from("nutrition_rules").select("*").eq("user_id", user.id).eq("active", true).order("created_at", { ascending: false }).limit(80),
       supabase.from("meal_logs").select("log_date,meal_key,meal_name,meal_time,foods,completed,skipped,kcal,protein_g,carbs_g,fat_g").eq("user_id", user.id).order("log_date", { ascending: false }).limit(240),
       supabase.from("workout_feedback").select("*").eq("user_id", user.id).order("log_date", { ascending: false }).limit(30),
+      supabase.from("health_exam_results").select("exam_date,marker_key,marker_name,value_numeric,value_text,unit,ref_min,ref_max,ref_text,fasting,lab_name,notes").eq("user_id", user.id).order("exam_date", { ascending: false }).limit(80),
+      supabase.from("health_medications").select("name,dose_value,dose_unit,frequency_text,route,start_date,end_date,status,reason,notes").eq("user_id", user.id).order("created_at", { ascending: false }).limit(60),
+      supabase.from("health_supplements").select("name,dose_value,dose_unit,frequency_text,start_date,end_date,status,purpose,notes").eq("user_id", user.id).order("created_at", { ascending: false }).limit(60),
+      supabase.from("health_symptoms").select("symptom_date,kind,symptom_name,body_area,side,severity,description,triggers,status,resolved_at").eq("user_id", user.id).order("symptom_date", { ascending: false }).limit(80),
+      supabase.from("health_therapies").select("therapy_type,name,provider,frequency_text,start_date,end_date,status,notes").eq("user_id", user.id).order("created_at", { ascending: false }).limit(50),
+      supabase.from("health_procedures").select("procedure_type,name,procedure_date,restrictions,exercise_clearance,provider,notes").eq("user_id", user.id).order("procedure_date", { ascending: false }).limit(50),
     ]);
 
     const recentConversation = (conversationRes.data || []).slice().reverse();
@@ -219,6 +236,14 @@ Deno.serve(async (req) => {
       nutrition_rules: nutritionRulesRes.data || [],
       recent_meal_logs: recentMealsRes.data || [],
       workout_feedback: feedbackRes.data || [],
+      health_records: {
+        exams: healthExamsRes.data || body.health_context?.recent_exams || [],
+        medications: healthMedsRes.data || body.health_context?.active_medications || [],
+        supplements: healthSuppsRes.data || body.health_context?.active_supplements || [],
+        symptoms: healthSymptomsRes.data || body.health_context?.active_symptoms || [],
+        therapies: healthTherapiesRes.data || body.health_context?.active_therapies || [],
+        procedures: healthProceduresRes.data || body.health_context?.recent_procedures || [],
+      },
       recent_days: histRes.data || [],
       recent_actions: coachActionsRes.data || [],
       recent_weekly_reviews: weeklyReviewsRes.data || [],

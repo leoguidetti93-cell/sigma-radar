@@ -44,42 +44,67 @@
     "approx": true
   },
   {
-    "name": "Abobrinha",
-    "cat": "veg",
+    "name": "Abadejo assado",
+    "cat": "protein",
     "portion": "100 g",
-    "kcal": 31,
-    "p": 1.8,
-    "c": 6.2,
-    "f": 0.4,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Abobrinha italiana",
-    "cat": "veg",
-    "portion": "100 g",
-    "kcal": 35,
-    "p": 2,
-    "c": 6,
-    "f": 0.3,
-    "origin": "Sigma ampliado",
-    "approx": true
-  },
-  {
-    "name": "Abobrinha refogada",
-    "cat": "veg",
-    "portion": "100 g",
-    "kcal": 41,
-    "p": 1.4,
-    "c": 5.1,
-    "f": 1.9,
-    "origin": "Sigma",
-    "approx": true,
+    "kcal": 111.6,
+    "p": 23.5,
+    "c": 0,
+    "f": 1.2,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-273",
     "aliases": [
-      "Abobrinha salteada"
-    ],
-    "mealPhotoAliases": [
-      "abobrinha"
+      "Filé de abadejo assado"
+    ]
+  },
+  {
+    "name": "Abadejo cozido",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 91.1,
+    "p": 19.3,
+    "c": 0,
+    "f": 0.9,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-274",
+    "aliases": [
+      "Filé de abadejo cozido"
+    ]
+  },
+  {
+    "name": "Abadejo cru",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 59.1,
+    "p": 13.1,
+    "c": 0,
+    "f": 0.4,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-275",
+    "aliases": [
+      "Filé de abadejo cru"
+    ]
+  },
+  {
+    "name": "Abadejo grelhado",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 129.6,
+    "p": 27.6,
+    "c": 0,
+    "f": 1.3,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-276",
+    "aliases": [
+      "Filé de abadejo grelhado"
     ]
   },
   {
@@ -197,6 +222,94 @@
     "approx": true
   },
   {
+    "name": "Abobrinha",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 31,
+    "p": 1.8,
+    "c": 6.2,
+    "f": 0.4,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Abobrinha italiana",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 35,
+    "p": 2,
+    "c": 6,
+    "f": 0.3,
+    "origin": "Sigma ampliado",
+    "approx": true
+  },
+  {
+    "name": "Abobrinha refogada",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 41,
+    "p": 1.4,
+    "c": 5.1,
+    "f": 1.9,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Abobrinha salteada"
+    ],
+    "mealPhotoAliases": [
+      "abobrinha"
+    ]
+  },
+  {
+    "name": "Açaí com xarope",
+    "cat": "carb",
+    "portion": "200 g",
+    "kcal": 220,
+    "p": 2,
+    "c": 48,
+    "f": 3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Açaí polpa sem açúcar",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 70,
+    "p": 1,
+    "c": 6,
+    "f": 5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Açaí polpa sem xarope",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 55,
+    "p": 0.8,
+    "c": 13.6,
+    "f": 0.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Acarajé",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 289.2,
+    "p": 8.3,
+    "c": 19.1,
+    "f": 19.9,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-525",
+    "aliases": [
+      "Acaraje"
+    ]
+  },
+  {
     "name": "Acelga",
     "cat": "veg",
     "portion": "100 g",
@@ -204,6 +317,28 @@
     "p": 2.0,
     "c": 6.9,
     "f": 0.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Acém bovino cozido",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 27,
+    "c": 0,
+    "f": 7,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Acém cozido",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 174,
+    "p": 30.2,
+    "c": 3.5,
+    "f": 5.8,
     "origin": "Sigma",
     "approx": true
   },
@@ -231,28 +366,6 @@
     "contains_animal_products": true
   },
   {
-    "name": "Acém bovino cozido",
-    "cat": "protein",
-    "portion": "100 g",
-    "kcal": 170,
-    "p": 27,
-    "c": 0,
-    "f": 7,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Acém cozido",
-    "cat": "protein",
-    "portion": "100 g",
-    "kcal": 174,
-    "p": 30.2,
-    "c": 3.5,
-    "f": 5.8,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Agrião",
     "cat": "veg",
     "portion": "100 g",
@@ -260,6 +373,94 @@
     "p": 1.7,
     "c": 5.9,
     "f": 0.4,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água com eletrólitos zero",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água com gás",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água de coco",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água de coco industrializada",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água saborizada com hortelã",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água saborizada com limão",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Água tônica zero",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
     "origin": "Sigma",
     "approx": true
   },
@@ -363,6 +564,22 @@
     "approx": true
   },
   {
+    "name": "Almeirão refogado",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 65.1,
+    "p": 1.7,
+    "c": 5.7,
+    "f": 4.8,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-85",
+    "aliases": [
+      "Almeirao refogado"
+    ]
+  },
+  {
     "name": "Almôndega de patinho assada",
     "cat": "protein",
     "portion": "100 g",
@@ -407,6 +624,17 @@
     "approx": true
   },
   {
+    "name": "Amêndoas",
+    "cat": "fat",
+    "portion": "15 g",
+    "kcal": 71,
+    "p": 2.4,
+    "c": 2.4,
+    "f": 6.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Amendoim japonês assado",
     "cat": "fat",
     "portion": "15 g",
@@ -440,17 +668,6 @@
     "approx": true
   },
   {
-    "name": "Amêndoas",
-    "cat": "fat",
-    "portion": "15 g",
-    "kcal": 71,
-    "p": 2.4,
-    "c": 2.4,
-    "f": 6.3,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Arroz 7 grãos",
     "cat": "carb",
     "portion": "100 g",
@@ -478,6 +695,17 @@
     "mealPhotoAliases": [
       "arroz multigrãos"
     ]
+  },
+  {
+    "name": "Arroz à grega",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 135,
+    "p": 2.7,
+    "c": 25,
+    "f": 2.5,
+    "origin": "Sigma",
+    "approx": true
   },
   {
     "name": "Arroz basmati cozido",
@@ -550,6 +778,47 @@
     ],
     "mealPhotoAliases": [
       "arroz branco"
+    ]
+  },
+  {
+    "name": "Arroz carreteiro",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 175,
+    "p": 8,
+    "c": 22,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Carreteiro"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Arroz com feijão e carne moída",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 155,
+    "p": 8.5,
+    "c": 19,
+    "f": 5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Arroz e feijão",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 128,
+    "p": 4.2,
+    "c": 23,
+    "f": 1.8,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Arroz com feijão"
     ]
   },
   {
@@ -723,6 +992,39 @@
     "approx": true
   },
   {
+    "name": "Atum em óleo",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 165.9,
+    "p": 26.2,
+    "c": 0,
+    "f": 6.0,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-277",
+    "aliases": [
+      "Atum em conserva em óleo",
+      "Atum conserva em óleo"
+    ]
+  },
+  {
+    "name": "Atum fresco cru",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 117.5,
+    "p": 25.7,
+    "c": 0,
+    "f": 0.9,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-278",
+    "aliases": [
+      "Atum cru fresco"
+    ]
+  },
+  {
     "name": "Atum fresco grelhado",
     "cat": "protein",
     "portion": "100 g",
@@ -742,6 +1044,17 @@
     "c": 0,
     "f": 7,
     "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Aveia com banana",
+    "cat": "carb",
+    "portion": "200 g",
+    "kcal": 190,
+    "p": 5,
+    "c": 38,
+    "f": 3,
+    "origin": "Sigma",
     "approx": true
   },
   {
@@ -833,39 +1146,6 @@
     "approx": true
   },
   {
-    "name": "Açaí com xarope",
-    "cat": "carb",
-    "portion": "200 g",
-    "kcal": 220,
-    "p": 2,
-    "c": 48,
-    "f": 3,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Açaí polpa sem açúcar",
-    "cat": "fruit",
-    "portion": "100 g",
-    "kcal": 70,
-    "p": 1,
-    "c": 6,
-    "f": 5,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Açaí polpa sem xarope",
-    "cat": "fruit",
-    "portion": "100 g",
-    "kcal": 55,
-    "p": 0.8,
-    "c": 13.6,
-    "f": 0.3,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Baby beef",
     "cat": "protein",
     "portion": "100 g",
@@ -886,6 +1166,22 @@
     "f": 4.6,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Bacalhau refogado",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 139.7,
+    "p": 24.0,
+    "c": 1.2,
+    "f": 3.6,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-280",
+    "aliases": [
+      "Bacalhau salgado refogado"
+    ]
   },
   {
     "name": "Bacon cru",
@@ -919,6 +1215,40 @@
     "p": 4.5,
     "c": 28,
     "f": 1,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Baião de dois",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 7,
+    "c": 24,
+    "f": 5.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Banana amassada com canela",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 90,
+    "p": 1.1,
+    "c": 23,
+    "f": 0.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Banana assada com canela",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 100,
+    "p": 1.2,
+    "c": 25,
+    "f": 0.4,
     "origin": "Sigma",
     "approx": true
   },
@@ -1022,15 +1352,45 @@
     "approx": true
   },
   {
+    "name": "Barreado",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 165.0,
+    "p": 18.3,
+    "c": 0.2,
+    "f": 9.5,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-528"
+  },
+  {
     "name": "Batata baroa cozida",
     "cat": "carb",
     "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
+    "kcal": 80.1,
+    "p": 0.9,
+    "c": 18.9,
+    "f": 0.2,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-86",
+    "aliases": [
+      "Mandioquinha cozida (batata-baroa)"
+    ]
+  },
+  {
+    "name": "Batata cozida com manteiga",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 120,
+    "p": 2.0,
+    "c": 19,
+    "f": 4.2,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Batata doce assada",
@@ -1066,6 +1426,28 @@
     "approx": true
   },
   {
+    "name": "Batata doce frita",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 210,
+    "p": 2.0,
+    "c": 32,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Batata doce na air fryer",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 125,
+    "p": 1.6,
+    "c": 27,
+    "f": 1.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Batata doce roxa cozida",
     "cat": "carb",
     "portion": "100 g",
@@ -1086,6 +1468,20 @@
     "f": 15,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Batata frita na air fryer",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 155,
+    "p": 2.5,
+    "c": 27,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Batata na air fryer"
+    ]
   },
   {
     "name": "Batata inglesa assada",
@@ -1130,6 +1526,34 @@
     "f": 1.5,
     "origin": "Sigma ampliado V4.0.3",
     "approx": true
+  },
+  {
+    "name": "Batata rústica assada",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 135,
+    "p": 2.5,
+    "c": 25,
+    "f": 3.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Batata rústica"
+    ]
+  },
+  {
+    "name": "Batata sauté",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 125,
+    "p": 2.2,
+    "c": 20,
+    "f": 4.2,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Batata salteada"
+    ]
   },
   {
     "name": "BCAA em pó",
@@ -1286,6 +1710,18 @@
     "approx": true
   },
   {
+    "name": "Berinjela à parmegiana",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 160,
+    "p": 7,
+    "c": 12,
+    "f": 10,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Berinjela assada",
     "cat": "veg",
     "portion": "100 g",
@@ -1293,6 +1729,17 @@
     "p": 1,
     "c": 8,
     "f": 0.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Berinjela refogada",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 65,
+    "p": 1.5,
+    "c": 8,
+    "f": 3,
     "origin": "Sigma",
     "approx": true
   },
@@ -1330,6 +1777,23 @@
     "approx": true
   },
   {
+    "name": "Bife à cavalo",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 291.2,
+    "p": 23.7,
+    "c": 0,
+    "f": 21.1,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-529",
+    "aliases": [
+      "Bife a cavalo",
+      "Bife à cavalo com contra filé"
+    ]
+  },
+  {
     "name": "Bife acebolado",
     "cat": "protein",
     "portion": "100 g",
@@ -1345,6 +1809,18 @@
     "mealPhotoAliases": [
       "bife acebolado"
     ]
+  },
+  {
+    "name": "Bife acebolado frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 220,
+    "p": 25,
+    "c": 4,
+    "f": 12,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Bife ancho",
@@ -1377,6 +1853,44 @@
     "c": 0,
     "f": 7,
     "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Bife frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 230,
+    "p": 27,
+    "c": 1,
+    "f": 13,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Bife na frigideira"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Bife grelhado com azeite",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 220,
+    "p": 28,
+    "c": 1,
+    "f": 12,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Biscoito água e sal",
+    "cat": "carb",
+    "portion": "30 g",
+    "kcal": 130,
+    "p": 3,
+    "c": 22,
+    "f": 3.5,
+    "origin": "Sigma",
     "approx": true
   },
   {
@@ -1413,17 +1927,6 @@
     "approx": true
   },
   {
-    "name": "Biscoito água e sal",
-    "cat": "carb",
-    "portion": "30 g",
-    "kcal": 130,
-    "p": 3,
-    "c": 22,
-    "f": 3.5,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Bisnaguinha",
     "cat": "carb",
     "portion": "2 unid (40 g)",
@@ -1436,15 +1939,37 @@
     "contains_animal_products": true
   },
   {
+    "name": "Bisteca suína frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 311.2,
+    "p": 33.7,
+    "c": 0,
+    "f": 18.5,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "contains_animal_products": true,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-428",
+    "aliases": [
+      "Bisteca de porco frita"
+    ]
+  },
+  {
     "name": "Bisteca suína grelhada",
     "cat": "protein",
     "portion": "100 g",
-    "kcal": 170,
-    "p": 27,
+    "kcal": 280.1,
+    "p": 28.9,
     "c": 0,
-    "f": 7,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
+    "f": 17.4,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-429",
+    "aliases": [
+      "Bisteca de porco grelhada"
+    ]
   },
   {
     "name": "Blend proteína vegetal",
@@ -1467,6 +1992,22 @@
     "f": 3.5,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Bolinho de arroz",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 273.5,
+    "p": 8.0,
+    "c": 41.7,
+    "f": 8.3,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-530",
+    "aliases": [
+      "Bolinho de arroz frito"
+    ]
   },
   {
     "name": "Bolo de cenoura com cobertura",
@@ -1516,28 +2057,6 @@
     "contains_animal_products": true
   },
   {
-    "name": "Broto de alfafa",
-    "cat": "veg",
-    "portion": "100 g",
-    "kcal": 27,
-    "p": 1.5,
-    "c": 5.3,
-    "f": 0.4,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Broto de feijão",
-    "cat": "veg",
-    "portion": "100 g",
-    "kcal": 32,
-    "p": 1.8,
-    "c": 6.3,
-    "f": 0.5,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Brócolis",
     "cat": "veg",
     "portion": "100 g",
@@ -1583,6 +2102,56 @@
     ]
   },
   {
+    "name": "Broto de alfafa",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 27,
+    "p": 1.5,
+    "c": 5.3,
+    "f": 0.4,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Broto de feijão",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 32,
+    "p": 1.8,
+    "c": 6.3,
+    "f": 0.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Cação cozido",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 27,
+    "c": 0,
+    "f": 7,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Cação empanado frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 208.3,
+    "p": 25.0,
+    "c": 3.1,
+    "f": 10.0,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-281",
+    "aliases": [
+      "Cação com farinha de trigo frito",
+      "Posta de cação empanada frita"
+    ]
+  },
+  {
     "name": "Cacau em pó",
     "cat": "supp",
     "portion": "30 g",
@@ -1606,17 +2175,6 @@
     "contains_animal_products": true
   },
   {
-    "name": "Cafeína cápsula",
-    "cat": "supp",
-    "portion": "30 g",
-    "kcal": 11,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Café americano",
     "cat": "drink",
     "portion": "200 ml",
@@ -1626,6 +2184,20 @@
     "f": 0.0,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Café carioca sem açúcar",
+    "cat": "drink",
+    "portion": "60 ml",
+    "kcal": 3,
+    "p": 0.1,
+    "c": 0.4,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Carioca sem açúcar"
+    ]
   },
   {
     "name": "Café coado com açúcar",
@@ -1647,7 +2219,12 @@
     "c": 0.6,
     "f": 0,
     "origin": "Sigma",
-    "approx": true
+    "approx": true,
+    "aliases": [
+      "Café infusão 10%",
+      "Cafe coado sem acucar",
+      "Café preto coado sem açúcar"
+    ]
   },
   {
     "name": "Café com leite",
@@ -1707,6 +2284,35 @@
     "contains_animal_products": true
   },
   {
+    "name": "Café com leite semidesnatado sem açúcar",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 58,
+    "p": 4.0,
+    "c": 5.3,
+    "f": 2.2,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Café com leite sem açúcar"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Café curto sem açúcar",
+    "cat": "drink",
+    "portion": "25 ml",
+    "kcal": 2,
+    "p": 0.1,
+    "c": 0.2,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Espresso curto"
+    ]
+  },
+  {
     "name": "Café descafeinado",
     "cat": "drink",
     "portion": "200 ml",
@@ -1720,13 +2326,47 @@
   {
     "name": "Café espresso",
     "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 26,
-    "p": 0.5,
-    "c": 6.2,
-    "f": 0.0,
+    "portion": "30 ml",
+    "kcal": 2,
+    "p": 0.1,
+    "c": 0.3,
+    "f": 0,
     "origin": "Sigma",
-    "approx": true
+    "approx": true,
+    "aliases": [
+      "Café expresso",
+      "Espresso"
+    ]
+  },
+  {
+    "name": "Café espresso duplo sem açúcar",
+    "cat": "drink",
+    "portion": "60 ml",
+    "kcal": 4,
+    "p": 0.2,
+    "c": 0.6,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Café expresso duplo",
+      "Espresso duplo sem açúcar"
+    ]
+  },
+  {
+    "name": "Café espresso sem açúcar",
+    "cat": "drink",
+    "portion": "30 ml",
+    "kcal": 2,
+    "p": 0.1,
+    "c": 0.3,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Café expresso sem açúcar",
+      "Espresso sem açúcar"
+    ]
   },
   {
     "name": "Café latte",
@@ -1741,10 +2381,36 @@
     "contains_animal_products": true
   },
   {
+    "name": "Café pingado sem açúcar",
+    "cat": "drink",
+    "portion": "100 ml",
+    "kcal": 38,
+    "p": 2.1,
+    "c": 3.0,
+    "f": 1.9,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Pingado sem açúcar"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Café sem açúcar",
     "cat": "drink",
     "portion": "200 ml",
     "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Cafeína cápsula",
+    "cat": "supp",
+    "portion": "30 g",
+    "kcal": 11,
     "p": 0,
     "c": 0,
     "f": 0,
@@ -1761,6 +2427,49 @@
     "f": 0.3,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Caldo de feijão",
+    "cat": "carb",
+    "portion": "250 ml",
+    "kcal": 150,
+    "p": 7,
+    "c": 23,
+    "f": 4,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Camarão à baiana",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 100.8,
+    "p": 7.9,
+    "c": 3.2,
+    "f": 6.0,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-531",
+    "aliases": [
+      "Camarao a baiana"
+    ]
+  },
+  {
+    "name": "Camarão alho e óleo",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 160,
+    "p": 22,
+    "c": 2,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Camarão salteado no alho"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Camarão ao vapor",
@@ -1783,6 +2492,18 @@
     "f": 5.3,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Camarão empanado frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 240,
+    "p": 18,
+    "c": 18,
+    "f": 11,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Camarão grelhado",
@@ -1816,6 +2537,36 @@
     "f": 2.2,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Canja de galinha",
+    "cat": "protein",
+    "portion": "250 ml",
+    "kcal": 145,
+    "p": 10,
+    "c": 18,
+    "f": 3.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Canja de frango"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Cappuccino caseiro sem açúcar",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 72,
+    "p": 4.3,
+    "c": 6.4,
+    "f": 3.0,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Cappuccino sem açúcar"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Cappuccino tradicional",
@@ -1852,6 +2603,28 @@
     "approx": true
   },
   {
+    "name": "Cará assado",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Cará cozido",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 114,
+    "p": 3.5,
+    "c": 23.8,
+    "f": 1.8,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Carambola",
     "cat": "fruit",
     "portion": "100 g",
@@ -1872,6 +2645,36 @@
     "f": 2.4,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Carne assada ao molho",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 190,
+    "p": 27,
+    "c": 3,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Carne assada com molho"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Carne de panela com batata",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 165,
+    "p": 18,
+    "c": 8,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Carne cozida com batata"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Carne de panela com legumes",
@@ -1939,6 +2742,36 @@
     "f": 17,
     "origin": "Sigma",
     "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Carne moída com batata",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 155,
+    "p": 15,
+    "c": 9,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Carne moída refogada com batata"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Carne moída com legumes",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 150,
+    "p": 17,
+    "c": 6,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Carne moída refogada com legumes"
+    ],
     "contains_animal_products": true
   },
   {
@@ -2022,28 +2855,6 @@
     "approx": true
   },
   {
-    "name": "Cará assado",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Cará cozido",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 114,
-    "p": 3.5,
-    "c": 23.8,
-    "f": 1.8,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Caseína",
     "cat": "supp",
     "portion": "100 g",
@@ -2077,17 +2888,6 @@
     "approx": true
   },
   {
-    "name": "Castanha portuguesa",
-    "cat": "fat",
-    "portion": "15 g",
-    "kcal": 102,
-    "p": 3.4,
-    "c": 3.4,
-    "f": 9.0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Castanha-do-pará",
     "cat": "fat",
     "portion": "15 g",
@@ -2095,6 +2895,17 @@
     "p": 3.6,
     "c": 3.6,
     "f": 9.7,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Castanha portuguesa",
+    "cat": "fat",
+    "portion": "15 g",
+    "kcal": 102,
+    "p": 3.4,
+    "c": 3.4,
+    "f": 9.0,
     "origin": "Sigma",
     "approx": true
   },
@@ -2109,17 +2920,6 @@
     "origin": "Sigma",
     "approx": true,
     "contains_animal_products": true
-  },
-  {
-    "name": "Cação cozido",
-    "cat": "protein",
-    "portion": "100 g",
-    "kcal": 170,
-    "p": 27,
-    "c": 0,
-    "f": 7,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
   },
   {
     "name": "Cebola",
@@ -2294,6 +3094,146 @@
     "approx": true
   },
   {
+    "name": "Chá de camomila",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Chá de erva-doce sem açúcar",
+    "cat": "drink",
+    "portion": "250 ml",
+    "kcal": 2,
+    "p": 0,
+    "c": 0.4,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Chá de hibisco",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Chá de hortelã sem açúcar",
+    "cat": "drink",
+    "portion": "250 ml",
+    "kcal": 2,
+    "p": 0,
+    "c": 0.4,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Chá gelado zero",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Chá mate com limão sem açúcar",
+    "cat": "drink",
+    "portion": "250 ml",
+    "kcal": 4,
+    "p": 0.1,
+    "c": 0.8,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Mate com limão sem açúcar"
+    ]
+  },
+  {
+    "name": "Chá mate sem açúcar",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Chá preto",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 25,
+    "p": 0.5,
+    "c": 5,
+    "f": 0.1,
+    "origin": "Sigma ampliado",
+    "approx": true
+  },
+  {
+    "name": "Chá preto sem açúcar",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Chá verde",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 25,
+    "p": 0.5,
+    "c": 5,
+    "f": 0.1,
+    "origin": "Sigma ampliado",
+    "approx": true
+  },
+  {
+    "name": "Chá verde sem açúcar",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Charuto de repolho",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 78.2,
+    "p": 6.8,
+    "c": 10.1,
+    "f": 1.1,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-532",
+    "aliases": [
+      "Charuto de repolho com carne e arroz"
+    ]
+  },
+  {
     "name": "Chicória",
     "cat": "veg",
     "portion": "100 g",
@@ -2383,90 +3323,13 @@
     "approx": true
   },
   {
-    "name": "Chá de camomila",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Chá de hibisco",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Chá gelado zero",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Chá mate sem açúcar",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Chá preto",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 25,
-    "p": 0.5,
-    "c": 5,
-    "f": 0.1,
-    "origin": "Sigma ampliado",
-    "approx": true
-  },
-  {
-    "name": "Chá preto sem açúcar",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Chá verde",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 25,
-    "p": 0.5,
-    "c": 5,
-    "f": 0.1,
-    "origin": "Sigma ampliado",
-    "approx": true
-  },
-  {
-    "name": "Chá verde sem açúcar",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
+    "name": "Chuchu refogado",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 42,
+    "p": 1,
+    "c": 6,
+    "f": 1.7,
     "origin": "Sigma",
     "approx": true
   },
@@ -2592,17 +3455,6 @@
     "approx": true
   },
   {
-    "name": "Cold brew sem açúcar",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 19,
-    "p": 0.4,
-    "c": 4.6,
-    "f": 0.0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Colágeno proteico",
     "cat": "supp",
     "portion": "30 g",
@@ -2610,6 +3462,17 @@
     "p": 23.2,
     "c": 5.8,
     "f": 2.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Cold brew sem açúcar",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 19,
+    "p": 0.4,
+    "c": 4.6,
+    "f": 0.0,
     "origin": "Sigma",
     "approx": true
   },
@@ -2645,6 +3508,38 @@
     "f": 7,
     "origin": "Sigma ampliado V4.0.3",
     "approx": true
+  },
+  {
+    "name": "Coração de frango cru",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 221.5,
+    "p": 12.6,
+    "c": 0,
+    "f": 18.6,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-394",
+    "aliases": [
+      "Coracao de frango cru"
+    ]
+  },
+  {
+    "name": "Coração de frango grelhado",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 207.3,
+    "p": 22.4,
+    "c": 0.6,
+    "f": 12.1,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-395",
+    "aliases": [
+      "Coracao de frango grelhado"
+    ]
   },
   {
     "name": "Corvina assada",
@@ -2725,6 +3620,51 @@
     "approx": true
   },
   {
+    "name": "Couve-flor",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 36,
+    "p": 2.0,
+    "c": 7.1,
+    "f": 0.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Couve-flor cozida",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 25,
+    "p": 2,
+    "c": 5,
+    "f": 0.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Couve-flor gratinada",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 6,
+    "c": 7,
+    "f": 9,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Couve-flor refogada",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 55,
+    "p": 2.5,
+    "c": 6,
+    "f": 2.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Couve manteiga",
     "cat": "veg",
     "portion": "100 g",
@@ -2751,28 +3691,6 @@
     "mealPhotoAliases": [
       "couve"
     ]
-  },
-  {
-    "name": "Couve-flor",
-    "cat": "veg",
-    "portion": "100 g",
-    "kcal": 36,
-    "p": 2.0,
-    "c": 7.1,
-    "f": 0.5,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Couve-flor cozida",
-    "cat": "veg",
-    "portion": "100 g",
-    "kcal": 25,
-    "p": 2,
-    "c": 5,
-    "f": 0.3,
-    "origin": "Sigma",
-    "approx": true
   },
   {
     "name": "Coxa de frango assada com pele",
@@ -2819,18 +3737,6 @@
     "f": 7,
     "origin": "Sigma",
     "approx": true
-  },
-  {
-    "name": "Coxinha de frango",
-    "cat": "carb",
-    "portion": "1 unid (100 g)",
-    "kcal": 280,
-    "p": 10,
-    "c": 30,
-    "f": 13,
-    "origin": "Sigma",
-    "approx": true,
-    "contains_animal_products": true
   },
   {
     "name": "Coxão duro bovino cozido",
@@ -2888,6 +3794,30 @@
     "approx": true
   },
   {
+    "name": "Coxinha de frango",
+    "cat": "carb",
+    "portion": "1 unid (100 g)",
+    "kcal": 280,
+    "p": 10,
+    "c": 30,
+    "f": 13,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Coxinha de frango com catupiry",
+    "cat": "carb",
+    "portion": "1 unidade (120 g)",
+    "kcal": 330,
+    "p": 12,
+    "c": 36,
+    "f": 15,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Cranberry sem açúcar",
     "cat": "fruit",
     "portion": "100 g",
@@ -2942,6 +3872,20 @@
     "f": 0,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Creme de abóbora",
+    "cat": "carb",
+    "portion": "250 ml",
+    "kcal": 110,
+    "p": 3,
+    "c": 18,
+    "f": 3,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Sopa cremosa de abóbora"
+    ]
   },
   {
     "name": "Creme de amêndoas",
@@ -3021,6 +3965,30 @@
     "approx": true
   },
   {
+    "name": "Crepioca com frango",
+    "cat": "carb",
+    "portion": "1 unidade (140 g)",
+    "kcal": 245,
+    "p": 22,
+    "c": 23,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Crepioca com queijo",
+    "cat": "carb",
+    "portion": "1 unidade (120 g)",
+    "kcal": 240,
+    "p": 13,
+    "c": 24,
+    "f": 10,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Crepioca simples",
     "cat": "carb",
     "portion": "100 g",
@@ -3042,6 +4010,22 @@
     "origin": "Sigma",
     "approx": true,
     "contains_animal_products": true
+  },
+  {
+    "name": "Croquete de carne frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 346.7,
+    "p": 16.9,
+    "c": 18.1,
+    "f": 22.7,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-388",
+    "aliases": [
+      "Croquete frito de carne"
+    ]
   },
   {
     "name": "Cupim assado",
@@ -3077,6 +4061,46 @@
     "approx": true
   },
   {
+    "name": "Curau de milho verde",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 78.4,
+    "p": 2.4,
+    "c": 13.9,
+    "f": 1.6,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-29",
+    "aliases": [
+      "Curau"
+    ]
+  },
+  {
+    "name": "Cuscuz com frango",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 160,
+    "p": 10,
+    "c": 20,
+    "f": 4,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Cuscuz com manteiga",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 150,
+    "p": 2.4,
+    "c": 25,
+    "f": 5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Cuscuz com ovo",
     "cat": "carb",
     "portion": "100 g",
@@ -3086,6 +4110,18 @@
     "f": 1.5,
     "origin": "Sigma ampliado V4.0.3",
     "approx": true
+  },
+  {
+    "name": "Cuscuz com queijo",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 180,
+    "p": 6,
+    "c": 23,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Cuscuz de milho",
@@ -3129,7 +4165,10 @@
     "c": 26,
     "f": 1.5,
     "origin": "Sigma ampliado V4.0.3",
-    "approx": true
+    "approx": true,
+    "aliases": [
+      "Cuscuz paulista"
+    ]
   },
   {
     "name": "Damasco fresco",
@@ -3163,6 +4202,19 @@
     "f": 2.2,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Dobradinha",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 124.5,
+    "p": 19.8,
+    "c": 0,
+    "f": 4.4,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-536"
   },
   {
     "name": "Doce de leite",
@@ -3254,6 +4306,21 @@
     "approx": true
   },
   {
+    "name": "Empada de frango",
+    "cat": "carb",
+    "portion": "1 unidade (100 g)",
+    "kcal": 300,
+    "p": 9,
+    "c": 28,
+    "f": 17,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true,
+    "aliases": [
+      "Empada de frango assada"
+    ]
+  },
+  {
     "name": "Endívia",
     "cat": "veg",
     "portion": "100 g",
@@ -3331,6 +4398,30 @@
     "approx": true
   },
   {
+    "name": "Escondidinho de carne",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 185,
+    "p": 9,
+    "c": 21,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Escondidinho de frango",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 10,
+    "c": 20,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Esfiha de carne",
     "cat": "carb",
     "portion": "1 unid (100 g)",
@@ -3340,6 +4431,33 @@
     "f": 8,
     "origin": "Sigma",
     "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Esfiha de frango",
+    "cat": "carb",
+    "portion": "1 unidade (100 g)",
+    "kcal": 220,
+    "p": 11,
+    "c": 28,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Espaguete à bolonhesa",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 155,
+    "p": 7,
+    "c": 23,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Macarrão bolonhesa"
+    ],
     "contains_animal_products": true
   },
   {
@@ -3622,6 +4740,21 @@
     ]
   },
   {
+    "name": "Feijão tropeiro",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 190,
+    "p": 8,
+    "c": 22,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true,
+    "aliases": [
+      "Feijão tropeiro mineiro"
+    ]
+  },
+  {
     "name": "Feijão vermelho cozido",
     "cat": "carb",
     "portion": "100 g",
@@ -3633,6 +4766,22 @@
     "approx": true
   },
   {
+    "name": "Feijoada",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 150,
+    "p": 9,
+    "c": 11,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Feijoada completa",
+      "Feijoada brasileira"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Fibra solúvel",
     "cat": "supp",
     "portion": "30 g",
@@ -3642,6 +4791,33 @@
     "f": 2.1,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Fígado bovino grelhado",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 27,
+    "c": 0,
+    "f": 7,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Fígado de frango cru",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 106.5,
+    "p": 17.6,
+    "c": 0,
+    "f": 3.5,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-400",
+    "aliases": [
+      "Figado de frango cru"
+    ]
   },
   {
     "name": "Figo fresco",
@@ -3706,6 +4882,21 @@
     "contains_animal_products": true
   },
   {
+    "name": "Filé de frango frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 205,
+    "p": 28,
+    "c": 3,
+    "f": 9,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Peito de frango frito"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Filé de frango grelhado",
     "cat": "protein",
     "portion": "100 g",
@@ -3715,6 +4906,21 @@
     "f": 7,
     "origin": "Sigma ampliado V4.0.3",
     "approx": true
+  },
+  {
+    "name": "Filé de frango na air fryer",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 165,
+    "p": 29,
+    "c": 2,
+    "f": 5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Peito de frango na air fryer"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Filé de peito de peru",
@@ -3816,6 +5022,50 @@
     "approx": true
   },
   {
+    "name": "Frango à milanesa",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 220.9,
+    "p": 28.5,
+    "c": 7.5,
+    "f": 7.8,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "aliases": [
+      "Filé de frango à milanesa"
+    ],
+    "contains_animal_products": true,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-401"
+  },
+  {
+    "name": "Frango à passarinho",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 290,
+    "p": 24,
+    "c": 8,
+    "f": 18,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Frango ao molho de tomate",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 168,
+    "p": 27,
+    "c": 4,
+    "f": 5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Frango ensopado com tomate"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Frango assado sem pele",
     "cat": "protein",
     "portion": "100 g",
@@ -3825,6 +5075,36 @@
     "f": 7,
     "origin": "Sigma ampliado V4.0.3",
     "approx": true
+  },
+  {
+    "name": "Frango com creme de milho",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 175,
+    "p": 18,
+    "c": 12,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Frango ao creme de milho"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Frango com quiabo",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 145,
+    "p": 18,
+    "c": 5,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Frango ensopado com quiabo"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Frango cozido sem pele",
@@ -3871,6 +5151,33 @@
     "mealPhotoAliases": [
       "frango desfiado refogado"
     ]
+  },
+  {
+    "name": "Frango ensopado",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 155,
+    "p": 22,
+    "c": 4,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Frango cozido com molho"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Frango grelhado com azeite",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 175,
+    "p": 28,
+    "c": 1,
+    "f": 6.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Frango grelhado em cubos",
@@ -3926,15 +5233,18 @@
     ]
   },
   {
-    "name": "Frango à passarinho",
+    "name": "Frango xadrez",
     "cat": "protein",
     "portion": "100 g",
-    "kcal": 290,
-    "p": 24,
-    "c": 8,
-    "f": 18,
+    "kcal": 155,
+    "p": 17,
+    "c": 9,
+    "f": 6,
     "origin": "Sigma",
     "approx": true,
+    "aliases": [
+      "Frango com legumes ao molho"
+    ],
     "contains_animal_products": true
   },
   {
@@ -3946,17 +5256,6 @@
     "c": 26.5,
     "f": 2.0,
     "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Fígado bovino grelhado",
-    "cat": "protein",
-    "portion": "100 g",
-    "kcal": 170,
-    "p": 27,
-    "c": 0,
-    "f": 7,
-    "origin": "Sigma ampliado V4.0.3",
     "approx": true
   },
   {
@@ -4059,17 +5358,6 @@
     "approx": true
   },
   {
-    "name": "Graviola",
-    "cat": "fruit",
-    "portion": "100 g",
-    "kcal": 73,
-    "p": 1.1,
-    "c": 18.1,
-    "f": 0.5,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Grão-de-bico como carbo",
     "cat": "carb",
     "portion": "100 g",
@@ -4109,6 +5397,17 @@
     ]
   },
   {
+    "name": "Graviola",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 73,
+    "p": 1.1,
+    "c": 18.1,
+    "f": 0.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Guacamole",
     "cat": "fat",
     "portion": "15 g",
@@ -4118,6 +5417,18 @@
     "f": 9.5,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Hambúrguer artesanal com queijo",
+    "cat": "carb",
+    "portion": "1 unidade (220 g)",
+    "kcal": 520,
+    "p": 30,
+    "c": 40,
+    "f": 27,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Hambúrguer bovino caseiro",
@@ -4265,6 +5576,18 @@
     "f": 4.5,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Iogurte natural com frutas",
+    "cat": "dairy",
+    "portion": "170 g",
+    "kcal": 125,
+    "p": 6,
+    "c": 18,
+    "f": 3,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Iogurte natural com mel",
@@ -4498,6 +5821,36 @@
     "approx": true
   },
   {
+    "name": "Kibe assado",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 180,
+    "p": 12,
+    "c": 20,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Quibe assado"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Kibe frito",
+    "cat": "carb",
+    "portion": "1 unidade (100 g)",
+    "kcal": 240,
+    "p": 11,
+    "c": 24,
+    "f": 11,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Quibe frito"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Kiwi",
     "cat": "fruit",
     "portion": "100 g",
@@ -4587,6 +5940,42 @@
     "approx": true
   },
   {
+    "name": "Lasanha à bolonhesa",
+    "cat": "carb",
+    "portion": "200 g",
+    "kcal": 340,
+    "p": 20,
+    "c": 32,
+    "f": 15,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Lasanha de frango",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 175,
+    "p": 10,
+    "c": 16,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Lasanha de quatro queijos",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 230,
+    "p": 10,
+    "c": 18,
+    "f": 14,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Lasanha massa cozida",
     "cat": "carb",
     "portion": "100 g",
@@ -4598,16 +5987,26 @@
     "approx": true
   },
   {
-    "name": "Lasanha à bolonhesa",
-    "cat": "carb",
-    "portion": "200 g",
-    "kcal": 340,
-    "p": 20,
-    "c": 32,
-    "f": 15,
+    "name": "Legumes assados",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 70,
+    "p": 2,
+    "c": 10,
+    "f": 2.5,
     "origin": "Sigma",
-    "approx": true,
-    "contains_animal_products": true
+    "approx": true
+  },
+  {
+    "name": "Legumes na air fryer",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 75,
+    "p": 2,
+    "c": 10,
+    "f": 3,
+    "origin": "Sigma",
+    "approx": true
   },
   {
     "name": "Legumes salteados",
@@ -4887,6 +6286,17 @@
     "approx": true
   },
   {
+    "name": "Limão",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 49,
+    "p": 0.8,
+    "c": 12.2,
+    "f": 0.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Limonada sem açúcar",
     "cat": "drink",
     "portion": "200 ml",
@@ -4905,17 +6315,6 @@
     "p": 0.4,
     "c": 4.5,
     "f": 0.0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Limão",
-    "cat": "fruit",
-    "portion": "100 g",
-    "kcal": 49,
-    "p": 0.8,
-    "c": 12.2,
-    "f": 0.3,
     "origin": "Sigma",
     "approx": true
   },
@@ -4955,6 +6354,72 @@
     "contains_animal_products": true
   },
   {
+    "name": "Linguiça de frango frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 245.5,
+    "p": 18.3,
+    "c": 0,
+    "f": 18.5,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-419",
+    "aliases": [
+      "Linguica de frango frita"
+    ]
+  },
+  {
+    "name": "Linguiça de frango grelhada",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 243.7,
+    "p": 18.2,
+    "c": 0,
+    "f": 18.4,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-420",
+    "aliases": [
+      "Linguica de frango grelhada"
+    ]
+  },
+  {
+    "name": "Linguiça suína frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 279.5,
+    "p": 20.5,
+    "c": 0,
+    "f": 21.3,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-422",
+    "aliases": [
+      "Linguiça de porco frita",
+      "Linguica suina frita"
+    ]
+  },
+  {
+    "name": "Linguiça suína grelhada",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 296.5,
+    "p": 23.2,
+    "c": 0,
+    "f": 21.9,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-423",
+    "aliases": [
+      "Linguiça de porco grelhada",
+      "Linguica suina grelhada"
+    ]
+  },
+  {
     "name": "Linguiça toscana assada",
     "cat": "protein",
     "portion": "100 g",
@@ -4962,6 +6427,30 @@
     "p": 19,
     "c": 1,
     "f": 23,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Linguiça toscana frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 320,
+    "p": 17,
+    "c": 2,
+    "f": 27,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Linguiça toscana grelhada",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 290,
+    "p": 18,
+    "c": 2,
+    "f": 24,
     "origin": "Sigma",
     "approx": true,
     "contains_animal_products": true
@@ -5003,12 +6492,17 @@
     "name": "Lombo suíno assado",
     "cat": "protein",
     "portion": "100 g",
-    "kcal": 210,
-    "p": 30,
+    "kcal": 210.2,
+    "p": 35.7,
     "c": 0,
-    "f": 9,
-    "origin": "Sigma",
-    "approx": true
+    "f": 6.4,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-432",
+    "aliases": [
+      "Lombo de porco assado"
+    ]
   },
   {
     "name": "Lombo suíno grelhado",
@@ -5033,6 +6527,18 @@
     "approx": true
   },
   {
+    "name": "Lombo suíno na air fryer",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 205,
+    "p": 29,
+    "c": 1,
+    "f": 9,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Lula grelhada",
     "cat": "protein",
     "portion": "100 g",
@@ -5040,6 +6546,28 @@
     "p": 20.8,
     "c": 2.4,
     "f": 4.0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Maçã fuji",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 55,
+    "p": 0.8,
+    "c": 13.4,
+    "f": 0.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Maçã gala",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 64,
+    "p": 1.0,
+    "c": 15.7,
+    "f": 0.4,
     "origin": "Sigma",
     "approx": true
   },
@@ -5053,6 +6581,21 @@
     "f": 7.0,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Macarrão à bolonhesa",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 155,
+    "p": 7,
+    "c": 23,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Espaguete à bolonhesa"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Macarrão alho e óleo",
@@ -5092,6 +6635,45 @@
     "mealPhotoAliases": [
       "macarrão vermelho"
     ]
+  },
+  {
+    "name": "Macarrão com carne moída",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 165,
+    "p": 9,
+    "c": 21,
+    "f": 5.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Macarrão com frango",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 160,
+    "p": 9,
+    "c": 22,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Macarrão com molho branco",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 180,
+    "p": 5,
+    "c": 24,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Macarrão ao molho branco"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Macarrão comum cozido",
@@ -5248,17 +6830,6 @@
     "approx": true
   },
   {
-    "name": "Maminha bovina assada",
-    "cat": "protein",
-    "portion": "100 g",
-    "kcal": 170,
-    "p": 27,
-    "c": 0,
-    "f": 7,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
     "name": "Mamão formosa",
     "cat": "fruit",
     "portion": "100 g",
@@ -5278,6 +6849,17 @@
     "c": 12.6,
     "f": 0.3,
     "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Maminha bovina assada",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 27,
+    "c": 0,
+    "f": 7,
+    "origin": "Sigma ampliado V4.0.3",
     "approx": true
   },
   {
@@ -5318,6 +6900,35 @@
     ],
     "mealPhotoAliases": [
       "mandioca cozida"
+    ]
+  },
+  {
+    "name": "Mandioca frita",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 300,
+    "p": 1.5,
+    "c": 46,
+    "f": 13,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Aipim frito",
+      "Macaxeira frita"
+    ]
+  },
+  {
+    "name": "Mandioca na air fryer",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 1.4,
+    "c": 36,
+    "f": 2.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Aipim na air fryer"
     ]
   },
   {
@@ -5374,6 +6985,22 @@
     "f": 0.5,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Manjuba frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 349.3,
+    "p": 30.1,
+    "c": 0,
+    "f": 24.5,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-300",
+    "aliases": [
+      "Peixe manjuba frito"
+    ]
   },
   {
     "name": "Manteiga",
@@ -5476,28 +7103,6 @@
     "approx": true
   },
   {
-    "name": "Maçã fuji",
-    "cat": "fruit",
-    "portion": "100 g",
-    "kcal": 55,
-    "p": 0.8,
-    "c": 13.4,
-    "f": 0.3,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Maçã gala",
-    "cat": "fruit",
-    "portion": "100 g",
-    "kcal": 64,
-    "p": 1.0,
-    "c": 15.7,
-    "f": 0.4,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Melancia",
     "cat": "fruit",
     "portion": "100 g",
@@ -5542,6 +7147,23 @@
     "approx": true
   },
   {
+    "name": "Merluza frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 191.6,
+    "p": 26.9,
+    "c": 0,
+    "f": 8.5,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "aliases": [
+      "Filé de merluza frito"
+    ],
+    "contains_animal_products": true,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-303"
+  },
+  {
     "name": "Merluza grelhada",
     "cat": "protein",
     "portion": "100 g",
@@ -5551,6 +7173,21 @@
     "f": 6.2,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Merluza na air fryer",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 140,
+    "p": 24,
+    "c": 2,
+    "f": 4,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Filé de merluza na air fryer"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Mexerica",
@@ -5630,6 +7267,23 @@
     "approx": true
   },
   {
+    "name": "Milho verde enlatado drenado",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 97.6,
+    "p": 3.2,
+    "c": 17.1,
+    "f": 2.4,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-45",
+    "aliases": [
+      "Milho verde enlatado",
+      "Milho em lata drenado"
+    ]
+  },
+  {
     "name": "Minas frescal light",
     "cat": "dairy",
     "portion": "170 g",
@@ -5639,6 +7293,21 @@
     "f": 3.8,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Mingau de aveia com leite",
+    "cat": "carb",
+    "portion": "250 ml",
+    "kcal": 180,
+    "p": 8,
+    "c": 28,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Aveia com leite"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Mirtilo",
@@ -5759,6 +7428,20 @@
     "contains_animal_products": true
   },
   {
+    "name": "Molho de tomate caseiro",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 45,
+    "p": 1.5,
+    "c": 8,
+    "f": 1.2,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Molho vermelho caseiro"
+    ]
+  },
+  {
     "name": "Molho rosé",
     "cat": "fat",
     "portion": "20 g",
@@ -5805,28 +7488,6 @@
     "approx": true
   },
   {
-    "name": "Muesli sem açúcar",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Multivitamínico",
-    "cat": "supp",
-    "portion": "30 g",
-    "kcal": 11,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Muçarela",
     "cat": "dairy",
     "portion": "170 g",
@@ -5849,6 +7510,18 @@
     "approx": true
   },
   {
+    "name": "Muçarela derretida",
+    "cat": "dairy",
+    "portion": "100 g",
+    "kcal": 300,
+    "p": 22,
+    "c": 3,
+    "f": 23,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Muçarela light",
     "cat": "dairy",
     "portion": "170 g",
@@ -5856,6 +7529,28 @@
     "p": 10.6,
     "c": 9.5,
     "f": 4.2,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Muesli sem açúcar",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Multivitamínico",
+    "cat": "supp",
+    "portion": "30 g",
+    "kcal": 11,
+    "p": 0,
+    "c": 0,
+    "f": 0,
     "origin": "Sigma",
     "approx": true
   },
@@ -5902,6 +7597,18 @@
     "f": 0.5,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Nhoque à bolonhesa",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 160,
+    "p": 6,
+    "c": 28,
+    "f": 3.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Nhoque ao molho de tomate",
@@ -5959,6 +7666,50 @@
     "approx": true
   },
   {
+    "name": "Óleo de abacate",
+    "cat": "fat",
+    "portion": "15 g",
+    "kcal": 80,
+    "p": 2.7,
+    "c": 2.7,
+    "f": 7.1,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Óleo de coco",
+    "cat": "fat",
+    "portion": "15 g",
+    "kcal": 78,
+    "p": 2.6,
+    "c": 2.6,
+    "f": 7.0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Óleo de linhaça",
+    "cat": "fat",
+    "portion": "15 g",
+    "kcal": 68,
+    "p": 2.2,
+    "c": 2.2,
+    "f": 6.0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Ômega 3 cápsulas",
+    "cat": "supp",
+    "portion": "30 g",
+    "kcal": 109,
+    "p": 19.8,
+    "c": 5.0,
+    "f": 2.0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Omelete com queijo",
     "cat": "protein",
     "portion": "100 g",
@@ -5981,6 +7732,18 @@
     "approx": true
   },
   {
+    "name": "Omelete de frango",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 170,
+    "p": 20,
+    "c": 3,
+    "f": 9,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Omelete de legumes",
     "cat": "protein",
     "portion": "100 g",
@@ -5996,6 +7759,21 @@
     "mealPhotoAliases": [
       "omelete de legumes"
     ]
+  },
+  {
+    "name": "Omelete de presunto e queijo",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 220,
+    "p": 16,
+    "c": 3,
+    "f": 16,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Omelete misto"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Omelete de queijo",
@@ -6043,6 +7821,52 @@
     "approx": true
   },
   {
+    "name": "Ovo de codorna cru",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 176.9,
+    "p": 13.7,
+    "c": 0.8,
+    "f": 12.7,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-485",
+    "aliases": [
+      "Ovo de codorna"
+    ]
+  },
+  {
+    "name": "Ovo frito",
+    "cat": "protein",
+    "portion": "1 unidade (50 g)",
+    "kcal": 90,
+    "p": 6.3,
+    "c": 0.4,
+    "f": 7.0,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Ovo na frigideira"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Ovo frito sem óleo",
+    "cat": "protein",
+    "portion": "1 unidade (50 g)",
+    "kcal": 72,
+    "p": 6.3,
+    "c": 0.4,
+    "f": 4.8,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Ovo frito na frigideira antiaderente"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Ovo inteiro",
     "cat": "protein",
     "portion": "100 g",
@@ -6076,6 +7900,36 @@
     "approx": true
   },
   {
+    "name": "Ovo mexido com queijo",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 205,
+    "p": 14,
+    "c": 2,
+    "f": 16,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Ovos mexidos com queijo"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Ovo pochê",
+    "cat": "protein",
+    "portion": "1 unidade (50 g)",
+    "kcal": 72,
+    "p": 6.3,
+    "c": 0.4,
+    "f": 4.8,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Ovo poché"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Ovos mexidos",
     "cat": "protein",
     "portion": "100 g",
@@ -6092,6 +7946,17 @@
     "mealPhotoAliases": [
       "ovos mexidos"
     ]
+  },
+  {
+    "name": "Paçoca",
+    "cat": "carb",
+    "portion": "1 unid (20 g)",
+    "kcal": 100,
+    "p": 3,
+    "c": 10,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true
   },
   {
     "name": "Palatinose",
@@ -6169,6 +8034,296 @@
     "c": 27.8,
     "f": 2.1,
     "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão australiano",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 122,
+    "p": 3.8,
+    "c": 25.4,
+    "f": 1.9,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão de alho",
+    "cat": "carb",
+    "portion": "1 unidade (60 g)",
+    "kcal": 210,
+    "p": 5,
+    "c": 28,
+    "f": 9,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão de centeio",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Pão de fermentação natural",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 2,
+    "origin": "Sigma ampliado",
+    "approx": true
+  },
+  {
+    "name": "Pão de forma branco",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 159,
+    "p": 4.9,
+    "c": 32.9,
+    "f": 2.4,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão de forma integral",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 140,
+    "p": 4.3,
+    "c": 29.2,
+    "f": 2.2,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão de queijo",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Pão de queijo grande",
+    "cat": "carb",
+    "portion": "1 unidade (70 g)",
+    "kcal": 235,
+    "p": 6,
+    "c": 28,
+    "f": 11,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão de queijo médio",
+    "cat": "carb",
+    "portion": "1 unidade (40 g)",
+    "kcal": 135,
+    "p": 3.5,
+    "c": 16,
+    "f": 6.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão de queijo pequeno",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 104,
+    "p": 3.2,
+    "c": 21.6,
+    "f": 1.6,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão francês",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 113,
+    "p": 3.5,
+    "c": 23.5,
+    "f": 1.7,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão francês com manteiga",
+    "cat": "carb",
+    "portion": "1 unidade (65 g)",
+    "kcal": 210,
+    "p": 5.5,
+    "c": 35,
+    "f": 5.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Pão na chapa com manteiga"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão francês com queijo minas",
+    "cat": "carb",
+    "portion": "1 unidade (90 g)",
+    "kcal": 245,
+    "p": 11,
+    "c": 34,
+    "f": 7.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão francês com requeijão",
+    "cat": "carb",
+    "portion": "1 unidade (70 g)",
+    "kcal": 215,
+    "p": 6,
+    "c": 34,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão francês integral",
+    "cat": "carb",
+    "portion": "50 g",
+    "kcal": 130,
+    "p": 5,
+    "c": 24,
+    "f": 1.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão integral",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 131,
+    "p": 4.0,
+    "c": 27.3,
+    "f": 2.0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão integral 100%",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Pão integral com frango",
+    "cat": "carb",
+    "portion": "1 sanduíche (120 g)",
+    "kcal": 230,
+    "p": 20,
+    "c": 25,
+    "f": 5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão integral com ovo",
+    "cat": "carb",
+    "portion": "1 sanduíche (100 g)",
+    "kcal": 220,
+    "p": 12,
+    "c": 25,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão integral com pasta de amendoim",
+    "cat": "carb",
+    "portion": "1 sanduíche (80 g)",
+    "kcal": 260,
+    "p": 10,
+    "c": 30,
+    "f": 12,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão multigrãos",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Pão na chapa",
+    "cat": "carb",
+    "portion": "1 unidade (65 g)",
+    "kcal": 210,
+    "p": 5.5,
+    "c": 35,
+    "f": 5.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Pão francês na chapa"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pão sírio",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 161,
+    "p": 5.0,
+    "c": 33.5,
+    "f": 2.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pão sírio integral",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
+    "approx": true
+  },
+  {
+    "name": "Pão sírio tradicional",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 130,
+    "p": 4,
+    "c": 26,
+    "f": 1.5,
+    "origin": "Sigma ampliado V4.0.3",
     "approx": true
   },
   {
@@ -6294,6 +8449,29 @@
     "contains_animal_products": true
   },
   {
+    "name": "Pastel de frango",
+    "cat": "carb",
+    "portion": "1 unidade (100 g)",
+    "kcal": 285,
+    "p": 11,
+    "c": 30,
+    "f": 13,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pastel de palmito",
+    "cat": "carb",
+    "portion": "1 unidade (100 g)",
+    "kcal": 270,
+    "p": 6,
+    "c": 32,
+    "f": 13,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Pastel de queijo",
     "cat": "carb",
     "portion": "1 unid (120 g)",
@@ -6355,17 +8533,6 @@
     "mealPhotoAliases": [
       "patinho moído"
     ]
-  },
-  {
-    "name": "Paçoca",
-    "cat": "carb",
-    "portion": "1 unid (20 g)",
-    "kcal": 100,
-    "p": 3,
-    "c": 10,
-    "f": 6,
-    "origin": "Sigma",
-    "approx": true
   },
   {
     "name": "Pecan",
@@ -6484,7 +8651,9 @@
     "approx": true,
     "aliases": [
       "Frango refogado",
-      "Peito de frango salteado"
+      "Peito de frango salteado",
+      "Peito de frango sem pele refogado",
+      "Frango peito refogado com cebola e alho"
     ],
     "mealPhotoAliases": [
       "frango refogado"
@@ -6522,6 +8691,36 @@
     "f": 1,
     "origin": "Sigma",
     "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Peixe empanado frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 245,
+    "p": 21,
+    "c": 15,
+    "f": 11.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Filé de peixe empanado"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Peixe frito",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 220,
+    "p": 23,
+    "c": 7,
+    "f": 11,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Filé de peixe frito"
+    ],
     "contains_animal_products": true
   },
   {
@@ -6597,15 +8796,32 @@
     "approx": true
   },
   {
+    "name": "Pernil suíno cozido",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 225,
+    "p": 27,
+    "c": 1,
+    "f": 12,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Peru assado",
     "cat": "protein",
     "portion": "100 g",
-    "kcal": 170,
-    "p": 27,
+    "kcal": 163.1,
+    "p": 26.2,
     "c": 0,
-    "f": 7,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
+    "f": 5.7,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-425",
+    "aliases": [
+      "Peru congelado assado"
+    ]
   },
   {
     "name": "Pescada assada",
@@ -6637,6 +8853,50 @@
     "p": 25,
     "c": 0,
     "f": 3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pescada frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 223.0,
+    "p": 27.4,
+    "c": 0,
+    "f": 11.8,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "aliases": [
+      "Filé de pescada frito",
+      "Pescada branca frita"
+    ],
+    "contains_animal_products": true,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-305"
+  },
+  {
+    "name": "Pescada na air fryer",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 142,
+    "p": 24,
+    "c": 2,
+    "f": 4.2,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Filé de pescada na air fryer"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Pêssego",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 51,
+    "p": 0.8,
+    "c": 12.5,
+    "f": 0.3,
     "origin": "Sigma",
     "approx": true
   },
@@ -6678,6 +8938,21 @@
     "mealPhotoAliases": [
       "picadinho bovino"
     ]
+  },
+  {
+    "name": "Picadinho de carne com batata",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 160,
+    "p": 16,
+    "c": 8,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Picadinho com batata"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Picanha bovina grelhada",
@@ -6864,6 +9139,17 @@
     ]
   },
   {
+    "name": "Polenta frita",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 210,
+    "p": 3.0,
+    "c": 32,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Polvo cozido",
     "cat": "protein",
     "portion": "100 g",
@@ -6871,6 +9157,28 @@
     "p": 24.4,
     "c": 2.8,
     "f": 4.7,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pré-treino com carbo",
+    "cat": "supp",
+    "portion": "30 g",
+    "kcal": 96,
+    "p": 17.4,
+    "c": 4.3,
+    "f": 1.7,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Pré-treino sem açúcar",
+    "cat": "supp",
+    "portion": "30 g",
+    "kcal": 111,
+    "p": 20.2,
+    "c": 5.0,
+    "f": 2.0,
     "origin": "Sigma",
     "approx": true
   },
@@ -6997,28 +9305,6 @@
     "approx": true
   },
   {
-    "name": "Pré-treino com carbo",
-    "cat": "supp",
-    "portion": "30 g",
-    "kcal": 96,
-    "p": 17.4,
-    "c": 4.3,
-    "f": 1.7,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pré-treino sem açúcar",
-    "cat": "supp",
-    "portion": "30 g",
-    "kcal": 111,
-    "p": 20.2,
-    "c": 5.0,
-    "f": 2.0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Psyllium",
     "cat": "supp",
     "portion": "30 g",
@@ -7135,6 +9421,18 @@
     "contains_animal_products": true
   },
   {
+    "name": "Purê de batata com manteiga",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 115,
+    "p": 2.1,
+    "c": 17,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "Purê de batata doce",
     "cat": "carb",
     "portion": "100 g",
@@ -7209,182 +9507,6 @@
     ]
   },
   {
-    "name": "Pão australiano",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 122,
-    "p": 3.8,
-    "c": 25.4,
-    "f": 1.9,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão de centeio",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Pão de fermentação natural",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 2,
-    "origin": "Sigma ampliado",
-    "approx": true
-  },
-  {
-    "name": "Pão de forma branco",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 159,
-    "p": 4.9,
-    "c": 32.9,
-    "f": 2.4,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão de forma integral",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 140,
-    "p": 4.3,
-    "c": 29.2,
-    "f": 2.2,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão de queijo",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Pão de queijo pequeno",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 104,
-    "p": 3.2,
-    "c": 21.6,
-    "f": 1.6,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão francês",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 113,
-    "p": 3.5,
-    "c": 23.5,
-    "f": 1.7,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão francês integral",
-    "cat": "carb",
-    "portion": "50 g",
-    "kcal": 130,
-    "p": 5,
-    "c": 24,
-    "f": 1.5,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão integral",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 131,
-    "p": 4.0,
-    "c": 27.3,
-    "f": 2.0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão integral 100%",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Pão multigrãos",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Pão sírio",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 161,
-    "p": 5.0,
-    "c": 33.5,
-    "f": 2.5,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Pão sírio integral",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Pão sírio tradicional",
-    "cat": "carb",
-    "portion": "100 g",
-    "kcal": 130,
-    "p": 4,
-    "c": 26,
-    "f": 1.5,
-    "origin": "Sigma ampliado V4.0.3",
-    "approx": true
-  },
-  {
-    "name": "Pêssego",
-    "cat": "fruit",
-    "portion": "100 g",
-    "kcal": 51,
-    "p": 0.8,
-    "c": 12.5,
-    "f": 0.3,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Quark natural",
     "cat": "protein",
     "portion": "100 g",
@@ -7451,6 +9573,18 @@
     "f": 4.6,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Queijo coalho grelhado",
+    "cat": "dairy",
+    "portion": "100 g",
+    "kcal": 330,
+    "p": 22,
+    "c": 3,
+    "f": 25,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Queijo cottage",
@@ -7548,6 +9682,35 @@
     "f": 3.3,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Queijo minas grelhado",
+    "cat": "dairy",
+    "portion": "100 g",
+    "kcal": 280,
+    "p": 19,
+    "c": 4,
+    "f": 21,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Queijo Minas meia cura",
+    "cat": "dairy",
+    "portion": "100 g",
+    "kcal": 320.7,
+    "p": 21.2,
+    "c": 3.6,
+    "f": 24.6,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-462",
+    "aliases": [
+      "Queijo minas meia-cura",
+      "Queijo meia cura"
+    ]
   },
   {
     "name": "Queijo minas padrão",
@@ -7674,6 +9837,30 @@
     "approx": true
   },
   {
+    "name": "Quiabo refogado",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 62,
+    "p": 2,
+    "c": 8,
+    "f": 2.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Quibebe",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 86.3,
+    "p": 8.6,
+    "c": 6.6,
+    "f": 2.7,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-544"
+  },
+  {
     "name": "Quinoa branca cozida",
     "cat": "carb",
     "portion": "100 g",
@@ -7754,10 +9941,10 @@
     "name": "Repolho refogado",
     "cat": "veg",
     "portion": "100 g",
-    "kcal": 55,
+    "kcal": 50,
     "p": 1.5,
-    "c": 8,
-    "f": 2.5,
+    "c": 7,
+    "f": 2,
     "origin": "Sigma",
     "approx": true
   },
@@ -7933,6 +10120,78 @@
     ]
   },
   {
+    "name": "Salada de alface tomate e pepino",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 22,
+    "p": 1.2,
+    "c": 4,
+    "f": 0.3,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Salada simples com pepino"
+    ]
+  },
+  {
+    "name": "Salada de folhas com cenoura",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 28,
+    "p": 1.3,
+    "c": 5,
+    "f": 0.3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Salada de frutas sem açúcar",
+    "cat": "fruit",
+    "portion": "150 g",
+    "kcal": 90,
+    "p": 1.2,
+    "c": 22,
+    "f": 0.4,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Salada de frutas"
+    ]
+  },
+  {
+    "name": "Salada de legumes com maionese",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 96.1,
+    "p": 1.1,
+    "c": 8.9,
+    "f": 7.0,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-545",
+    "aliases": [
+      "Salada de legumes c/ maionese"
+    ]
+  },
+  {
+    "name": "Salada de legumes no vapor",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 35.4,
+    "p": 2.0,
+    "c": 7.1,
+    "f": 0.3,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-546",
+    "aliases": [
+      "Salada de legumes cozida no vapor",
+      "Legumes cozidos no vapor"
+    ]
+  },
+  {
     "name": "Salada verde simples",
     "cat": "veg",
     "portion": "100 g",
@@ -8000,6 +10259,48 @@
     "approx": true
   },
   {
+    "name": "Salmão na air fryer",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 215,
+    "p": 24,
+    "c": 0,
+    "f": 13,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Filé de salmão na air fryer"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Salpicão de frango",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 147.9,
+    "p": 13.9,
+    "c": 4.6,
+    "f": 7.8,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-547",
+    "aliases": [
+      "Salpicao de frango"
+    ]
+  },
+  {
+    "name": "Salsão",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 38,
+    "p": 2.2,
+    "c": 7.6,
+    "f": 0.5,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Salsicha cozida",
     "cat": "protein",
     "portion": "50 g",
@@ -8012,15 +10313,43 @@
     "contains_animal_products": true
   },
   {
-    "name": "Salsão",
-    "cat": "veg",
-    "portion": "100 g",
-    "kcal": 38,
-    "p": 2.2,
-    "c": 7.6,
-    "f": 0.5,
+    "name": "Sanduíche de peito de peru e queijo",
+    "cat": "carb",
+    "portion": "1 unidade (140 g)",
+    "kcal": 260,
+    "p": 18,
+    "c": 28,
+    "f": 8,
     "origin": "Sigma",
-    "approx": true
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Sanduíche de presunto e queijo",
+    "cat": "carb",
+    "portion": "1 unidade (140 g)",
+    "kcal": 290,
+    "p": 17,
+    "c": 28,
+    "f": 11,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Sanduíche natural de frango",
+    "cat": "carb",
+    "portion": "1 unidade (160 g)",
+    "kcal": 280,
+    "p": 22,
+    "c": 32,
+    "f": 7,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Sanduíche de frango"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Sardinha assada",
@@ -8043,6 +10372,18 @@
     "f": 4.1,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Sardinha frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 240,
+    "p": 25,
+    "c": 2,
+    "f": 15,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Sardinha grelhada",
@@ -8100,17 +10441,6 @@
     "approx": true
   },
   {
-    "name": "Semente de chia",
-    "cat": "fat",
-    "portion": "15 g",
-    "kcal": 100,
-    "p": 3.3,
-    "c": 3.3,
-    "f": 8.9,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
     "name": "Semente de cânhamo",
     "cat": "fat",
     "portion": "15 g",
@@ -8118,6 +10448,17 @@
     "p": 3.2,
     "c": 3.2,
     "f": 8.6,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Semente de chia",
+    "cat": "fat",
+    "portion": "15 g",
+    "kcal": 100,
+    "p": 3.3,
+    "c": 3.3,
+    "f": 8.9,
     "origin": "Sigma",
     "approx": true
   },
@@ -8277,6 +10618,40 @@
     "approx": true
   },
   {
+    "name": "Sopa de feijão",
+    "cat": "carb",
+    "portion": "250 ml",
+    "kcal": 165,
+    "p": 8,
+    "c": 25,
+    "f": 4,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Sopa de legumes",
+    "cat": "veg",
+    "portion": "250 ml",
+    "kcal": 95,
+    "p": 3,
+    "c": 16,
+    "f": 2,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Sopa de lentilha",
+    "cat": "protein",
+    "portion": "250 ml",
+    "kcal": 180,
+    "p": 10,
+    "c": 28,
+    "f": 3,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Sorvete de creme",
     "cat": "dairy",
     "portion": "100 g",
@@ -8286,6 +10661,36 @@
     "f": 11,
     "origin": "Sigma",
     "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Strogonoff de carne",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 190,
+    "p": 16,
+    "c": 8,
+    "f": 11,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Estrogonofe de carne"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Strogonoff de frango",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 165,
+    "p": 17,
+    "c": 7,
+    "f": 8,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Estrogonofe de frango"
+    ],
     "contains_animal_products": true
   },
   {
@@ -8443,6 +10848,19 @@
     "approx": true
   },
   {
+    "name": "Tabule",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 57.5,
+    "p": 2.0,
+    "c": 10.6,
+    "f": 1.2,
+    "origin": "TACO/UNICAMP",
+    "approx": false,
+    "source": "TACO 4ª ed. (NEPA/UNICAMP)",
+    "source_id": "TACO-549"
+  },
+  {
     "name": "Tahine",
     "cat": "fat",
     "portion": "15 g",
@@ -8450,6 +10868,17 @@
     "p": 2.3,
     "c": 2.3,
     "f": 6.2,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Tâmara fresca",
+    "cat": "fruit",
+    "portion": "100 g",
+    "kcal": 52,
+    "p": 0.8,
+    "c": 12.8,
+    "f": 0.3,
     "origin": "Sigma",
     "approx": true
   },
@@ -8487,6 +10916,57 @@
     "approx": true
   },
   {
+    "name": "Tapioca com frango",
+    "cat": "carb",
+    "portion": "1 unidade (130 g)",
+    "kcal": 230,
+    "p": 18,
+    "c": 32,
+    "f": 4,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Tapioca com ovo",
+    "cat": "carb",
+    "portion": "1 unidade (120 g)",
+    "kcal": 225,
+    "p": 10,
+    "c": 33,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Tapioca com ovo e queijo",
+    "cat": "carb",
+    "portion": "1 unidade (150 g)",
+    "kcal": 290,
+    "p": 15,
+    "c": 33,
+    "f": 11,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Tapioca com queijo",
+    "cat": "carb",
+    "portion": "1 unidade (100 g)",
+    "kcal": 220,
+    "p": 7,
+    "c": 35,
+    "f": 6,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Tapioca com muçarela"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Tapioca pronta",
     "cat": "carb",
     "portion": "100 g",
@@ -8520,6 +11000,21 @@
     "approx": true
   },
   {
+    "name": "Tilápia ao molho de tomate",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 150,
+    "p": 24,
+    "c": 4,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Tilápia com molho de tomate"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Tilápia assada",
     "cat": "protein",
     "portion": "100 g",
@@ -8549,6 +11044,36 @@
     "approx": true
   },
   {
+    "name": "Tilápia empanada frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 250,
+    "p": 22,
+    "c": 14,
+    "f": 12,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Filé de tilápia empanado frito"
+    ],
+    "contains_animal_products": true
+  },
+  {
+    "name": "Tilápia frita",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 210,
+    "p": 25,
+    "c": 5,
+    "f": 10,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Filé de tilápia frito"
+    ],
+    "contains_animal_products": true
+  },
+  {
     "name": "Tilápia grelhada",
     "cat": "protein",
     "portion": "100 g",
@@ -8558,6 +11083,22 @@
     "f": 4.4,
     "origin": "Sigma",
     "approx": true
+  },
+  {
+    "name": "Tilápia na air fryer",
+    "cat": "protein",
+    "portion": "100 g",
+    "kcal": 145,
+    "p": 25,
+    "c": 2,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "aliases": [
+      "Tilápia air fryer",
+      "Filé de tilápia na air fryer"
+    ],
+    "contains_animal_products": true
   },
   {
     "name": "Tofu defumado",
@@ -8657,6 +11198,17 @@
     ]
   },
   {
+    "name": "Tônica zero",
+    "cat": "drink",
+    "portion": "200 ml",
+    "kcal": 0,
+    "p": 0,
+    "c": 0,
+    "f": 0,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
     "name": "Torrada integral",
     "cat": "carb",
     "portion": "100 g",
@@ -8746,26 +11298,16 @@
     "approx": true
   },
   {
-    "name": "Tâmara fresca",
-    "cat": "fruit",
+    "name": "Tutu de feijão",
+    "cat": "carb",
     "portion": "100 g",
-    "kcal": 52,
-    "p": 0.8,
-    "c": 12.8,
-    "f": 0.3,
+    "kcal": 155,
+    "p": 6,
+    "c": 24,
+    "f": 4,
     "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Tônica zero",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
+    "approx": true,
+    "contains_animal_products": true
   },
   {
     "name": "Uva passa",
@@ -8819,6 +11361,17 @@
     "p": 2,
     "c": 7,
     "f": 0.2,
+    "origin": "Sigma",
+    "approx": true
+  },
+  {
+    "name": "Vagem refogada",
+    "cat": "veg",
+    "portion": "100 g",
+    "kcal": 55,
+    "p": 2,
+    "c": 7,
+    "f": 2,
     "origin": "Sigma",
     "approx": true
   },
@@ -8917,6 +11470,42 @@
     "approx": true
   },
   {
+    "name": "X-salada",
+    "cat": "carb",
+    "portion": "1 unidade (250 g)",
+    "kcal": 580,
+    "p": 30,
+    "c": 45,
+    "f": 32,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Yakisoba de carne",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 155,
+    "p": 8,
+    "c": 20,
+    "f": 5.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
+    "name": "Yakisoba de frango",
+    "cat": "carb",
+    "portion": "100 g",
+    "kcal": 145,
+    "p": 8,
+    "c": 20,
+    "f": 4.5,
+    "origin": "Sigma",
+    "approx": true,
+    "contains_animal_products": true
+  },
+  {
     "name": "ZMA",
     "cat": "supp",
     "portion": "30 g",
@@ -8924,138 +11513,6 @@
     "p": 0,
     "c": 0,
     "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água com eletrólitos zero",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água com gás",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água de coco",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água de coco industrializada",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água saborizada com hortelã",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água saborizada com limão",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Água tônica zero",
-    "cat": "drink",
-    "portion": "200 ml",
-    "kcal": 0,
-    "p": 0,
-    "c": 0,
-    "f": 0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Óleo de abacate",
-    "cat": "fat",
-    "portion": "15 g",
-    "kcal": 80,
-    "p": 2.7,
-    "c": 2.7,
-    "f": 7.1,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Óleo de coco",
-    "cat": "fat",
-    "portion": "15 g",
-    "kcal": 78,
-    "p": 2.6,
-    "c": 2.6,
-    "f": 7.0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Óleo de linhaça",
-    "cat": "fat",
-    "portion": "15 g",
-    "kcal": 68,
-    "p": 2.2,
-    "c": 2.2,
-    "f": 6.0,
-    "origin": "Sigma",
-    "approx": true
-  },
-  {
-    "name": "Ômega 3 cápsulas",
-    "cat": "supp",
-    "portion": "30 g",
-    "kcal": 109,
-    "p": 19.8,
-    "c": 5.0,
-    "f": 2.0,
     "origin": "Sigma",
     "approx": true
   }
